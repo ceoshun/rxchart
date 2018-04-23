@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<!-- saved from url=(0125)http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>嵘兴网页版监测测向系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="./css/jquery.Jcrop.min.css" rel="stylesheet">
+    <link href="./css/font-awesome.css" rel="stylesheet">
+    <link href="./css/site.css" rel="stylesheet">
+    <script src="./scripts/jquery-1.10.2.min.js"></script>
+    <script src="./scripts/bootstrap.js"></script>
+    <script src="./scripts/bootstrap-switch.min.js"></script>
+    <script src="./scripts/bootstrap-contextmenu.js"></script>
+    <script src="./scripts/jquery.ui.widget.js"></script>
+    <script src="./scripts/jquery.iframe-transport.js"></script>
+    <script src="./scripts/jquery.fileupload.js"></script>
+    <script src="./scripts/html2canvas.js"></script>
+    <script src="./scripts/jquery.Jcrop.js"></script>
+    <script src="./scripts/jcrop.js"></script>
+    <script src="./scripts/moment.js"></script>
+    <script src="./scripts/socket.io.js"></script>
+    <script src="./scripts/sortElements.js"></script>
+    <script src="./scripts/jquery.nicescroll.js"></script>
+    <script src="./scripts/rxchart.min.js"></script>
+    <script src="./scripts/progressbar.js"></script>
+
+        <script type="text/javascript">
+            $(function () {
+                //监测功能切换
+                $('.fun-group > li ').click(function () {
+                    var id = $(this).children('a').attr('href');
+                    if (navigator.userAgent.indexOf("Firefox") > 0) {
+                        $('.fun-content > iframe').height('0px');
+                        $(id).height('100%');
+                    } else {
+                        $('.fun-content > iframe').hide();
+                        $(id).show();
+                    }
+                    //
+                    $(this).closest('.fun-group').children('.fun-item').removeClass('selected');
+                    $(this).closest('.fun-item').addClass('selected');
+                });
+    
+                //打开选中的监测功能
+                if ('') {
+                    
+                    $('iframe').load(function () {
+                        $('.icon-').closest('.fun-item').trigger('click');
+                    });
+                } else {
+                    // $('iframe').load(function () {
+                    setTimeout(function () {
+                        $('.fun-item:eq(0)').trigger('click')
+                    }, 20);
+                    //   });
+                }
+            });
+        </script>
+</head>
+<body oncontextmenu="return false">
+<div class="layout-fill" id="rtmPage">
+    <div class="layout-dock-left" style="width:158px;padding:0; background-color: #0b5e65; border-right: 1px solid rgb(0,177,179)">
+        <div class="layout-fill" style=" ">
+            <style type="text/css">
+    .tree-custom {
+        top: 25px;
+        height: 650px;
+        width: 210px;
+    }
+</style>
+<div class="dev-selected">
+    <div class="input-group" style="position: relative;">
+        <input id="txtDev" type="text" readonly="" class="form-control input-custom" value="舟山市枸杞岛固定站_TCI-TCI735HV" style="display: block;">
+        <span id="arrowDev" class="input-custom-arrow "></span>
+        <div class="tree-custom" style="display: none; height: 92px;">
+    <div class="form-group form-inline" style="margin-bottom: 5px;">
+        <div class="input-group col-xs-12 ">
+            <div style="width: 70px; position: relative; float: left;">
+                <input class="form-control input-custom enum" living="true" readonly="readonly" id="txtArea" name="txtArea" data-default="" data-value="" value="" type="text" style="padding: 5px; width: 100%;">
+                <span class="input-custom-arrow "></span>
+                <ul class="droplist-custom">
+                    
+                    <li data-value="" data-text="全部">全部</li>
+                    
+                    <li data-value="330000" data-text="浙江省">浙江省</li>
+                    
+                    <li data-value="330100" data-text="杭州市">杭州市</li>
+                    
+                    <li data-value="330200" data-text="宁波市">宁波市</li>
+                    
+                    <li data-value="330300" data-text="温州市">温州市</li>
+                    
+                    <li data-value="330400" data-text="嘉兴市">嘉兴市</li>
+                    
+                    <li data-value="330500" data-text="湖州市">湖州市</li>
+                    
+                    <li data-value="330600" data-text="绍兴市">绍兴市</li>
+                    
+                    <li data-value="330700" data-text="金华市">金华市</li>
+                    
+                    <li data-value="330800" data-text="衢州市">衢州市</li>
+                    
+                    <li data-value="330900" data-text="舟山市">舟山市</li>
+                    
+                    <li data-value="331000" data-text="台州市">台州市</li>
+                    
+                    <li data-value="331100" data-text="丽水市">丽水市</li>
+                    
+                </ul>
+            </div>
+            <div style="width: 125px; position: relative;float: left;">
+                <input type="text" class="form-control input-custom" style="padding-right: 0;width: 100%;" placeholder="站点/设备关键字" id="txtDevName">
+            </div>
+        </div>
+    </div>
+    <div id="devinfo" class="tree-div" style="width: 204px; overflow: hidden; outline: none;" oncontextmenu="return false" tabindex="5000">
+        <ul class="tree">
+            
+            <li class="tree-node open">
+                <a monstationno="33090002" monstationname="舟山市枸杞岛固定站" areaname="舟山市" areacode="330900" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;舟山市枸杞岛固定站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090002" devno="00101" monstationname="舟山市枸杞岛固定站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.109.82" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|12|13|14|15|16|21|25|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33110005" monstationname="丽水松阳站" areaname="丽水市" areacode="331100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;丽水松阳站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110005" devno="00101" monstationname="丽水松阳站" devname="KL-M738DF" devmodelname="Atom_KL-M738DF" serviceip="127.0.0.1" serviceport="9221" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16|12|13|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-M738DF
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020008" monstationname="宁波伏龙山短波站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波伏龙山短波站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020008" devno="00102" monstationname="宁波伏龙山短波站" devname="RS-ESMB" devmodelname="Atom_RX-ESMB" serviceip="173.17.127.163" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|14|15|16|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010002" monstationname="杭州萧山站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州萧山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010002" devno="00101" monstationname="杭州萧山站" devname="RS-ESMB" devmodelname="Atom_RX-ESMB" serviceip="172.17.120.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|14|15|16|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010002" devno="00102" monstationname="杭州萧山站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="172.17.120.2" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="13|12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010002" devno="00301" monstationname="杭州萧山站" devname="嵘兴-MS865" devmodelname="ATOM" serviceip="172.17.120.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="16|15|14|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;嵘兴-MS865
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010002" devno="00401" monstationname="杭州萧山站" devname="MS865" devmodelname="Atom_MS865" serviceip="172.17.120.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;MS865
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060005" monstationname="绍兴办公楼站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴办公楼站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060005" devno="00101" monstationname="绍兴办公楼站" devname="HR-HRS41A" devmodelname="Atom_HRS41A" serviceip="172.17.104.87" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070003" monstationname="金华义乌五峰山站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华义乌五峰山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100002" monstationname="台州三门湖塘悦色站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州三门湖塘悦色站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100002" devno="00101" monstationname="台州三门湖塘悦色站" devname="TCI-TCI707" devmodelname="Atom_TCI707" serviceip="173.17.105.61" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI707
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33050002" monstationname="湖州莫干山站" areaname="湖州市" areacode="330500" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;湖州莫干山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33050002" devno="00101" monstationname="湖州莫干山站" devname="TCI-TCI735" devmodelname="Atom_TCI735HV" serviceip="172.17.101.82" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33040006" monstationname="嘉兴海宁站" areaname="嘉兴市" areacode="330400" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;嘉兴海宁站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33040006" devno="00101" monstationname="嘉兴海宁站" devname="华日-HRS41A" devmodelname="ATOM" serviceip="172.17.102.51" serviceport="5050" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="16|15|14|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日-HRS41A
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33040006" devno="00201" monstationname="嘉兴海宁站" devname="HR-HRS41A" devmodelname="Atom_HRS41A" serviceip="172.17.102.52" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|16|15|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33050008" monstationname="湖州南浔小型站" areaname="湖州市" areacode="330500" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;湖州南浔小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33050008" devno="00101" monstationname="湖州南浔小型站" devname="华日-HRS41A" devmodelname="ATOM" serviceip="172.17.101.52" serviceport="5050" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="16|15|14|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33110003" monstationname="丽水云和站" areaname="丽水市" areacode="331100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;丽水云和站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110003" devno="00101" monstationname="丽水云和站" devname="RS-ESMB" devmodelname="Atom_KL-ESMB" serviceip="89.10.11.88" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|15|14|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110003" devno="00201" monstationname="丽水云和站" devname="KL- KRSDF" devmodelname="Atom_KL- KRSDF" serviceip="0.0.0.0" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL- KRSDF
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020001" monstationname="宁波中心站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波中心站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020001" devno="00105" monstationname="宁波中心站" devname="TCI-TCI737" devmodelname="Atom_TCI737" serviceip="172.17.103.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|12|13|14|15|16|21|25|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI737
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33080006" monstationname="衢州开化小型站" areaname="衢州市" areacode="330800" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;衢州开化小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33080006" devno="00101" monstationname="衢州开化小型站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.100.49" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|16|15|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030002" monstationname="温州大过寺站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州大过寺站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030002" devno="00201" monstationname="温州大过寺站" devname="RS-DDF255" devmodelname="Atom_RX-DDF255" serviceip="172.17.106.212" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|12|13|14|15|16|20|21">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF255
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020007" monstationname="宁波机场站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波机场站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020007" devno="00101" monstationname="宁波机场站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.127.227" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020004" monstationname="宁波慈溪站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波慈溪站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020004" devno="00101" monstationname="宁波慈溪站" devname="TCI-TCI725" devmodelname="Atom_TCI725" serviceip="172.17.127.52" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|25|14|15|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI725
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020010" monstationname="宁波凤皇山站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波凤皇山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020010" devno="00101" monstationname="宁波凤皇山站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.127.210" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030011" monstationname="温州永强机场站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州永强机场站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030011" devno="00101" monstationname="温州永强机场站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.106.212" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33040001" monstationname="嘉兴海盐站" areaname="嘉兴市" areacode="330400" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;嘉兴海盐站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33040001" devno="00101" monstationname="嘉兴海盐站" devname="RS-DDF255" devmodelname="Atom_RX-DDF255" serviceip="172.17.102.41" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|20|21">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF255
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33000004" monstationname="省联通大楼站" areaname="浙江省" areacode="330000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;省联通大楼站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33000004" devno="00101" monstationname="省联通大楼站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.110.101" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060002" monstationname="绍兴豆腐尖站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴豆腐尖站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060002" devno="00101" monstationname="绍兴豆腐尖站" devname="RS-ESMB" devmodelname="Atom_RX-ESMB" serviceip="172.17.104.50" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060002" devno="00201" monstationname="绍兴豆腐尖站" devname="RX-DFU101V" devmodelname="Atom_DFU101V" serviceip="172.17.104.50" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="13|12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-DFU101V
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060002" devno="00301" monstationname="绍兴豆腐尖站" devname="RX-MS865" devmodelname="Atom_RX-MS865ZX" serviceip="172.17.104.50" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS865
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33090003" monstationname="舟山市嵊泗固定站" areaname="舟山市" areacode="330900" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;舟山市嵊泗固定站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090003" devno="00101" monstationname="舟山市嵊泗固定站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.109.68" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13|14|15|16|21|25|10|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030006" monstationname="温州文成小型站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州文成小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030006" devno="00101" monstationname="温州文成小型站" devname="TCI-TCI707" devmodelname="Atom_TCI707" serviceip="172.17.106.231" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI707
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030006" devno="00201" monstationname="温州文成小型站" devname="RX-MS865" devmodelname="Atom_MS835" serviceip="172.17.106.231" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|14|15|16|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS865
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33080001" monstationname="衢州西区固定站" areaname="衢州市" areacode="330800" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;衢州西区固定站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33080001" devno="00101" monstationname="衢州西区固定站" devname="HR-EM550" devmodelname="Atom_HR-EM550" serviceip="172.17.100.31" serviceport="80" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-EM550
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33080001" devno="00201" monstationname="衢州西区固定站" devname="HR-EBD195" devmodelname="Atom_HR-EBD195" serviceip="0.0.0.0" serviceport="80" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33080002" monstationname="衢州乌石山远程站" areaname="衢州市" areacode="330800" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;衢州乌石山远程站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33090004" monstationname="舟山定海站" areaname="舟山市" areacode="330900" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;舟山定海站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090004" devno="00201" monstationname="舟山定海站" devname="KL-EBD195" devmodelname="Atom_KL-EBD195" serviceip="192.168.1.234" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-EBD195
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090004" devno="00301" monstationname="舟山定海站" devname="RS-EM550" devmodelname="Atom_KL-EM550" serviceip="192.168.1.234" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|10|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM550
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070007" monstationname="金华武义小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华武义小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070007" devno="00101" monstationname="金华武义小型站" devname="HR-HRS41GZ" devmodelname="Atom_HR-HRS41GZ" serviceip="172.17.108.148" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010003" monstationname="杭州临平站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州临平站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010003" devno="00101" monstationname="杭州临平站" devname="RX-MS865" devmodelname="Atom_MS835" serviceip="172.17.119.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|14|15|16|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS865
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010003" devno="00201" monstationname="杭州临平站" devname="RS-EM050" devmodelname="Atom_RX-EM050" serviceip="172.17.119.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM050
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010003" devno="00601" monstationname="杭州临平站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="172.17.119.2" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070001" monstationname="金华兰溪新湖固定站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华兰溪新湖固定站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070001" devno="00101" monstationname="金华兰溪新湖固定站" devname="RS-DDF255" devmodelname="Atom_RX-DDF255" serviceip="172.17.108.118" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13|14|15|16|20|21|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF255
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020003" monstationname="宁波伏龙山站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波伏龙山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020003" devno="00101" monstationname="宁波伏龙山站" devname="TCI-TCI745" devmodelname="Atom_TCI745" serviceip="172.17.127.163" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI745
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33110004" monstationname="丽水龙泉站" areaname="丽水市" areacode="331100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;丽水龙泉站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110004" devno="00101" monstationname="丽水龙泉站" devname="RS-ESMB" devmodelname="Atom_KL-ESMB" serviceip="89.10.11.88" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|14|16|10|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110004" devno="00201" monstationname="丽水龙泉站" devname="KL-KRSDF2" devmodelname="Atom_KL-KRSDF2" serviceip="0.0.0.0" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-KRSDF2
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070006" monstationname="金华浦江小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华浦江小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070006" devno="00101" monstationname="金华浦江小型站" devname="HR-HRS41GZ" devmodelname="Atom_HR-HRS41GZ" serviceip="172.17.108.142" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020013" monstationname="宁波奉化站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波奉化站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020013" devno="00101" monstationname="宁波奉化站" devname="TCI-TCI737" devmodelname="Atom_TCI737" serviceip="172.17.127.83" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|12|13|14|15|16|21|25|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI737
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020012" monstationname="宁波东部新城站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波东部新城站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020012" devno="00101" monstationname="宁波东部新城站" devname="TCI-TCI737" devmodelname="Atom_TCI737" serviceip="172.17.127.102" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI737
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020011" monstationname="宁波象山石浦站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波象山石浦站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020011" devno="00101" monstationname="宁波象山石浦站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.127.210" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070011" monstationname="金华磐安小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华磐安小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070011" devno="00101" monstationname="金华磐安小型站" devname="HR-HRS53" devmodelname="Atom_HRS53" serviceip="172.17.108.167" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS53
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030004" monstationname="温州大罗山站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州大罗山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030004" devno="00101" monstationname="温州大罗山站" devname="RS-EB500" devmodelname="Atom_RX-EB500" serviceip="172.17.106.200" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|14|15|10|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EB500
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030004" devno="00102" monstationname="温州大罗山站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="172.17.106.200" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010011" monstationname="杭州桐庐小型站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州桐庐小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010011" devno="00101" monstationname="杭州桐庐小型站" devname="华日-HRS41GZ" devmodelname="ATOM" serviceip="172.17.110.177" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="15|14|10|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日-HRS41GZ
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010011" devno="00302" monstationname="杭州桐庐小型站" devname="HRS41" devmodelname="Atom_HRS41GZ" serviceip="10.10.5.181" serviceport="8000" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="16|15|14|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HRS41
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010011" devno="00303" monstationname="杭州桐庐小型站" devname="HRS41GZ" devmodelname="Atom_HRS41GZ" serviceip="10.10.5.181" serviceport="8000" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="16|15|14|10|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010001" monstationname="杭州玉皇山站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州玉皇山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010001" devno="00101" monstationname="杭州玉皇山站" devname="R&S-DDF255" devmodelname="ATOM_DDF255" serviceip="172.17.116.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;R&S-DDF255
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060001" monstationname="绍兴驼峰山站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴驼峰山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060001" devno="00101" monstationname="绍兴驼峰山站" devname="RS-ESMB" devmodelname="Atom_RX-ESMB" serviceip="172.17.104.31" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060001" devno="00201" monstationname="绍兴驼峰山站" devname="RX-DFU101V" devmodelname="Atom_DFU101V" serviceip="172.17.104.31" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-DFU101V
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060001" devno="00301" monstationname="绍兴驼峰山站" devname="RX-MS865" devmodelname="Atom_RX-MS865" serviceip="172.17.104.31" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS865
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33040005" monstationname="嘉兴中心站" areaname="嘉兴市" areacode="330400" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;嘉兴中心站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33000003" monstationname="省移动监测车-浙APK106" areaname="浙江省" areacode="330000" address="" typename="移动站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;省移动监测车-浙APK106
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33000003" devno="00101" monstationname="省移动监测车-浙APK106" devname="R&S-DDF5GTS" devmodelname="ATOM" serviceip="192.168.11.170" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="6" func="20|16|15|14|13|12|11|10|21">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;R&S-DDF5GTS
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020014" monstationname="宁波余姚站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波余姚站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020014" devno="00101" monstationname="宁波余姚站" devname="TCI-TCI737" devmodelname="Atom_TCI737" serviceip="172.17.127.83" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI737
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33110002" monstationname="丽水兴业大厦站" areaname="丽水市" areacode="331100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;丽水兴业大厦站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110002" devno="00101" monstationname="丽水兴业大厦站" devname="RS-EM050" devmodelname="Atom_KL-EM050" serviceip="192.168.1.234" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM050
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110002" devno="00201" monstationname="丽水兴业大厦站" devname="KL-EBD195" devmodelname="Atom_KL-EBD195" serviceip="0.0.0.0" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010006" monstationname="华信-科立迅" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;华信-科立迅
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010006" devno="00105" monstationname="华信-科立迅" devname="科立迅" devmodelname="ATOM" serviceip="10.10.5.156" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;科立迅
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030003" monstationname="温州龙岗山站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州龙岗山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030003" devno="00101" monstationname="温州龙岗山站" devname="RS-ESMB" devmodelname="Atom_ESMB" serviceip="172.17.106.206" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|14|15|16|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030003" devno="00201" monstationname="温州龙岗山站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="172.17.106.206" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100008" monstationname="台州仙居小型站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州仙居小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100008" devno="00101" monstationname="台州仙居小型站" devname="RX-MS900" devmodelname="Atom_MS900" serviceip="173.17.105.31" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS900
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33080005" monstationname="衢州常山小型站" areaname="衢州市" areacode="330800" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;衢州常山小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33080005" devno="00101" monstationname="衢州常山小型站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.100.52" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|16|15|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33090001" monstationname="舟山普陀站" areaname="舟山市" areacode="330900" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;舟山普陀站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090001" devno="00101" monstationname="舟山普陀站" devname="RS-DDF255" devmodelname="Atom_RX-DDF255" serviceip="172.17.109.51" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|12|13|14|15|16|20|21|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF255
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090001" devno="00201" monstationname="舟山普陀站" devname="RS-EB500" devmodelname="Atom_RX-EB500" serviceip="172.17.109.51" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EB500
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100007" monstationname="台州天台小型站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州天台小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100007" devno="00101" monstationname="台州天台小型站" devname="RX-MS900" devmodelname="Atom_MS900" serviceip="173.17.105.71" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS900
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060006" monstationname="绍兴塖州站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴塖州站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060006" devno="00101" monstationname="绍兴塖州站" devname="TCI707" devmodelname="Atom_TCI707" serviceip="172.17.104.100" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI707
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060007" monstationname="绍兴中心站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴中心站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060007" devno="00101" monstationname="绍兴中心站" devname="华日-HRS41" devmodelname="ATOM" serviceip="172.17.104.85" serviceport="5050" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="16|15|14|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日-HRS41
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060007" devno="00102" monstationname="绍兴中心站" devname="华日-HRS53" devmodelname="ATOM" serviceip="172.17.104.85" serviceport="5050" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="16|15|14|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日-HRS53
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010007" monstationname="省联通大楼站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;省联通大楼站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010008" monstationname="杭州奥体中心站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州奥体中心站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010008" devno="00101" monstationname="杭州奥体中心站" devname="RS-DDF550" devmodelname="Atom_RX-DDF550" serviceip="172.17.115.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13|14|15|16|11|10|20|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF550
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010012" monstationname="杭州萧山机场站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州萧山机场站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010012" devno="00101" monstationname="杭州萧山机场站" devname="华日-HRS41A" devmodelname="ATOM" serviceip="172.17.110.178" serviceport="5050" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="15|14|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日-HRS41A
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010012" devno="00301" monstationname="杭州萧山机场站" devname="华日萧山机场站HR41A" devmodelname="Atom_HRS41A" serviceip="172.17.110.178" serviceport="8000" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;华日萧山机场站HR41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100006" monstationname="台州黄岩小型站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州黄岩小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100006" devno="00101" monstationname="台州黄岩小型站" devname="RX-MS900" devmodelname="Atom_MS900" serviceip="173.17.105.81" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS900
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010004" monstationname="华信实验室RS41A" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;华信实验室RS41A
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33110006" monstationname="丽水庆元站" areaname="丽水市" areacode="331100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;丽水庆元站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110006" devno="00101" monstationname="丽水庆元站" devname="KL-M738" devmodelname="Atom_KL-M738" serviceip="127.0.0.1" serviceport="9221" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16|12|13|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-M738
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110006" devno="00201" monstationname="丽水庆元站" devname="KL-KRSP100A" devmodelname="Atom_KL-KRSP100A" serviceip="0.0.0.0" serviceport="0" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-KRSP100A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33040003" monstationname="嘉兴嘉善站" areaname="嘉兴市" areacode="330400" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;嘉兴嘉善站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33040003" devno="00101" monstationname="嘉兴嘉善站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.102.54" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33090006" monstationname="舟山新城小型站" areaname="舟山市" areacode="330900" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;舟山新城小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090006" devno="00101" monstationname="舟山新城小型站" devname="KL-M738DF" devmodelname="Atom_KL-M738DF" serviceip="127.0.0.1" serviceport="9221" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-M738DF
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100004" monstationname="台州温岭北山站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州温岭北山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100004" devno="00101" monstationname="台州温岭北山站" devname="RS-EM050" devmodelname="Atom_RX-EM050" serviceip="173.17.105.6" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM050
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100004" devno="00201" monstationname="台州温岭北山站" devname="RS-EBD100" devmodelname="Atom_EBD100" serviceip="173.17.105.6" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD100
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070009" monstationname="金华义乌机电小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华义乌机电小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070009" devno="00101" monstationname="金华义乌机电小型站" devname="HR-HRS41GZ" devmodelname="Atom_HR-HRS41GZ" serviceip="172.17.108.155" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020006" monstationname="宁波梅山岛站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波梅山岛站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020006" devno="00101" monstationname="宁波梅山岛站" devname="TCI-TCI735HV" devmodelname="Atom_TCI735HV" serviceip="172.17.127.210" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735HV
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070005" monstationname="金华东阳小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华东阳小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070005" devno="00101" monstationname="金华东阳小型站" devname="HR-HRS41GZ" devmodelname="Atom_HR-HRS41GZ" serviceip="172.17.108.151" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33080004" monstationname="衢州江山小型站" areaname="衢州市" areacode="330800" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;衢州江山小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33080004" devno="00101" monstationname="衢州江山小型站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.100.55" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070010" monstationname="金华义乌工商小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华义乌工商小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070010" devno="00101" monstationname="金华义乌工商小型站" devname="HR-HRS41A" devmodelname="Atom_HRS41A" serviceip="172.17.108.163" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030001" monstationname="温州国信中心站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州国信中心站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030001" devno="00101" monstationname="温州国信中心站" devname="RS-EM550" devmodelname="Atom_RX-EM550" serviceip="172.17.106.4" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM550
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030001" devno="00501" monstationname="温州国信中心站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="172.17.106.4" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="13|12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33040002" monstationname="嘉兴站" areaname="嘉兴市" areacode="330400" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;嘉兴站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33040002" devno="00101" monstationname="嘉兴站" devname="HR-EM050" devmodelname="Atom_HR-EM050" serviceip="172.17.102.101" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|16|14|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-EM050
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33040002" devno="00201" monstationname="嘉兴站" devname="HR-EBD195" devmodelname="Atom_HR-EBD195" serviceip="0.0.0.0" serviceport="80" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100005" monstationname="台州临海靖江花城站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州临海靖江花城站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100005" devno="00101" monstationname="台州临海靖江花城站" devname="RS-EM550" devmodelname="Atom_RX-EM550" serviceip="173.17.105.103" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM550
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100005" devno="00201" monstationname="台州临海靖江花城站" devname="RS-EBD100" devmodelname="Atom_EBD100" serviceip="173.17.105.103" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD100
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070002" monstationname="金华一品大厦站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华一品大厦站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070002" devno="00101" monstationname="金华一品大厦站" devname="HR-ESMB" devmodelname="Atom_HR-ESMB" serviceip="172.17.108.102" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|16|15|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070002" devno="00201" monstationname="金华一品大厦站" devname="HR-EBD195" devmodelname="Atom_HR-EBD195" serviceip="0.0.0.0" serviceport="80" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100003" monstationname="台州椒江白云山站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州椒江白云山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100003" devno="00101" monstationname="台州椒江白云山站" devname="RS-ESMB" devmodelname="Atom_RX-ESMB" serviceip="173.17.105.99" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100003" devno="00201" monstationname="台州椒江白云山站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="173.17.105.99" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070004" monstationname="金华永康小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华永康小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070004" devno="00101" monstationname="金华永康小型站" devname="HR-HRS41GZ" devmodelname="Atom_HR-HRS41GZ" serviceip="172.17.108.145" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010005" monstationname="华信实验室RS12" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;华信实验室RS12
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33050004" monstationname="湖州德清站" areaname="湖州市" areacode="330500" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;湖州德清站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020002" monstationname="宁波科技园站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波科技园站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020002" devno="00101" monstationname="宁波科技园站" devname="RS-ESVN40" devmodelname="Atom_RX-ESVN40" serviceip="172.17.103.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESVN40
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020002" devno="00102" monstationname="宁波科技园站" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="172.17.103.2" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060003" monstationname="绍兴上虞站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴上虞站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060003" devno="00101" monstationname="绍兴上虞站" devname="RS-EB110" devmodelname="Atom_RX-EB110DA" serviceip="172.17.104.47" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EB110
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020005" monstationname="宁波市江北站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波市江北站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020005" devno="00101" monstationname="宁波市江北站" devname="RS-ESVN40" devmodelname="Atom_ESVN40" serviceip="172.17.127.227" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESVN40
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020005" devno="00102" monstationname="宁波市江北站" devname="RS-ESVN-EBD195" devmodelname="Atom_ESVN40-EBD195" serviceip="172.17.127.227" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="13|12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESVN-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33070008" monstationname="金华义乌民航小型站" areaname="金华市" areacode="330700" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;金华义乌民航小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33070008" devno="00101" monstationname="金华义乌民航小型站" devname="HR-HRS41GZ" devmodelname="Atom_HR-HRS41GZ" serviceip="172.17.108.159" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41GZ
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33020015" monstationname="宁波西县岭站" areaname="宁波市" areacode="330200" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;宁波西县岭站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33020015" devno="00101" monstationname="宁波西县岭站" devname="TCI-TCI737" devmodelname="Atom_TCI737" serviceip="172.17.126.50" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|12|13|14|15|16|21|25|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI737
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100009" monstationname="台州路桥马腰山站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台州路桥马腰山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100009" devno="00101" monstationname="台州路桥马腰山站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="173.17.105.22" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|16|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100009" devno="00201" monstationname="台州路桥马腰山站" devname="HR-HRQ131" devmodelname="Atom_HR-HRQ131" serviceip="173.17.105.21" serviceport="1720" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRQ131
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33030005" monstationname="温州乐清小型站" areaname="温州市" areacode="330300" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;温州乐清小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33030005" devno="00101" monstationname="温州乐清小型站" devname="MS900" devmodelname="Atom_MS900" serviceip="172.17.106.40" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;MS900
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33000001" monstationname="省德雅站" areaname="浙江省" areacode="330000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;省德雅站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33000001" devno="00101" monstationname="省德雅站" devname="TCI-TCI735" devmodelname="Atom_TCI735HV" serviceip="172.17.112.2" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|12|13|14|15|16|21|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI735
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33110001" monstationname="丽水白云山站" areaname="丽水市" areacode="331100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;丽水白云山站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33110001" devno="00101" monstationname="丽水白云山站" devname="RS-DDF255" devmodelname="Atom_KL-DDF255" serviceip="172.17.107.78" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|15|14|16|12|13|25|11">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF255
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33090005" monstationname="舟山新城站" areaname="舟山市" areacode="330900" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;舟山新城站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090005" devno="00101" monstationname="舟山新城站" devname="RS-EM050" devmodelname="Atom_KL-EM050" serviceip="192.168.1.234" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EM050
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33090005" devno="00201" monstationname="舟山新城站" devname="KL-EBD195" devmodelname="Atom_KL-EBD195" serviceip="192.168.1.234" serviceport="5555" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="13|12">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;KL-EBD195
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010010" monstationname="杭州监测指挥车-浙A0J960" areaname="杭州市" areacode="330100" address="" typename="移动站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州监测指挥车-浙A0J960
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010010" devno="00101" monstationname="杭州监测指挥车-浙A0J960" devname="TCI-TCI737" devmodelname="ATOM" serviceip="192.168.11.21" serviceport="8081" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="6" func="21|16|15|14|13|12|11|10|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI737
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010009" monstationname="华信实验室" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;华信实验室
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010009" devno="00101" monstationname="华信实验室" devname="RS-ESMB" devmodelname="Atom_RX-ESMB" serviceip="10.10.5.159" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|10|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-ESMB
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010009" devno="00201" monstationname="华信实验室" devname="RS-EBD195" devmodelname="Atom_EBD195" serviceip="10.10.5.159" serviceport="8180" devtypename="测向设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EBD195
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010009" devno="00304" monstationname="华信实验室" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="10.10.5.165" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="16|15|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010009" devno="00321" monstationname="华信实验室" devname="TCI-TCI707" devmodelname="Atom_TCI707" serviceip="10.10.5.166" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;TCI-TCI707
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010009" devno="10002" monstationname="华信实验室" devname="RFEYE" devmodelname="Atom_TCI725" serviceip="10.10.5.194" serviceport="8081" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="11|12|13|14|10|15|25">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RFEYE
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010009" devno="10009" monstationname="华信实验室" devname="RFEYE1" devmodelname="Atom_TCI735HV" serviceip="10.10.5.194" serviceport="8081" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="1" func="11|13|14|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RFEYE1
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33060004" monstationname="绍兴诸暨站" areaname="绍兴市" areacode="330600" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;绍兴诸暨站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33060004" devno="00101" monstationname="绍兴诸暨站" devname="RS-EB110" devmodelname="Atom_RX-EB110DA" serviceip="172.17.104.107" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="14|15|16|11|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-EB110
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33100001" monstationname="台站路桥机场站" areaname="台州市" areacode="331000" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;台站路桥机场站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33100001" devno="00101" monstationname="台站路桥机场站" devname="RX-MS865" devmodelname="Atom_MS835" serviceip="173.17.105.61" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="11|14|15|16|10">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS865
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33050003" monstationname="湖州南浔站" areaname="湖州市" areacode="330500" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;湖州南浔站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33050003" devno="00101" monstationname="湖州南浔站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.101.51" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="15|10|11|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33010013" monstationname="杭州淳安站" areaname="杭州市" areacode="330100" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;杭州淳安站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33010013" devno="00101" monstationname="杭州淳安站" devname="RX-MS918H" devmodelname="Atom_RXMS918H" serviceip="172.17.115.20" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS918H
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33080003" monstationname="衢州龙游小型站" areaname="衢州市" areacode="330800" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;衢州龙游小型站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33080003" devno="00101" monstationname="衢州龙游小型站" devname="HR-HRS41A" devmodelname="Atom_HR-HRS41A" serviceip="172.17.100.58" serviceport="1720" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|16|15">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;HR-HRS41A
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="tree-node open">
+                <a monstationno="33050001" monstationname="湖州美欣大厦站" areaname="湖州市" areacode="330500" address="" typename="固定站">
+                    <b class="fa fa-caret-down">&nbsp;</b><span class="icon icon-monstat"></span>&nbsp;湖州美欣大厦站
+                </a>
+                
+                <ul class="sub-tree">
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33050001" devno="00101" monstationname="湖州美欣大厦站" devname="RS-DDF255" devmodelname="Atom_RX-DDF255" serviceip="172.17.101.200" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="12|13|14|15|16|11|10|20|21">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RS-DDF255
+                        </a>
+                    </li>
+                    
+                    <li class="tree-node open">
+                        <a monstationno="33050001" devno="00102" monstationname="湖州美欣大厦站" devname="RX-MS865" devmodelname="Atom_MS835" serviceip="172.17.101.200" serviceport="8180" devtypename="监测设备" devprotocolname="Atom" devprotocol="104" maxrunnum="10" func="10|11|14|15|16">
+                            <span class="icon icon-dev-state-3"></span>&nbsp;RX-MS865
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var page = $('#devinfo');
+    $(function () {
+        $('.tree-custom').show();
+        $('.tree .tree-node').click(function (event) {
+            event.stopPropagation();
+            if ($(this).hasClass('open')) {
+                $(this).removeClass('open');
+                $(this).children('.sub-tree').hide();
+                $(this).find('b.fa').removeClass('fa-caret-right').addClass('fa-caret-down');
+                if ($(this).find('.tree-selected').length != 0) {
+                    $(this).children('a').addClass('tree-selected');
+                }
+            } else {
+                $(this).addClass('open');
+                $(this).children('.sub-tree').show();
+                $(this).find('b.fa').removeClass('fa-caret-down').addClass('fa-caret-right');
+                $(this).children('a').removeClass('tree-selected');
+            }
+        });
+        $('.tree-div').niceScroll({cursorwidth: "12px"});//添加列表滚动条
+        showDevInfo();//显示设备详细信息
+        updateDevStatus();
+
+        //单击设备
+        $('.sub-tree .tree-node a').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            typeof devSelectedEvent !== 'undefined' && devSelectedEvent(this, event);
+            $('.tree-selected').removeClass('tree-selected')
+            $(this).addClass('tree-selected');
+        });
+
+        //输入关键字自动查询
+        $('#txtDevName').bind('input propertychange', function () {
+            var areacode = $('#txtArea').attr('data-value') || '';
+            var keyWord = $(this).val();
+            matchedByKeyWord(areacode, keyWord);
+        });
+        //选择地市事件
+        $('#txtArea').nextAll('.droplist-custom').find('li').click(function (event) {
+            var areacode = $(this).attr('data-value');
+            var keyWord = $('#txtDevName').val();
+            matchedByKeyWord(areacode, keyWord);
+            setLocalStorage('statareacode', areacode);
+        });
+        setAreaList();
+    });
+    /**
+     * 设置地市下拉框的值
+     * */
+    function setAreaList() {
+        var areacode = getLocalStorage('statareacode');
+        var areaname;
+        var isExists = false;
+        $('#txtArea').nextAll('.droplist-custom').find('li').each(function () {
+            if (areacode == $(this).attr('data-value')) {
+                areaname = $(this).attr('data-text');
+                isExists = true;
+                return false;
+            }
+        });
+        if (!isExists) {
+            areacode = '';
+            areaname = '全部';
+        }
+        $('#txtArea').val(areaname).attr('data-value', areacode);
+        matchedByKeyWord(areacode, '');
+    }
+
+    /*显示设备信息*/
+    function showDevInfo() {
+        $('.tree .tree-node a').mouseover(function (e) {
+            var strTitle = '';
+            var $this = $(this);
+            var monstationno = $this.attr('monstationno');
+            var devno = $this.attr('devno');
+            if (!devno)//监测站
+            {
+                strTitle = '<label>站点名称：</label>' + $(this).attr('monstationname') + '<br />' +
+                    '<label>站点编号：</label>' + $(this).attr('monstationno') + '<br />' +
+                    '<label>站点区域 ：</label>' + $(this).attr('areaname') + '<br />' +
+                    '<label>站点地址：</label>' + $(this).attr('address') + '<br />' +
+                    '<label>站点类型：</label>' + $(this).attr('typename') + '<br />';
+            } else//设备
+            {
+                strTitle = '<label>设备名称：</label>' + $(this).attr('devname') + '<br />' +
+                    '<label>设备编号：</label>' + $(this).attr('devno') + '<br />' +
+                    '<label>服务IP ：</label>' + $(this).attr('serviceip') + '<br />' +
+                    '<label>服务端口：</label>' + $(this).attr('serviceport') + '<br />' +
+                    '<label>设备类型：</label>' + $(this).attr('devtypename') + '<br />' +
+                    '<label>设备协议：</label>' + $(this).attr('devprotocolname') + '<br />' +
+                    '<label>设备状态：</label>' + ($(this).attr('devstatus') || '未知') + '<br />';
+            }
+
+            var top = $this.parent().offset().top;
+            var left = $this.parent().offset().left;
+            var winHeight = $(parent.window).height() - 76;
+            var $tooltip = $('<div class="my-tooltip" style="z-index:150;position:absolute;border:1px solid #0c6267;background:#0c454f;padding:5px;color:#fff;font-size:12px;min-width: 200px;"><\/div>').appendTo($('body')); //创建 div 元素 文字提示
+            var height = $tooltip.html(strTitle).height() - 12;      //设置x坐标和y坐标，并且显示
+            if (winHeight - top < height) {
+                top = top - height;
+            }
+            $tooltip.css({
+                "top": top + "px",
+                "left": (left + 205) + "px"
+            }).show();
+        }).mouseout(function () {
+            $(".my-tooltip").remove();   //移除
+        });
+    }
+    /*更新设备状态*/
+    function updateDevStatus() {
+        GetDevStatusServerInfo(function (ret) {
+            if (ret.flag == "0") return popTips(ret.msg, 'error');
+            var emsSocket = page.data('emsSocket');
+            if (!emsSocket) {
+                var ip = window.location.hostname;
+                emsSocket = io.connect('http://' + ip + ':' + ret.serverPort); //socket 连接
+                page.data('emsSocket', emsSocket);
+                //
+                emsSocket.on('devStatus', function (data) {
+                    var $devnode = $('a[monstationno="' + data.monstationno + '"][devno="' + data.devno + '"]');
+                    $devnode.children('span').attr('class', 'icon icon-dev-state-' + data.status);
+                    $devnode.attr('devstatus', getDevStatus(data.status));
+                });
+                emsSocket.on('message', function (data) {
+                    //alert('获取监测设备状态信息失败,无法连接环境监控服务：' + data.msg);
+                });
+
+                emsSocket.emit('GetDevStatus', {
+                    ip: ret.ip,
+                    port: ret.port,
+                    data: getDevParamXML()
+                });
+            }
+        });
+    }
+    /*获取设备参数xml*/
+    function getDevParamXML() {
+        var devArr = []
+        $('.tree .sub-tree  a').each(function () {
+            var $this = $(this);
+            // if($(this).attr('serviceip')=='192.168.108.206') {
+            var devinfo = "<devinfo statid='" + $(this).attr('monstationno') + "' devtype='00'  devid='" + $(this).attr('devno') + "'" +
+                " devip='" + $(this).attr('serviceip') + "' devport='" + $(this).attr('serviceport') + "' devprotocol='" + ($(this).attr('devprotocol') || '') + "'" +
+                " devpassword='" + $(this).attr('maxrunnum') + "' ><type id='1' name='' /></devinfo>";
+            devArr.push(devinfo);
+            // }
+        });
+        var xml = "<?xml version='1.0' encoding='gb2312' ?><subscribe>" + devArr.join('') + "</subscribe >";
+        return xml;
+    }
+
+    /*查找节点*/
+    function matchedByKeyWord(areacode, keyWord) {
+        if (keyWord == "" && areacode == "")//显示所有节点
+        {
+            $(".tree li").each(function () {
+                $(this).show();
+            });
+            return;
+        }
+        //隐藏节点
+        $(".tree li").each(function () {
+            $(this).hide();
+        });
+        //查找节点
+        matchedStationDevice(areacode, keyWord);
+    }
+    /*通过关键字查找节点  通过一次循环查找两个类型的节点*/
+    function matchedStationDevice(areacode, keyWord) {
+
+        $(".tree>li").each(function () {
+            if ($(this).find(">a").attr('areacode') != areacode && areacode != '') return true;
+            //查找匹配的台站节点
+            var stationMatched = false;
+            if (isMatch(keyWord, $(this).find(">a").text())) {
+                $(this).show();
+                //该台站的所有的子节点全部显示
+                $(this).find("li").show();
+                stationMatched = true;
+            }
+            //如果台站没有匹配到，则需要再查询子节点
+            if (!stationMatched) {
+                //查找匹配的设备节点
+                var deviceMatched = false;
+                $(this).find("li").each(function () {
+                    if (isMatch(keyWord, $(this).find(">a").text())) {
+                        $(this).show();
+                        deviceMatched = true;
+                    }
+                });
+                if (deviceMatched) {
+                    $(this).show();
+                }
+            }
+        });
+    }
+    /**
+     * 判断searchText是否与targetText匹配
+     * @param searchText 检索的文本
+     * @param targetText 目标文本
+     * @return true-检索的文本与目标文本匹配；否则为false.
+     */
+    function isMatch(searchText, targetText) {
+        var flag = false;
+        searchText = $.trim(searchText);
+        targetText = $.trim(targetText);
+        var keyWords = searchText.split(" ");
+        for (var i = 0; i < keyWords.length; i++) {
+            if (targetText.toUpperCase().indexOf(keyWords[i].toUpperCase()) != -1) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+    //获取设备状态的服务地址、ip、端口等信息
+    function GetDevStatusServerInfo(callback) {
+        var useAtomMS = '1';
+        if (useAtomMS == "1") {
+            getJsonData2('../service/dms/GetRMSServerAddress?' + new Date(),
+                {
+                    dmsip: '10.10.5.161',
+                    sRegionNo: '999999',
+                    isPortable: '',
+                    token: 'd3b15f90-46d7-11e8-85f0-5b99027fd485'
+                },
+                function (ret) {
+                    if (ret.flag == "0") return popTips(ret.msg);
+                    callback({
+                        ip: ret.data.rmsip,
+                        serverPort: "3602"
+                    });
+                });
+
+        } else {
+            getJsonData2('../service/rtm/GetEMSServerAddress?' + new Date(),
+                {
+                    dmsip: '10.10.5.161',
+                    isPortable: ''
+                },
+                function (ret) {
+                    if (ret.flag == "0") return popTips(ret.msg);
+                    callback({
+                        ip: ret.data.emsip,
+                        port: ret.data.emsport,
+                        serverPort: "3601"
+                    });
+                });
+        }
+    }
+</script>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.tree-custom').height($(document).height()-70);
+        $('#txtDev,#arrowDev').click(function (event) {
+            event.stopPropagation();
+            $(this).nextAll('.tree-custom').show();
+            $('.tree-div').getNiceScroll().show().resize();
+        });
+        if ($('#txtDev').val() == '_') {
+            $('#txtDev').val('请选择监测设备');
+        }
+        $('body').click(function (e) {
+            e = window.event || e; // 兼容IE7
+            obj = $(e.srcElement || e.target);
+            if ($(obj).closest("#txtDev,#arrowDev,.tree-custom,#txtDevkeyword,#btnDevSearch").length > 0) {
+                //  alert('内部区域');
+            } else {
+                hideDevInfoPanel(); //隐藏监测设备信息面板
+            }
+        });
+
+        //右键菜单
+        $('.tree .sub-tree .tree-node  a').contextmenu({
+            target: '#dev-context-menu',
+            before: function (e, context) {
+                $('#dev-context-menu').data('context', context);
+                $('#dev-context-menu ul').empty();
+                $(context).attr('func').split('|').map(function (item) {
+                    var page = getFuncPage(item)
+                    if (page.id) {
+                        $('#dev-context-menu ul').append('<li><a tabindex="-1" href="#" onclick=openRtmPage("' + page.id + '")>' + page.title + '</a></li>');
+                    }
+                });
+
+            }
+        });
+    });
+
+    //隐藏监测设备信息面板
+    function hideDevInfoPanel() {
+        $('.tree-custom').hide();
+        $('.tree-div').getNiceScroll().hide();
+        $('#dev-context-menu').hide();
+    }
+    //设备选中事件
+    function devSelectedEvent(target) {
+        openRtmPage('', target);
+    }
+
+    function openRtmPage(type, target) {
+        var isOpenNew = false;//判断是否添加选项卡标志
+        if (typeof (target) === 'undefined') {//右键打开新的选项卡
+            isOpenNew = true;
+            target = $('#dev-context-menu').data('context');
+        }
+        //  if (typeof (type) === 'undefined') type = "sglfreq";
+
+        var monstationno = $(target).attr('monstationno');
+        var devno = $(target).attr('devno');
+        var monstationname = $(target).attr('monstationname');
+        var devname = $(target).attr('devname');
+        var devmodelname = $(target).attr('devmodelname');
+        var title = monstationname + '_' + devname;
+        var url = '/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&monstationno=' + monstationno + '&devno=' + devno + '&monstationname=' + monstationname + '&devname=' + devname + '&devmodelname=' + devmodelname + '&type=' + type;
+        //$('.fun-content > iframe').hide();
+        if (isOpenNew) {
+            parent.openWindow(url, title);
+        }
+        else {
+            parent.$('.tab-content').find('.tab-pane.active>.loading-message').show();
+            location.href = url;
+            parent.$('.page-content > .nav-tabs').find('li.active >a span').text(title).attr('aria-controls', title).attr('href', '#' + title);
+        }
+
+        hideDevInfoPanel(); //隐藏监测设备信息面板
+        //缓存选中的站点设备
+        setLocalStorage('monstatdev', JSON.stringify({monstationno: monstationno, devno: devno}))
+    }
+
+</script>
+            <ul class="fun-group">
+                
+                <li class="fun-item selected">
+                    <span class="icon-ifanalysis"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#ifanalysis" funcno="11">中频分析</a>
+                </li>
+                
+                <li class="fun-item">
+                    <span class="icon-df"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#df" funcno="12">单频测向</a>
+                </li>
+                
+                <li class="fun-item">
+                    <span class="icon-ifdf"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#ifdf" funcno="13">中频测向</a>
+                </li>
+                
+                <li class="fun-item">
+                    <span class="icon-mscan"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#mscan" funcno="14">离散扫描</a>
+                </li>
+                
+                <li class="fun-item">
+                    <span class="icon-fscan"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#fscan" funcno="15">频段扫描</a>
+                </li>
+                
+                <li class="fun-item">
+                    <span class="icon-dscan"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#dscan" funcno="16">数字扫描</a>
+                </li>
+                
+                <li class="fun-item">
+                    <span class="icon-sglfreq"></span>
+                    <a href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#sglfreq" funcno="10">单频测量</a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+    <div class="layout-dock-right" style="left:158px;padding:0 ;">
+        <div class="layout-fill fun-content" style="overflow:hidden;">
+            
+            <iframe id="ifanalysis" name="ifanalysis" frameborder="0" src="./func.html" style="width: 100%; height: 100%; display: block;"></iframe>
+            
+            <iframe id="df" name="df" frameborder="0" src="./func(1).html" style="width: 100%; height: 100%; display: none;"></iframe>
+            
+            <iframe id="ifdf" name="ifdf" frameborder="0" src="./func(2).html" style="width: 100%; height: 100%; display: none;"></iframe>
+            
+            <iframe id="mscan" name="mscan" frameborder="0" src="./func(3).html" style="width: 100%; height: 100%; display: none;"></iframe>
+            
+            <iframe id="fscan" name="fscan" frameborder="0" src="./func(4).html" style="width: 100%; height: 100%; display: none;"></iframe>
+            
+            <iframe id="dscan" name="dscan" frameborder="0" src="./func(5).html" style="width: 100%; height: 100%; display: none;"></iframe>
+            
+            <iframe id="sglfreq" name="sglfreq" frameborder="0" src="./func(6).html" style="width: 100%; height: 100%; display: none;"></iframe>
+            
+        </div>
+    </div>
+</div>
+
+
+<div id="dev-context-menu" style="display: none;">
+    <ul class="dropdown-menu" role="menu">
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('sglfreq')">单频测量</a></li>
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('ifanalysis')">中频分析</a></li>
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('df')">单频测向</a></li>
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('ifdf')">中频测向</a></li>
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('mscan')">离散扫描</a></li>
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('fscan')">频段扫描</a></li>
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&timeStamp=Mon,%2023%20Apr%202018%2009:27:45%20GMT#" onclick="openRtmPage('dscan')">数字扫描</a></li>
+        <!--        <li><a tabindex="-1" href="#" onclick="openRtmPage('0')">打开</a></li>
+                <li><a tabindex="-1" href="#" onclick="openRtmPage('1')">在新标签页中打开</a></li>-->
+    </ul>
+</div>
+
+<input id="hidMonstationno" type="hidden" value="33090002">
+<input id="hidDevno" type="hidden" value="00101">
+<input id="hidLongi" type="hidden" value="122.7738">
+<input id="hidLati" type="hidden" value="30.710440">
+
+
+<script type="text/javascript">
+$(function () {
+    initParamEvent();
+})
+</script>
+
+
+<script src="./sortTable.js"></script><div id="ascrail2000" class="nicescroll-rails" style="width: 14px; z-index: 120; cursor: default; position: absolute; top: 76px; left: 201px; height: 608px; display: none;"><div style="position: relative; top: 0px; float: right; width: 12px; height: 0px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 14px; z-index: 120; top: 670px; left: 11px; position: absolute; cursor: default; display: none;"><div style="position: relative; top: 0px; height: 12px; width: 0px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="NiuniuCaptureEvent" style="display: none;"></div></body></html>

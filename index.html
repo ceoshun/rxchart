@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>嵘兴监测测向系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="./css/jquery.Jcrop.min.css" rel="stylesheet">
+    <link href="./css/font-awesome.css" rel="stylesheet">
+    <link href="./css/site.css" rel="stylesheet">
+    <script src="./scripts/jquery-1.10.2.min.js"></script>
+    <script src="./scripts/bootstrap.js"></script>
+    <script src="./scripts/bootstrap-switch.min.js"></script>
+    <script src="./scripts/bootstrap-contextmenu.js"></script>
+    <script src="./scripts/jquery.ui.widget.js"></script>
+    <script src="./scripts/jquery.iframe-transport.js"></script>
+    <script src="./scripts/jquery.fileupload.js"></script>
+    <script src="./scripts/html2canvas.js"></script>
+    <script src="./scripts/jquery.Jcrop.js"></script>
+    <script src="./scripts/jcrop.js"></script>
+    <script src="./scripts/moment.js"></script>
+    <script src="./scripts/socket.io.js"></script>
+    <script src="./scripts/sortElements.js"></script>
+    <script src="./scripts/jquery.nicescroll.js"></script>
+    <script src="./scripts/rxchart.min.js"></script>
+    <script src="./scripts/progressbar.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            if (window.opener) {
+                try {
+                    window.opener.closeWindow();
+                    window.opener = null;
+                } catch (err) {
+                    // console.log(err);
+                }
+            }
+            doresize();
+            $(window).resize(function () {
+                doresize();
+            });
+
+            //添加首页
+            openWindow('/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485', '首页');
+        });
+
+        function openWindow(url, title, frameId) {
+            if (url.search(/\?/i) == -1)
+                url += "?timeStamp=" + (new Date()).toGMTString();
+            else
+                url += "&timeStamp=" + (new Date()).toGMTString();
+            var $tabs = $('.page-content > .nav-tabs');
+            var $tabContent = $('.page-content > .tab-content ');
+//          var len = $tabs.children('li').length;//当前选项卡数量
+            var $theTab = $('li a[href="#' + title.replace(".", "") + '"]', $tabs);// $('.page-content > .nav-tabs >li a[href="#' + title + '"]');
+            if ($theTab.length == 0) {
+                var $newTab = $('<li role="presentation"><a href="#' + title.replace(".", "") + '" aria-controls="' + title + '" role="tab" data-toggle="tab"><span>' + title + '&nbsp;&nbsp;</span></a></li>');
+                var $newTabContent = $('<div role="tabpanel" class="tab-pane active" id="' + title.replace(".", "") + '"> </div>');
+                $('<div class="loading-message"></div>').appendTo($newTabContent);
+                $('<iframe id="' + (frameId || uuid.v1()) + '" frameborder="0" src="' + fixUrl(url) + '" style="width: 100%; height: 100%; visibility: hidden;"></iframe>').load(function () {
+                    $(this).prevAll('.loading-message').hide();
+                    $(this).css({'visibility': 'visible'});
+                }).appendTo($newTabContent);
+                $tabs.append($newTab);
+                $tabContent.append($newTabContent);
+
+                $theTab = $newTab.children('a');
+                if (title == "首页") {
+                    $theTab.text('首页');
+                } else {
+                    //添加关闭功能
+                    $('<i class="tab-close" style="top: 2px;right: 2px;position:absolute; cursor:pointer;" ></i>').click(function (event) {
+                        var $tabli = $(this).parent().parent();
+                        var tabIndex = $tabli.index();
+                        //关闭前方法
+                        beforeClose(tabIndex);
+                        $tabs.children('li').eq(tabIndex).remove();
+                        setTimeout(function () {
+                            $tabContent.children('div').eq(tabIndex).remove();
+                        }, 1000);
+                        if ($tabli.hasClass('active')) {
+                            $tabs.children('li').eq(tabIndex - 1).find('a').tab('show');
+                        }
+                        return false;
+                    }).appendTo($theTab);
+                }
+            }
+            $theTab.tab('show') // Select tab by name
+
+            doresize();
+        }
+        function beforeClose(tabIndex) {
+            var $tabContent = $('.page-content > .tab-content ');
+            var $iframe = $tabContent.children('div').eq(tabIndex).find('iframe')[0];
+            if ($iframe.src.indexOf('/unionRtm') != -1) {
+                getIframeWindow($($iframe).attr('id')).close();
+                return;
+            }
+            if (($iframe.src.indexOf('/rtm') == -1 && $iframe.src.indexOf('/bdm') == -1) || $iframe.src.indexOf('.aspx') != -1) return;
+            $($iframe).contents().find('.fun-content').find('iframe').each(function () {
+                try {
+                    (this.contentWindow || this).close();
+                } catch (e) {
+                    this.close();
+                }
+            });
+        }
+
+        function doresize() {
+            window.pageSize = getPageSizeD();
+            $('.page-content').height(window.pageSize.WinH - 50);
+            $('.page-content').css({'min-height': window.pageSize.WinH - 50});
+            $(".page-content > .tab-content").height(window.pageSize.WinH - 73);
+        }
+        function getPageSizeD() {
+            var winW, winH;
+            if (window.innerHeight) {// all except IE
+                winW = window.innerWidth;
+                winH = window.innerHeight;
+            } else if (document.documentElement && document.documentElement.clientHeight) {// IE 6 Strict Mode
+                winW = document.documentElement.clientWidth;
+                winH = document.documentElement.clientHeight;
+            } else if (document.body) { // other
+                winW = document.body.clientWidth;
+                winH = document.body.clientHeight;
+            }  // for small pages with total size less then the viewport
+            return {WinW: winW, WinH: winH};
+        }
+
+    </script>
+</head>
+<body style="padding-top: 50px;">
+<div class="navbar navbar-inverse navbar-fixed-top app-nav">
+    <!--<div class="container">-->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-nav-bar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+
+        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485#" class="navbar-brand" style="padding-right:50px;">
+            <span class="fa fa-lg fa-bar-chart-o"></span> 嵘兴网页版监测测向系统
+        </a>
+    </div>
+    <div id="top-nav-bar" class="navbar-collapse collapse" style="padding-right:5px;">
+        <ul class="nav navbar-nav" id="mainNav">
+            <li data-functions=".010100">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','监测测向');">
+                    监测测向
+                    <!--<b class="caret"></b>-->
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/unionRtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','联合监测');">
+                    联合监测
+                    <!--<b class="caret"></b>-->
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" class="dropdown-toggle navbar-link" data-toggle="dropdown">
+                    监测管理
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li data-functions=".010100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/rtm/shared?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','监测数据共享');">
+                            监测数据共享
+                        </a>
+                    </li>
+                    <li data-functions="" style="">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/dpb/playback?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','监测数据回放','playback');">
+                            监测数据回放
+                        </a>
+                    </li>
+                    <li data-functions="">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/dm/datamanager?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','监测数据管理','datamanager');">
+                            监测数据管理
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" class="dropdown-toggle navbar-link" data-toggle="dropdown">
+                    业务数据管理
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li data-functions=".010100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/bdm/sample?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','样本管理','sample')">
+                            样本管理
+                        </a>
+                    </li>
+                    <li data-functions="">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/bdm/backnoise?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','背噪管理','backnoise')">
+                            背噪管理
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/map?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','地图应用','map');">
+                    地图应用
+                    <!--<b class="caret"></b>-->
+                </a>
+            </li>
+            
+            <li class="dropdown">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" class="dropdown-toggle navbar-link" data-toggle="dropdown">
+                    基础资料管理
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li data-functions=".990100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('http://10.10.5.161/rim/rtm/MonitorOrg/MonitorOrgMgr.aspx?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&theme=Blue','监测机构')">
+                            监测机构
+                        </a>
+                    </li>
+                    <li data-functions=".990100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('http://10.10.5.161/rim/rtm/MonitorStation/MonitorStationMgr.aspx?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&theme=Blue','监测站')">
+                            监测站
+                        </a>
+                    </li>
+                    <li data-functions=".990100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('http://10.10.5.161/rim/rtm/DeviceInfo/DeviceInfoMgr.aspx?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&theme=Blue','设备资料')">
+                            设备资料
+                        </a>
+                    </li>
+                    <li data-functions=".990100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('http://10.10.5.161/rim/rtm/MondevParam/MondevParamMgr.aspx?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&theme=Blue','设备参数')">
+                            设备参数
+                        </a>
+                    </li>
+                    <li data-functions=".990100">
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('http://10.10.5.161/rim/rtm/Ants/AntsMgr.aspx?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&theme=Blue','天线管理')">
+                            天线管理
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" class="dropdown-toggle navbar-link" data-toggle="dropdown">
+                    欢迎你，dingfenglei
+                    <b class="caret"></b>
+
+                </a>
+                <ul class="dropdown-menu">
+                    
+                    <li>
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('/sync?token=d3b15f90-46d7-11e8-85f0-5b99027fd485','数据同步')">
+                            <i class="fa fa-circle-o-notch"></i> 数据同步
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485###" onclick="openWindow('http://10.10.5.161/rim/sys/User/changepassword.aspx?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&userid=dingfenglei&theme=Blue','修改密码')">
+                            <i class="fa fa-key"></i> 修改密码
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://mdfs-rx.pd.cp.hxdi.cn/account/logout?token=d3b15f90-46d7-11e8-85f0-5b99027fd485">
+                            <i class="glyphicon glyphicon-off"></i> 注销
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div class="layout-fill page-content" style="height: 124px; min-height: 124px;">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <!--<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">首页</a>
+        </li>-->
+    <li role="presentation" class="active"><a href="http://mdfs-rx.pd.cp.hxdi.cn/mon?token=d3b15f90-46d7-11e8-85f0-5b99027fd485#首页" aria-controls="首页" role="tab" data-toggle="tab" aria-expanded="true">首页</a></li></ul>
+    <!-- Tab panes -->
+    <div class="tab-content" style="overflow: hidden; height: 101px;">
+        <!-- <div role="tabpanel" class="tab-pane active" id="home">
+             <iframe id="frmMain" name="frmMain" frameborder="0" src="/rtm" style="width: 100%; height: 100%; "></iframe>
+        </div>-->
+    <div role="tabpanel" class="tab-pane active" id="首页"> <div class="loading-message" style="display: none;"></div><iframe id="9481b990-46d8-11e8-ab8d-3f05d54376df" frameborder="0" src="./嵘兴监测测向系统_files/rtm.html" style="width: 100%; height: 100%; visibility: visible;"></iframe></div></div>
+</div>
+
+<div id="NiuniuCaptureEvent" style="display: none;"></div></body></html>

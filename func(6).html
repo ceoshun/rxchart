@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<!-- saved from url=(0282)http://mdfs-rx.pd.cp.hxdi.cn/rtm/func?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&monstationno=33090002&devno=00101&devmodelname=Atom_TCI735HV&monstationname=%E8%88%9F%E5%B1%B1%E5%B8%82%E6%9E%B8%E6%9D%9E%E5%B2%9B%E5%9B%BA%E5%AE%9A%E7%AB%99&devname=TCI-TCI735HV&funcno=10&type=sglfreq -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>嵘兴网页版监测测向系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="./css/jquery.Jcrop.min.css" rel="stylesheet">
+    <link href="./css/font-awesome.css" rel="stylesheet">
+    <link href="./css/site.css" rel="stylesheet">
+    <script src="./scripts/jquery-1.10.2.min.js"></script>
+    <script src="./scripts/bootstrap.js"></script>
+    <script src="./scripts/bootstrap-switch.min.js"></script>
+    <script src="./scripts/bootstrap-contextmenu.js"></script>
+    <script src="./scripts/jquery.ui.widget.js"></script>
+    <script src="./scripts/jquery.iframe-transport.js"></script>
+    <script src="./scripts/jquery.fileupload.js"></script>
+    <script src="./scripts/html2canvas.js"></script>
+    <script src="./scripts/jquery.Jcrop.js"></script>
+    <script src="./scripts/jcrop.js"></script>
+    <script src="./scripts/moment.js"></script>
+    <script src="./scripts/socket.io.js"></script>
+    <script src="./scripts/sortElements.js"></script>
+    <script src="./scripts/jquery.nicescroll.js"></script>
+    <script src="./scripts/rxchart.min.js"></script>
+    <script src="./scripts/progressbar.js"></script>
+</head>
+<body oncontextmenu="return false">
+<div id="sglfreq" class="layout-fill content" style="overflow: hidden;">
+    <div class="layout-dock-top" style="z-index: 1000">
+        
+<div class="layout-fill func-param-group data_query" style="min-width: 500px;">
+    
+    <div class="layout-dock-left func-param-item" id="leftBtnTool" style="width: 80px; border-left: none;position: relative;">
+        <button class="btn-on" id="btnStart" title="启动"></button>
+        <button class="btn-off" id="btnStop" title="停止" style="display: none;"></button>
+        <button class="btn-share" id="btnShare" title="共享" style="display: none"></button>
+        <button class="btn-share-stop" id="btnStopShare" title="停止共享" style="display: none;"></button>
+        <button class="btn-on" id="btnStartBack" title="启动回放" style="display: none"></button>
+        <button class="btn-playback-stop" id="btnStopBack" title="停止回放" style="display: none;"></button>
+        <button class="btn-msg" id="btnStartMsg" style="display: none;"></button>
+        <div id="lblStartMessage" class="start-message">
+        </div>
+    </div>
+    <div class="layout-dock-left func-param-item" id="middleBtnTool" style="left: 80px; width: 145px;">
+        <button type="button" class="btn-fun btn-recovery" id="btnRecovery" style="display: none;"></button>
+        <button type="button" class="btn-fun btn-restore" id="btnRestore" style="display: none;"></button>
+        <button type="button" class="btn-fun btn-save dropdown-toggle navbar-link" data-toggle="dropdown"></button>
+        <button type="button" class="btn-fun btn-silence" id="btnPause"></button>
+        <button type="button" class="btn-fun btn-resume" id="btnResume" style="display: none;"></button>
+        <button type="button" class="btn-fun btn-parse-on" id="btnPauseOn" style="display: none;"></button>
+        <button type="button" class="btn-fun btn-parse-off" id="btnPauseOff" style="display: none;"></button>
+        <button type="button" class="btn-fun btn-speed" id="btnSpeed" style="display: none;"></button>
+        <div class="progressbar" style="display: none;">
+            <div></div>
+            <span id="btn_slider"></span>
+        </div>
+        <span class="bar-msg" style="display:none;"></span>
+        <button type="button" class="btn-fun btn-audio" id="btnSwitchAudio"></button>
+        <ul class="dropdown-menu dropdown-menu-custom" role="menu" style="top: 60px;">
+            <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm/func?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&amp;monstationno=33090002&amp;devno=00101&amp;devmodelname=Atom_TCI735HV&amp;monstationname=%E8%88%9F%E5%B1%B1%E5%B8%82%E6%9E%B8%E6%9D%9E%E5%B2%9B%E5%9B%BA%E5%AE%9A%E7%AB%99&amp;devname=TCI-TCI735HV&amp;funcno=10&amp;type=sglfreq#" id="btnSaveRealtimeData"><i>&nbsp;</i>实时数据</a></li>
+            
+            <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm/func?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&amp;monstationno=33090002&amp;devno=00101&amp;devmodelname=Atom_TCI735HV&amp;monstationname=%E8%88%9F%E5%B1%B1%E5%B8%82%E6%9E%B8%E6%9D%9E%E5%B2%9B%E5%9B%BA%E5%AE%9A%E7%AB%99&amp;devname=TCI-TCI735HV&amp;funcno=10&amp;type=sglfreq#" id="btnSaveAudioData"><i>&nbsp;</i>音频数据</a></li>
+            
+        </ul>
+    </div>
+    <div class="layout-dock-left func-param-item" id="rightBtnTool" style="left: 225px; right: 50px; min-width: 220px; padding: 0;">
+        
+        
+        <div class="form-inline param-group" style="padding: 0px; width: auto;">
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="frequency">频率</label>
+                <div class="input-group">
+                    <input class="form-control input-custom double" min="20" max="3000" living="true" unit="MHz" id="frequency" name="frequency" data-default="20" value="20" maxlength="12" type="text" style="width:120px">
+                    <span class="input-custom-addon">MHz</span>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="antenna">天线</label>
+                <div class="input-group">
+                    <input class="form-control input-custom enum" living="true" readonly="readonly" id="antenna" name="antenna" data-default="" data-value="" value="" type="text" style="width:120px">
+                    <span class="input-custom-arrow "></span>
+                    <ul class="droplist-custom">
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="bfo">差拍频率振荡</label>
+                <div class="input-group">
+                    <input class="form-control input-custom double" min="-8000" max="8000" living="true" unit="" id="bfo" name="bfo" data-default="-8000" value="-8000" maxlength="12" type="text" style="width:120px">
+                    <span class="input-custom-addon"></span>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="demodmode">解调模式</label>
+                <div class="input-group">
+                    <input class="form-control input-custom enum" living="true" readonly="readonly" id="demodmode" name="demodmode" data-default="FM" data-value="FM" value="FM" type="text" style="width:120px">
+                    <span class="input-custom-arrow "></span>
+                    <ul class="droplist-custom">
+                        
+                        <li data-value="FM" data-text="FM">FM</li>
+                        
+                        <li data-value="AM" data-text="AM">AM</li>
+                        
+                        <li data-value="CW" data-text="CW">CW</li>
+                        
+                        <li data-value="USB" data-text="USB">USB</li>
+                        
+                        <li data-value="LSB" data-text="LSB">LSB</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="gainctrl">增益控制</label>
+                <div class="input-group">
+                    <input class="form-control input-custom enum" living="true" readonly="readonly" id="gainctrl" name="gainctrl" data-default="fast" data-value="fast" value="fast" type="text" style="width:120px">
+                    <span class="input-custom-arrow "></span>
+                    <ul class="droplist-custom">
+                        
+                        <li data-value="fast" data-text="fast">fast</li>
+                        
+                        <li data-value="avg" data-text="avg">avg</li>
+                        
+                        <li data-value="slow" data-text="slow">slow</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="ifbw">中频带宽</label>
+                <div class="input-group">
+                    <input class="form-control input-custom enum" living="true" readonly="readonly" id="ifbw" name="ifbw" data-default="1kHz" data-value="1kHz" value="1kHz" type="text" style="width:120px">
+                    <span class="input-custom-arrow "></span>
+                    <ul class="droplist-custom">
+                        
+                        <li data-value="1kHz" data-text="1kHz">1kHz</li>
+                        
+                        <li data-value="3kHz" data-text="3kHz">3kHz</li>
+                        
+                        <li data-value="6kHz" data-text="6kHz">6kHz</li>
+                        
+                        <li data-value="6.25kHz" data-text="6.25kHz">6.25kHz</li>
+                        
+                        <li data-value="9kHz" data-text="9kHz">9kHz</li>
+                        
+                        <li data-value="12.5kHz" data-text="12.5kHz">12.5kHz</li>
+                        
+                        <li data-value="25kHz" data-text="25kHz">25kHz</li>
+                        
+                        <li data-value="30kHz" data-text="30kHz">30kHz</li>
+                        
+                        <li data-value="50kHz" data-text="50kHz">50kHz</li>
+                        
+                        <li data-value="100kHz" data-text="100kHz">100kHz</li>
+                        
+                        <li data-value="150kHz" data-text="150kHz">150kHz</li>
+                        
+                        <li data-value="200kHz" data-text="200kHz">200kHz</li>
+                        
+                        <li data-value="300kHz" data-text="300kHz">300kHz</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="mbw">测量带宽</label>
+                <div class="input-group">
+                    <input class="form-control input-custom enum" living="true" readonly="readonly" id="mbw" name="mbw" data-default="12.5kHz" data-value="12.5kHz" value="12.5kHz" type="text" style="width:120px">
+                    <span class="input-custom-arrow "></span>
+                    <ul class="droplist-custom">
+                        
+                        <li data-value="12.5kHz" data-text="12.5kHz">12.5kHz</li>
+                        
+                        <li data-value="15kHz" data-text="15kHz">15kHz</li>
+                        
+                        <li data-value="20kHz" data-text="20kHz">20kHz</li>
+                        
+                        <li data-value="25kHz" data-text="25kHz">25kHz</li>
+                        
+                        <li data-value="30kHz" data-text="30kHz">30kHz</li>
+                        
+                        <li data-value="50kHz" data-text="50kHz">50kHz</li>
+                        
+                        <li data-value="100kHz" data-text="100kHz">100kHz</li>
+                        
+                        <li data-value="200kHz" data-text="200kHz">200kHz</li>
+                        
+                        <li data-value="300kHz" data-text="300kHz">300kHz</li>
+                        
+                        <li data-value="400kHz" data-text="400kHz">400kHz</li>
+                        
+                        <li data-value="600kHz" data-text="600kHz">600kHz</li>
+                        
+                        <li data-value="1000kHz" data-text="1000kHz">1000kHz</li>
+                        
+                        <li data-value="2000kHz" data-text="2000kHz">2000kHz</li>
+                        
+                        <li data-value="3000kHz" data-text="3000kHz">3000kHz</li>
+                        
+                        <li data-value="4000kHz" data-text="4000kHz">4000kHz</li>
+                        
+                        <li data-value="5000kHz" data-text="5000kHz">5000kHz</li>
+                        
+                        <li data-value="6000kHz" data-text="6000kHz">6000kHz</li>
+                        
+                        <li data-value="7000kHz" data-text="7000kHz">7000kHz</li>
+                        
+                        <li data-value="8000kHz" data-text="8000kHz">8000kHz</li>
+                        
+                        <li data-value="9000kHz" data-text="9000kHz">9000kHz</li>
+                        
+                        <li data-value="10000kHz" data-text="10000kHz">10000kHz</li>
+                        
+                        <li data-value="20000kHz" data-text="20000kHz">20000kHz</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="squelchthreshold">静噪门限</label>
+                <div class="input-group">
+                    <input class="form-control input-custom double" min="-30" max="110" living="true" unit="dBμV" id="squelchthreshold" name="squelchthreshold" data-default="-30" value="-30" maxlength="12" type="text" style="width:120px">
+                    <span class="input-custom-addon">dBμV</span>
+                </div>
+            </div>
+            
+            <div class="input-group param-item" style="">
+                <label style="margin-right: 5px;" for="datasaveflag">数据保存</label>
+                <div class="input-group">
+                    <input class="form-control input-custom enum" living="true" readonly="readonly" id="datasaveflag" name="datasaveflag" data-default="0" data-value="0" value="不保存" type="text" style="width:120px">
+                    <span class="input-custom-arrow "></span>
+                    <ul class="droplist-custom">
+                        
+                        <li data-value="0" data-text="不保存">不保存</li>
+                        
+                        <li data-value="1" data-text="保存">保存</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+
+        </div>
+        <input id="impParamFile" name="impParamFile" type="file" style="display: none;">
+        
+    </div>
+    <div class="layout-dock-right func-param-item" style=" width: 50px;">
+        <button type="button" class="btn-fun btn-capture"></button>
+        <button type="button" class="btn-fun btn-reports" style="display:none;"></button>
+    </div>
+    
+</div>
+<div id="modalDevConflict" class="modal modal-custom" role="dialog" aria-labelledby="gridSystemModalLabel" style="top:60px;">
+    <div class="modal-dialog" role="document" style="width:450px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">设备使用冲突任务列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-custom">
+                    <div class="panel-body" style="position:relative;  padding: 0; background-color: #000;">
+                        <div class="form-group" style="margin-bottom: 4px;">
+                            <div class="table-head">
+                                <table class="table table-custom " style="">
+                                    <colgroup>
+                                        <col style="width: 250px;">
+                                        <col style="">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>站点功能</th>
+                                        <th>使用用户</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="table-body" style="overflow: hidden; height: 150px; outline: none;" tabindex="5002">
+                                <table id="DevConflictTable" class="table table-custom " style="">
+                                    <colgroup>
+                                        <col style="width: 250px;">
+                                        <col style="">
+                                    </colgroup>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">
+                        <i class="">&nbsp;</i>取消
+                    </button>
+                    <button id="btnDevConflictTableOK" type="button" class="btn btn-primary btn-sm"><i class="fa fa-save">
+                            &nbsp;</i>抢占
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var $devConflictTable = $('#DevConflictTable');
+    function fillDevConflictList(data) {
+        if (!data)return;
+        debugger;
+        var taskData = data.query.tasks.task;
+        $devConflictTable.children('tbody').empty();
+        taskData.forEach(function (item) {
+            var $tr = $('<tr>' +
+                '<td title="' + item.taskname.$.val + '">' + item.taskname.$.val + '</td> ' +
+                '<td title="' + item.userid.$.val + '">' + item.userid.$.val + '</td> ' +
+                '</tr>').data('data-value', item).click(function () {
+                $(this).parent().find('.selected').removeClass('selected');
+                $(this).addClass('selected');
+            });
+            $devConflictTable.children('tbody').append($tr);
+        });
+    }
+
+    $('#btnDevConflictTableOK').click(function () {
+        debugger;
+        if ($devConflictTable.find('tr.selected').length == 0)return popTips('请先选中要抢占的任务！');
+        var item = $devConflictTable.find('tr.selected').data('data-value');
+        var nTaskID = item.taskid.$.val;
+        var rmsip = item.rmsip.$.val;
+        var sUser = item.userid.$.val;
+        //表示当前使用设备的任务属于嵘兴公司
+        if (item.appid.$.val == "330000_002_01") {
+            getJsonData2('../service/rtm/DeleteRtmTask', {
+                rmsip: rmsip,
+                sUser: sUser,
+                nTaskID: item.rmstaskid.$.val
+            }, function (data) {
+                $('#modalDevConflict').modal('hide');
+                emitParamData({sUser: '', nTaskID: ''});
+                //开始任务
+                start(function () {
+                    setParamStatus(true);//设置参数状态
+                    SaveQueryData();
+                });
+            });
+        } else {
+            var data = "<root> " +
+                "<stationid val='33090002'/> " +
+                "<deviceid val='00101'/> " +
+                "<taskid  val='" + item.taskid.$.val + "'/> " +
+                "</root>";
+            getJsonData2('../service/atomms/SStopTaskMeasure', {
+                rmsip: rmsip,
+                sUser: sUser,
+                param: data
+            }, function (ret) {
+                if (ret.flag == "1") {
+                    $('#modalDevConflict').modal('hide');
+                    emitParamData({sUser: '', nTaskID: ''});
+                    //开始任务
+                    start(function () {
+                        setParamStatus(true);//设置参数状态
+                        SaveQueryData();
+                    });
+                } else {
+                    alert(ret.msg);
+                }
+            });
+        }
+    });
+</script>
+<script type="text/javascript">
+    var progressBar;
+    $(function () {
+
+        fillFreqList();//填充频率组数据
+
+        
+
+        //初始化布局参数控件
+        initParamEvent(AlterRtmTask); //AlterRtmTask 更改监测设备参数信息
+        //设置参数
+        
+        SetQueryData(); //从localStorage中获取查询数据并设置查询条件
+        
+
+        $('body').click(function (e) {
+            if (typeof parent.hideDevInfoPanel === 'function')
+                parent.hideDevInfoPanel();
+            e = window.event || e; // 兼容IE7
+            obj = $(e.srcElement || e.target);
+            if ($(obj).closest(".param-group,.param-header").length > 0) {
+                //alert('内部区域');
+            } else {
+                $('.droplist-custom').hide();
+                $('.param-group').removeClass('open');
+                if (!$('.param-group').hasClass('hover'))
+                    showParamItem();
+            }
+            //隐藏启动监测的进度显示信息
+            if ($(obj).closest("#lblStartMessage").length == 0) {
+                //$('#lblStartMessage').empty().hide();
+                $('#lblStartMessage').hide();
+            }
+        });
+        showParamItem();
+        $(window).resize(function () {
+            showParamItem();
+        });
+        $('.param-group').hover(function () {
+            $('.param-group').removeClass('open');
+            $(this).addClass('hover');
+            $('.param-item').show().find('input').trigger('input', 'hover');
+            //参数面板高度变化调整
+            if ($('.param-group:visible').height() > 65) {
+                $('.param-group').css({
+                    'margin-left': '-1px',
+                    'background': '#0b484e',
+                    'border-left': '1px solid #2f6368',
+                    'border-right': '1px solid #06272a',
+                    'border-bottom': '1px solid #09696e'
+                });
+                $('.param-group').width($('.param-group').width() + 1);
+            }
+            $('.param-header').height($('.param-group:visible').height() - 8);
+
+        }, function () {
+            $(this).removeClass('hover');
+            if ($(this).hasClass('open')) return;
+            showParamItem();
+            $('.param-group').css({
+                'margin-left': '0', 'background': 'none', 'border': 'none'
+            });
+            $('.param-group').width('auto');
+            $('.param-header').height($('.param-group:visible').height() - 5);
+        });
+
+        //按钮事件
+        initButtonEvent();
+
+        //监测数据共享相关
+        
+    });
+    /*
+     * 初始化按钮事件
+     * */
+    function initButtonEvent() {
+        //开始任务
+        $('#btnStart').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var $paramGroup = $('.param-group:visible');
+            switch ("10") {
+                case "14"://离散扫描
+                    var freq = $paramGroup.find('#frequency').val();
+                    if (freq == "") {
+                        popTips('频率不能为空！');
+                        return;
+                    }
+                    break;
+                case "15"://频段扫描
+                case "16"://数字扫描
+                    var startFreq = $paramGroup.find('#startfreq').val();
+                    var stopFreq = $paramGroup.find('#stopfreq').val();
+                    if (startFreq == "" || stopFreq == "") {
+                        popTips('开始频率和结束频率都不能为空！');
+                        return;
+                    }
+                    if (parseFloat(startFreq) >= parseFloat(stopFreq)) {
+                        popTips('开始频率不能大于或等于结束频率！');
+                        return;
+                    }
+                    break;
+            }
+            $('#btnStart').attr("disabled", "disabled");
+            $('#btnStartMsg').show();
+            start(function () {
+                setParamStatus(true);//设置参数状态
+                SaveQueryData();
+                //设备使用冲突
+                checkDevUseConflict();
+            });
+        });
+        //显示连接信息
+        $('#btnStartMsg').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var $startMessage = $('#lblStartMessage').show();
+            $startMessage.delay(3000).fadeOut(2000);
+        });
+        //停止任务
+        $('#btnStop').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).attr("disabled", "disabled");
+            stop(function () {
+                setParamStatus(false);//设置参数状态
+            });
+        });
+        //静默
+        $('#btnPause').click(function (event) {
+            event.preventDefault();
+            var socket = $('#sglfreq').data('socket');
+            if (socket) {
+                // socket.emit('pause');
+                // $('#btnPause').hide();
+                // $('#btnResume').show();
+                socket.emit('closeRMS');
+                emitParamData({sUser: '', nTaskID: ''});
+                //更改监测功能状态
+                parent.$('.icon-sglfreq').removeClass('on').addClass('pause');
+                setParamStatus(false);//设置参数状态
+            }
+        });
+        //恢复
+        $('#btnResume').click(function (event) {
+            event.preventDefault();
+            var socket = $('#sglfreq').data('socket');
+            if (socket) {
+                socket.emit('resume');
+                $('#btnPause').show();
+                $('#btnResume').hide();
+            }
+        });
+        //保存实时数据
+        $('#btnSaveRealtimeData').click(function (event) {
+            event.preventDefault();
+            var $this = $(this);
+            if (!$this.children('i').hasClass('fa fa-check')) {
+                saveTaskData({nFlag: 1, bOn: 1}, function () {
+                    $this.children('i').addClass('fa fa-check');
+                });
+            } else {
+                saveTaskData({nFlag: 1, bOn: 0}, function () {
+                    $this.children('i').removeClass('fa fa-check');
+                });
+            }
+        });
+        //保存统计数据
+        $('#btnSaveCountData').click(function (event) {
+            event.preventDefault();
+            var $this = $(this);
+            if (!$this.children('i').hasClass('fa fa-check')) {
+                saveTaskData({nFlag: 2, bOn: 1}, function () {
+                    $this.children('i').addClass('fa fa-check');
+                });
+            } else {
+                saveTaskData({nFlag: 2, bOn: 0}, function () {
+                    $this.children('i').removeClass('fa fa-check');
+                });
+            }
+        });
+        //保存音频数据
+        $('#btnSaveAudioData').click(function (event) {
+            event.preventDefault();
+            var paramData = $('#sglfreq').data('paramData') || {};
+            if (!paramData.nTaskID) return;
+            if ($('#btnSwitchAudio').hasClass('btn-audio')) {
+                return popTips('请先打开音频声音！');
+            }
+            var $this = $(this);
+            if (!$this.children('i').hasClass('fa fa-check')) {
+                var now = moment();
+                var time = now.format('HHmmss');
+                var audioFileName = paramData.nTaskID + '(' + time + ')' + '.wav';
+                paramData = $.extend(paramData, {startSaveAudio: true, audioFileName: audioFileName});
+                $('#sglfreq').data('paramData', paramData);
+                $this.children('i').addClass('fa fa-check');
+                setTimeout(function () {
+                    var $dropDownMenuUl;
+                    var $li = $('#btnSaveAudioData').parent();
+                    if ($li.hasClass('dropdown-submenu')) {
+                        $dropDownMenuUl = $li.children('.dropdown-menu');
+                    } else {
+                        $li.addClass('dropdown-submenu');
+                        $dropDownMenuUl = $('<ul class="dropdown-menu dropdown-menu-custom" role="menu"></ul>').appendTo($li);
+                    }
+                    var text = '音频文件(' + time + ')' + '.wav';
+                    $('<li><a tabindex="-1"  href="javascript:void(0);" >' + text + '</a></li>').click(function () {
+                        downfile('../file/download?filename=' + encodeURIComponent(text) + '&filepath=audio/' + audioFileName)
+                    }).prependTo($dropDownMenuUl);
+                }, 0);
+            } else {
+                paramData = $.extend(paramData, {startSaveAudio: false});
+                $('#sglfreq').data('paramData', paramData);
+                $this.children('i').removeClass('fa fa-check');
+            }
+            var socket = $('#sglfreq').data('socket');
+            socket.emit('paramData', paramData);
+        });
+        //音频开关
+        $('#btnSwitchAudio').click(function (event) {
+            event.preventDefault();
+            var paramData = $('#sglfreq').data('paramData') || {};
+            if (!paramData.nTaskID) return;
+            $('#lblStartMessage').empty().show();
+            var $this = $(this);
+            var bOn = $this.hasClass('btn-audio') ? "1" : "0";
+            getJsonData2('../service/rtm/SwitchRtmTaskAnalogaudio?' + new Date(), {
+                rmsip: paramData.rmsip,
+                sUser: paramData.sUser,
+                nTaskID: paramData.nTaskID,
+                bOn: bOn
+            }, function (data) {
+                if ($this.hasClass('btn-audio')) {
+                    $this.removeClass('btn-audio').addClass('btn-mute');
+                } else {
+                    $this.removeClass('btn-mute').addClass('btn-audio');
+                }
+            });
+        });
+
+        //新增参数（频段扫描和离散扫描功能使用）
+        $('#btnAddParamGroup').click(function (event) {
+            event.preventDefault();
+            var maxsize = parseInt($(this).attr('maxsize'));
+            if ($('.param-group').length >= maxsize) {
+                return popTips('新增最大限制' + maxsize + '组参数');
+            }
+            addParamGroup();
+        });
+        //删除参数（频段扫描和离散扫描功能使用）
+        $('#btnDelParamGroup').click(function (event) {
+            event.preventDefault();
+            delParamGroup();
+        });
+        //导入参数（离散扫描功能使用）
+        $('#impParamFile').fileupload({
+            url: '../file/getContent',
+            dataType: 'json'
+        }).on('fileuploadadd', function (e, data) {
+            var name = data.files[0].name;
+            var ext = name.substr(name.lastIndexOf('.'), name.length - name.lastIndexOf('.'));
+            if (ext.toLowerCase() != ".txt") {
+                popTips('选择的文件格式不正确!');
+                return false;
+            }
+        }).on('fileuploaddone', function (e, data) {
+            var ret = data.result;
+            if (ret.flag == "0") return popTips(ret.msg);
+            var reg = /^(\d+\.?\d*(\r\n)*)+$/;
+            if (!reg.test(ret.content)) {
+                return popTips('频点格式错误，无法解析为有效参数!');
+            }
+            var freqs = ret.content.split('\r\n');
+            var maxsize = parseInt($('#btnAddParamGroup').attr('maxsize'));
+            if (freqs.length > maxsize) {
+                return popTips('导入最大限制' + maxsize + '组参数');
+            }
+            $('.param-group:hidden').remove();
+            $.each(freqs, function (index, freq) {
+                if (freq == '') return true;
+                if (index > 0) addParamGroup(true);
+                $('.param-group').last().find('#frequency').val(freq);
+            });
+            fillFreqList(0);
+            //初始化布局参数控件
+            initParamEvent(AlterRtmTask); //AlterRtmTask 更改监测设备参数信息
+        });
+    }
+    //从localStorage中获取查询数据并设置查询条件 lvdiquan
+    function SetQueryData() {
+        var key = "33090002" + "00101" + "_" + "10";
+        //根据键值获取对应的查询参数
+        var dataJson = getLocalStorage(key);
+        if (!dataJson) return;
+        //将字符串转成Object对象
+        var groups = JSON.parse(dataJson);
+        $('.param-group').slice(1).remove();
+        $.each(groups, function (index, items) {
+            //参数组数超过设备功能支持的最大限制时跳出
+            if (index >= parseInt("1")) {
+                return false;
+            }
+            if (index > 0) {
+                addParamGroup(true);
+            }
+            var $paramGroup = $('.param-group').last();
+            $.each(items, function (i, item) {
+                var $input = $('.param-item', $paramGroup).find('[name="' + item.Id + '"]');
+                if (item.Text) {//下拉框
+                    var combxList = $input.nextAll('.droplist-custom').find('li');
+                    var isExistValue = false;
+                    combxList.each(function () {
+                        if ($(this).attr('data-value') == item.Value) {
+                            $input.val(item.Text).attr('data-value', item.Value);
+                            isExistValue = true;
+                            return false;
+                        }
+                    });
+                    if (isExistValue) {
+                        var firstVal = $input.nextAll('.droplist-custom').find('li:first').attr('data-value');
+                        $input.val(item.Text).attr('data-value', firstVal);
+                    }
+                } else {
+                    $input.val(item.Value);
+                }
+            });
+        });
+        fillFreqList(0);
+        //初始化布局参数控件
+        $('.droplist-custom>li').unbind('click');
+        initParamEvent(AlterRtmTask); //AlterRtmTask 更改监测设备参数信息
+    }
+
+    //保存查询条件到localStorage中 lvdiquan
+    function SaveQueryData() {
+        var key = "33090002" + "00101" + "_" + "10";
+        var groups = [];
+        $('.param-group', $('#sglfreq')).each(function () {
+            var items = [];
+            $('.param-item', $(this)).each(function () {
+                var $input = $(this).find('input.input-custom');
+                var name = $input.attr('name');
+                var val = $input.attr('data-value') || $input.val();
+                var text = $input.attr('data-value') && $input.val();
+                if (name == "frequency" || name == "startfreq" || name == "stopfreq") {
+                    val = parseFloat(val);
+                }
+                items.push({Id: name, Value: val, Text: text});
+            });
+            groups.push(items);
+        });
+
+        //将对象转成字符串
+        var dataJson = JSON.stringify(groups);
+        //按键值对key，value的形式保存查询参数
+        setLocalStorage(key, dataJson);
+    }
+
+    //更改监测设备参数信息
+    function AlterRtmTask() {
+        var paramData = $('#sglfreq').data('paramData') || {};
+        if (!paramData.nTaskID) return;
+
+        var sUpdateParam = getDeviceParam();
+        if (sUpdateParam != $('#sglfreq').data('deviceParam')) {
+            getJsonData2('../service/rtm/AlterRtmTask?' + new Date(), {
+                rmsip: paramData.rmsip,
+                sUser: paramData.sUser,
+                nTaskID: paramData.nTaskID,
+                sUpdateParam: sUpdateParam
+            }, function (data) {
+                if (data.flag == "1") {
+                    $('#sglfreq').data('deviceParam', sUpdateParam);
+                    //缓存
+                    SaveQueryData();
+                }
+                else {
+                    popTips(data.error, 'error');
+                }
+            });
+        }
+    }
+
+    //设置参数状态(启动和停止任务时使用)
+    function setParamStatus(readonly) {
+        if (readonly) {
+            $('#btnStart').removeAttr('disabled');
+            $('#btnStart').hide();
+            $('#btnStop').show();
+            $('.param-header .btn').attr("disabled", "disabled");
+            
+            $('.param-group input.input-custom').attr("disabled", "disabled");
+            $('.param-group input.input-custom').nextAll('.input-custom-arrow').hide();
+            
+        } else {
+            $('#btnStop').removeAttr('disabled');
+            $('#btnStop').hide();
+            $('#btnStart').show();
+            $('.param-header .btn').removeAttr("disabled");
+            $('#txtfreqList').removeAttr("disabled");
+            $('.param-group input.input-custom').removeAttr('disabled');
+            $('.param-group .input-custom-arrow').show();
+
+            //恢复保存数据按钮状态
+            $('#btnSaveRealtimeData').children('i').removeClass('fa fa-check');
+            $('#btnSaveCountData').children('i').removeClass('fa fa-check');
+        }
+        // $('#lblStartMessage').empty();
+    }
+
+    function showParamItem() {
+        $('.param-item').show().find('input').trigger('input');
+        $('.param-group').width('auto');
+
+        $('.param-item').each(function () {
+            var itemTop = $(this).position().top;
+            if (itemTop >= 57) {
+                $(this).hide();
+            }
+        });
+    }
+
+    //填充频率组列表数据
+    function fillFreqList(selelctIndex) {
+        var $freqlist = $('#txtfreqList').nextAll('.droplist-custom');
+        $freqlist.empty();
+        $('.param-group').each(function (index) {
+            var startfreq = $(this).find('#startfreq').attr('data-value') || $(this).find('#startfreq').val() ||
+                $(this).find('#frequency').attr('data-value') || $(this).find('#frequency').val() || '';
+            var stopfreq = $(this).find('#stopfreq').attr('data-value') || $(this).find('#stopfreq').val() || '';
+            var text = ( startfreq && stopfreq && (startfreq + ' - ' + stopfreq) || startfreq || stopfreq );
+            if (text) text += 'MHz';
+            var $freqli = $('<li data-startfreq="' + startfreq + '" data-stopfreq="' + stopfreq + '" data-text="' + text + '" data-value="' + text + '" >' + text + '</li>').click(function () {
+                $('#txtfreqList').val(text).attr("data-index", $(this).index());
+                $('.param-group').hide().eq($(this).index()).show();
+                $(this).parent().hide();
+                $(this).parent().parent().children('input').blur();
+            });
+            $freqlist.append($freqli);
+            if ($(this).is(':visible')) {
+                $('#txtfreqList').val(text).attr("data-index", index);
+            }
+        });
+        if (typeof selelctIndex !== 'undefined') {
+            $('.param-group').hide().eq(selelctIndex).show();
+            $('#txtfreqList').attr("data-index", selelctIndex).val($('#txtfreqList').nextAll('.droplist-custom').find('li').eq(selelctIndex).attr('data-text'));
+        }
+
+        $('.param-group [name="startfreq"],.param-group [name="stopfreq"],.param-group [name="frequency"]').on('change', function () {
+            setTimeout(fillFreqList, 10);
+        });
+        if ($('.param-group').length <= 1) {
+            $('#btnDelParamGroup').hide();
+        } else {
+            $('#btnDelParamGroup').show();
+        }
+    }
+
+    //新增参数组
+    function addParamGroup(flag) {
+        var maxsize = parseInt($('#btnAddParamGroup').attr('maxsize'));
+        if ($('.param-group').length >= maxsize) {
+            return;
+        }
+        var funcno = "10";
+        var $paramGroup = $('.param-group').last().clone();
+        switch (funcno) {
+            case "14"://离散扫描
+                var freq = $paramGroup.find('#frequency').val();
+                if (!freq) {
+                    return;
+                }
+                $paramGroup.find('#frequency').val(parseInt(freq) + 1);
+                break;
+            case "15"://频段扫描
+                var startFreq = $paramGroup.find('#startfreq').val();
+                var stopFreq = $paramGroup.find('#stopfreq').val();
+                if (!startFreq || !stopFreq) {
+                    return;
+                }
+
+                $paramGroup.find('#startfreq').val(parseInt(stopFreq) + 1);
+                $paramGroup.find('#stopfreq').val(parseInt(stopFreq) + 11);
+                break;
+        }
+        $paramGroup.insertAfter($('.param-group').hide().last()).show();
+        if (!flag) {
+            fillFreqList();
+            //初始化布局参数控件
+            initParamEvent(AlterRtmTask); //AlterRtmTask 更改监测设备参数信息
+        }
+    }
+
+    //删除参数组
+    function delParamGroup() {
+        var index = $('#txtfreqList').attr('data-index');
+        $('.param-group').eq(index).remove();
+        if (index > $('.param-group').length - 1) {
+            index = $('.param-group').length - 1;
+        }
+        fillFreqList(index);
+    }
+
+    //在功能参数组件中调用
+    function start(_callback) {
+        $('#lblStartMessage').empty().show().stop(true, false).fadeTo(100, 1).removeAttr('stop');
+        var paramData = $('#sglfreq').data('paramData') || {};
+        if (paramData.nTaskID) return;
+        var params = {
+            monstationno: "33090002",
+            devno: "00101",
+            funcno: "10",
+            funcname: "单频测量",
+            deviceParam: getDeviceParam()
+        }
+        addStartMessage('准备启动设备监测...');//操作信息
+        //获取监测地址
+        GetRMSServerAddress(params.monstationno.substr(0, 6), function (data) {
+            $.extend(params, data);//
+            //创建监测任务
+            $.post('../service/rtm/CreateRtmTask', params, function (ret) {
+                $('#sglfreq').data('deviceParam', params.deviceParam);//缓存设备参数
+                var socket = $('#sglfreq').data('socket');
+                if (!socket) {
+                    socket = initSocketListener('start'); //初始化监听
+                }
+                if (ret.flag != "1") return addStartMessage('创建监测任务失败');//操作信息
+                emitParamData({sUser: ret.data.sUser, nTaskID: ret.data.nTaskID});
+                socket.emit('OpenRMS');
+
+                //更改监测功能状态
+                parent.$('.icon-sglfreq').removeClass('pause').addClass('on');
+                //开启声音
+                setTimeout(function () {
+                    $('#sglfreq').data('openSound', true);
+                }, 3000);
+                //$('#lblStartMessage').empty();
+                //回调
+                if (typeof _callback === "function") {
+                    _callback();
+                    if (typeof startTaskComplate === 'function')
+                        startTaskComplate();
+                }
+            });
+        });
+    }
+
+    //获取监测地址
+    function GetRMSServerAddress(sRegionNo, callback) {
+        
+        getJsonDatasync2('../service/dms/GetRMSServerAddress?' + new Date(), {
+            dmsip: '10.10.5.161',
+            sRegionNo: sRegionNo
+        }, function (ret) {
+            if (ret.flag == "1") {
+                emitParamData($.extend(ret.data, {
+                    sUser: 'dingfenglei',
+                    isPortable: ''
+                }));
+                addStartMessage('服务地址和端口号获取成功');//操作信息
+                callback(ret.data);
+            } else {
+                addStartMessage('获取服务地址和端口号失败');//操作信息
+            }
+        });
+        
+    }
+
+    function stop(_callback) {
+        //$('#lblStartMessage').empty();
+        var paramData = $('#sglfreq').data('paramData') || {};
+        getJsonData2('../service/rtm/DeleteRtmTask', {
+            rmsip: paramData.rmsip,
+            sUser: paramData.sUser,
+            nTaskID: paramData.nTaskID
+        }, function (data) {
+            //清除当前任务信息
+            emitParamData({sUser: '', nTaskID: ''});
+            $('#sglfreq').removeData('deviceParam');//删除设备参数
+            var socket = $('#sglfreq').data('socket');
+            if (socket) {
+                socket.emit('close');
+                socket.emit('disconnect');
+            }
+            // $('#sglfreq').removeData('socket');
+            //更改监测功能状态
+            parent.$('.icon-sglfreq').removeClass('on');
+            //关闭音频数据
+            stopSound();
+            //隐藏启动监测的进度显示信息
+            $('#lblStartMessage').empty().hide().attr('stop', true);
+            //回调
+            if (typeof _callback === "function") {
+                _callback();
+                if (typeof stopTaskComplate === 'function') {
+                    stopTaskComplate();
+                }
+            }
+        });
+    }
+
+    //检测设备使用冲突信息
+    function checkDevUseConflict() {
+        var paramData = $('#sglfreq').data('paramData') || {};
+        getJsonDatasync2('../service/atomms/SSTaskOccupyInfo?' + new Date(), {
+            rmsip: paramData.rmsip,
+            param: paramData.nTaskID
+        }, function (ret) {
+            if (ret.flag == "-1") {
+                return;
+            }
+            else if (ret.flag == "0") {
+                stop(function () {
+                    setParamStatus(false);//设置参数状态
+                });
+                return popTips(ret.msg);
+            } else {
+                var devconflictdata = ret.data;
+                if (devconflictdata.query.tasks.task.length == 0) return;
+                stop(function () {
+                    setParamStatus(false);//设置参数状态
+                    fillDevConflictList(devconflictdata);//填充设备使用冲突数据
+                    $('#modalDevConflict').appendTo('body').modal('show');
+                });
+            }
+        });
+    }
+
+    //保存监测任务的数据（实时、统计）
+    function saveTaskData(options, _callback) {
+        var paramData = $('#sglfreq').data('paramData') || {};
+        if (!paramData.nTaskID) return;
+        getJsonData2('../service/rtm/SwitchRtmTaskDataSave', {
+            rmsip: paramData.rmsip,
+            sUser: paramData.sUser,
+            nTaskID: paramData.nTaskID,
+            nFlag: options.nFlag,
+            bOn: options.bOn,
+            nHoldTime: 0
+        }, function (data) {
+            if (typeof _callback === "function") {
+                _callback();
+            }
+        });
+    }
+
+    //
+    $(window).bind('beforeunload', function () {
+        close();
+    });
+
+    function close() {
+        //如果是数据共享，则只关闭中间层的连接
+        
+        stop();
+        
+    }
+
+    //初始化Socket监听环境
+    function initSocketListener(opType) {
+        var socket = $('#sglfreq').data('socket');
+        if (socket) return socket;
+        var ip = window.location.hostname;
+        socket = io.connect('http://' + ip + ':3202', {'max reconnection attempts': 20}); //socket 连接
+        $('#sglfreq').data('socket', socket);
+        socket.on('connect', function (data) {
+            console.log('connect');
+            return;
+            var paramData = $.extend($('#sglfreq').data('paramData') || {});
+            if (!opType && paramData.nTaskID) {
+                emitParamData({})
+                socket.emit('OpenRMS');
+            }
+            opType = null;
+        });
+        socket.on('message', function (data) {
+            addStartMessage(decodeURIComponent(data.msg), true);//操作信息
+        });
+        //音频数据
+        socket.on('audioData', function (data) {
+            if ($('#btnSwitchAudio').hasClass('btn-audio')) {
+                $('#btnSwitchAudio').removeClass('btn-audio').addClass('btn-mute');
+            }
+            var blob = new Blob([data], {type: 'audio/x-wav'});
+            var src = window.URL.createObjectURL(blob);
+            playSound(src);
+        });
+        //初始化监听后执行的函数
+        if (typeof initSocketListenerAfter === "function") {
+            initSocketListenerAfter(socket);
+        }
+        return socket;
+    }
+
+    //发送参数到服务端
+    function emitParamData(data) {
+        var paramData = $.extend($('#sglfreq').data('paramData') || {}, data);
+        $('#sglfreq').data('paramData', paramData);
+        var socket = $('#sglfreq').data('socket');
+        if (socket) {
+            socket.emit('paramData', paramData);
+        }
+    }
+
+    //获取设备参数
+    function getDeviceParam() {
+        var groups = [];
+        var items = [];
+        $('.param-group', $('#sglfreq')).each(function () {
+            items = [];
+            $('.param-item', $(this)).each(function () {
+                $input = $(this).find('input.input-custom');
+                var name = $input.attr('name');
+                var unit = $input.attr('unit') || "";
+                var val = $input.attr('data-value') || $input.val();
+                items.push('<item name="' + name + '" unit="' + unit + '" value="' + val + unit + '" valid="true" show="true"/>');
+            });
+            var $freq = $('.param-item', $(this)).find('input.input-custom').first()
+            groups.push({
+                freq: parseFloat($freq.attr('data-value') || $freq.val()),
+                items: items
+            });
+        });
+        groups.sort(function (a, b) {
+            return a.freq > b.freq ? 1 : -1
+        });//从小到大排序
+        var parameter = '<?xml version="1.0" encoding="gb2312" ?><!-- 设备参数框架 --><parameter groups="' + groups.length + '" name="TCI-TCI735HV" id="10">';
+        for (var i = 0; i < groups.length; i++) {
+            parameter += '<group index="' + i + '">';
+            parameter += groups[i].items.join("");
+            parameter += '</group>';
+        }
+        parameter += '</parameter>';
+        return parameter;
+    }
+
+    //添加message操作日志
+    function addStartMessage(message, islast) {
+        var $startMessage = $('#lblStartMessage').show();
+        if ($startMessage.attr('stop'))return;
+        $startMessage.removeClass('message-audio');
+        if (message.indexOf('声卡被占用') != -1) {
+            $startMessage.addClass('message-audio');
+            $('#btnSwitchAudio').removeClass('btn-mute').addClass('btn-audio');
+        }
+        var status = 'info';
+        if (message.indexOf('成功') != -1) {
+            status = 'success';
+        } else if (message.indexOf('失败') != -1 || message.indexOf('错误') != -1) {
+            status = 'error';
+        }
+        $('<div class="' + status + '"><div').text(message).appendTo($startMessage);
+        if (islast) {
+            $startMessage.hover(function () {
+                $startMessage.stop(true, false).fadeTo(100, 1);
+            }, function () {
+                $startMessage.delay(3000).fadeOut(2000);
+            }).delay(3000).fadeOut(2000);
+        }
+        return $startMessage;
+    }
+
+    //播放音频
+    function playSound(src) {
+        if (!$('#sglfreq').data('openSound')) return;
+        if (!!window.ActiveXObject || "ActiveXObject" in window) { //IE
+            $('<bgsound class="sound" src="' + src + '" autostart="true" hidden="true" ></bgsound>').appendTo($('body'));
+            //删除多余的音频元素
+            setTimeout(function () {
+                $('.sound').not(':last').remove();
+            }, 200);
+        }
+        else {
+            // $('<audio class="sound" src="' + src + '" autoplay="autoplay" hidden="true"></audio>').appendTo($('body'));
+            if ($('.sound').length == 0) {
+                $('<audio class="sound" autoplay="autoplay" hidden="true"></audio>').appendTo($('body'));
+            }
+            document.getElementsByClassName('sound')[0].src = src;
+        }
+    }
+
+    //停止播放音频
+    function stopSound() {
+        $('#sglfreq').data('openSound', false);
+        var sounds = document.getElementsByClassName('sound');
+        for (var i = 0; i < sounds.length; i++) {
+            if (sounds[i].nodeName == "AUDIO") {
+                sounds[i].muted = true;
+            } else {
+                sounds[i].volume = -10000;
+            }
+        }
+        $('.sound').remove();
+
+    }
+
+    //初始化监测共享相关的控件
+    function initShareControl() {
+        $('#btnStart').hide();
+        $('#btnShare').show();
+        $('#btnRecovery').parent().find('.btn-fun').hide();
+        $('#btnRecovery').show();
+        $('#btnRestore').show();
+        $('.param-header .btn').attr("disabled", "disabled");
+        $('.param-item .input-custom').attr('disabled', 'disabled').nextAll('.input-custom-arrow').hide();
+
+        //共享
+        $('#btnShare').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $('#lblStartMessage').empty().show();
+            var paramData = $('#sglfreq').data('paramData');
+            var socket = $('#sglfreq').data('socket');
+            if (!socket) socket = initSocketListener('share'); //初始化监听
+            //提交参数
+            emitParamData({sUser: '', nTaskID: '', rmsip: ''});
+            socket.emit('OpenRMS', paramData);
+            //
+            $('#btnShare').hide();
+            $('#btnStartMsg').show();
+            $('#btnStopShare').show();
+            parent.$tableMonShared.find('#').addClass('run').find('td').css({color: '#53fd00'});
+
+            var runDevList = parent.$tableMonShared.data('runDevList') || [];
+            runDevList.push('');
+            parent.$tableMonShared.data('runDevList', runDevList);
+        });
+        //停止共享
+        $('#btnStopShare').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var socket = $('#sglfreq').data('socket');
+            socket.emit('closeRMS');
+            parent.$tableMonShared.find('#').removeClass('run').find('td').css({color: '#2dfbfe'});
+            var runDevList = parent.$tableMonShared.data('runDevList') || [];
+            runDevList.splice($.inArray('', runDevList), 1);
+            parent.$tableMonShared.data('runDevList', runDevList);
+            //
+            $('#btnStopShare').hide();
+            $('#btnShare').show();
+        });
+        //回收
+        $('#btnRecovery').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            //提交参数
+            emitParamData({sUser: '', nTaskID: '', rmsip: ''});
+            stop(function () {
+                //
+                parent.$tableMonShared.find('#').remove();
+                parent.$('.fun-content').find('#').remove();
+            });
+        });
+        //恢复(还原)
+        $('#btnRestore').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var title = '舟山市枸杞岛固定站_TCI-TCI735HV';
+            var url = '/rtm?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&rmsip=&taskid=&userid=&monstationno=33090002&devno=00101&monstationname=舟山市枸杞岛固定站&devname=TCI-TCI735HV&type=sglfreq';
+            top.openWindow(url, title);
+        });
+    }
+
+    //初始化监测数据回放相关的控件
+    function initPlayBackControl() {
+        $('.btn-save').hide();
+        $('#btnPause').hide();
+        $('#btnResume').hide();
+        $('#btnStart').hide();
+        $('#btnSwitchAudio').hide();
+        $('#btnStartBack').show();
+        $('#btnPauseOn').show();
+        $('#btnSpeed').show();
+        $('.progressbar').show();
+        $('.bar-msg').show();
+        $('#sglfreq').data('isFast', 0);
+        var beginTime = parseInt('0');
+        var endTime = parseInt('0');
+        $('.bar-msg').html(longDateConvertDateStr(beginTime));
+        progressBar = $('.progressbar').progressbar({
+            min: beginTime || 0,
+            max: endTime || 100,
+            isDrag: true,
+            barStyle: {
+                background_color: '#f0f0f0',
+                height: 10
+            }, //滑动按钮的样式
+            btnSliderStyle: {
+                width: 8, //8px
+                background_color: '#f0f0f0'
+            },
+            barSlideredStyle: {
+                background_color: '#3BE3FF'
+            },
+            sliderDragged: draggedBar,
+            sliderDragging: function (val) {
+                $('.bar-msg').html(longDateConvertDateStr(val));
+            }
+        });
+
+        $('.param-header .btn').attr("disabled", "disabled");
+        $('.param-item .input-custom').attr('disabled', 'disabled').nextAll('.input-custom-arrow').hide();
+        $('#middleBtnTool').css('width', '360px');
+        $('#rightBtnTool').css('left', '440px');
+        setPlayBackTaskParam();
+        $('#btnStartBack').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $('#btnStartBack').attr("disabled", "disabled");
+            playBackData(function () {
+                $('#btnStartBack').hide().removeAttr("disabled");
+                $('#btnStartMsg').show();
+                $('#btnStopBack').show();
+                $('#btnPauseOn').show();
+                $('#btnPauseOff').hide();
+            });
+        });
+        $('#btnStopBack').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $('#btnStopBack').attr("disabled", "disabled");
+            var paramData = $('#sglfreq').data('paramData');
+            getJsonData2('../service/rtm/StopRtmReply', {
+                sUser: paramData.sUser,
+                nReplyID: paramData.nTaskID,
+                rmsip: paramData.rmsip
+            }, function (ret) {
+                progressBar.setVal(beginTime);
+                $('#btnStartBack').show();
+                $('#btnStopBack').hide().removeAttr("disabled");
+                $('#btnPauseOn').show();
+                $('#btnPauseOff').hide();
+            });
+        });
+        //暂停
+        $('#btnPauseOn').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var paramData = $('#sglfreq').data('paramData');
+            getJsonData2('../service/rtm/SuspendRtmReply', {
+                sUser: paramData.sUser,
+                nReplyID: paramData.nTaskID,
+                rmsip: paramData.rmsip
+            }, function (ret) {
+                if (ret.flag == 0) return popTips(ret.msg, 'error');
+                $('#btnPauseOn').hide();
+                $('#btnPauseOff').show();
+            });
+
+        });
+        //恢复暂停回放
+        $('#btnPauseOff').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var paramData = $('#sglfreq').data('paramData');
+            getJsonData2('../service/rtm/ResumeRtmReply', {
+                sUser: paramData.sUser,
+                nReplyID: paramData.nTaskID,
+                rmsip: paramData.rmsip,
+                lnFast: $('#sglfreq').data('isFast')
+            }, function (ret) {
+                if (ret.flag == 0) return popTips(ret.msg, 'error');
+                $('#btnPauseOff').hide();
+                $('#btnPauseOn').show();
+            });
+        });
+        //加速
+        $('#btnSpeed').click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            ($('#sglfreq').data('isFast') == 0) ? $('#sglfreq').data('isFast', 1) : $('#sglfreq').data('isFast', 0);
+            var paramData = $('#sglfreq').data('paramData');
+            getJsonData2('../service/rtm/ResumeRtmReplyEx', {
+                sUser: paramData.sUser,
+                nReplyID: paramData.nTaskID,
+                lnFast: parseInt($('#sglfreq').data('isFast')),
+                rmsip: paramData.rmsip
+            }, function (ret) {
+                if (ret.flag == 0) popTips(ret.msg, 'error');
+            });
+        });
+        var socket = $('#sglfreq').data('socket');
+        if (!socket) {
+            socket = initSocketListener('playBack'); //初始化监听
+        }
+        socket.on('header', function (data) {
+            if ($('#btnStartBack').is(':visible')) return;
+            var nowDate = data.tmStamp;
+            if (nowDate <= endTime) {
+                progressBar.setVal(nowDate, function (proBar) {
+                    $('.bar-msg').html(longDateConvertDateStr(nowDate));
+                });
+            } else {
+                progressBar.setVal(beginTime, function () {
+                    $('.bar-msg').html(longDateConvertDateStr(beginTime));
+                    $('#btnStartBack').show();
+                    $('#btnStopBack').hide();
+                    $('#btnPauseOn').show();
+                    $('#btnPauseOff').hide();
+                });
+            }
+        });
+    }
+
+    function playBackData(callback) {
+        $('#lblStartMessage').empty().show().stop(true, false).fadeTo(100, 1).removeAttr('stop');
+        var sFile = encodeURI('');
+        var sUser = '';
+        var rmsip = '';
+        var nTime = parseInt('0');
+        getJsonData2('../service/rtm/GetRtmReplyTaskId', {
+            sUser: sUser,
+            sFile: sFile,
+            nTime: nTime,
+            rmsip: rmsip
+        }, function (ret) {
+            if (ret.flag == "0")  return popTips(ret.msg, 'error');
+            var taskId = ret.data;
+            var paramData = $('#sglfreq').data('paramData');
+            var socket = $('#sglfreq').data('socket');
+            if (!socket) {
+                socket = initSocketListener('playBack'); //初始化监听
+            }
+
+            //提交参数
+            emitParamData({sUser: sUser, nTaskID: taskId, rmsip: rmsip});
+            socket.emit('OpenRMS', paramData, function () {
+                getJsonData2('../service/rtm/ResumeRtmReplyEx', {
+                    sUser: sUser,
+                    nReplyID: taskId,
+                    lnFast: parseInt($('#sglfreq').data('isFast')),
+                    rmsip: rmsip
+                }, function (ret) {
+                    console.log(ret.msg);
+                });
+            });
+            if (typeof callback === 'function') callback();
+
+        });
+    }
+
+    //拖动播放条完成事件
+    function draggedBar(val) {
+        var paramData = $('#sglfreq').data('paramData');
+        getJsonData2('../service/rtm/SetRtmReplyTimePos', {
+            sUser: paramData.sUser,
+            nReplyID: paramData.nTaskID,
+            rmsip: paramData.rmsip,
+            nTimePos: val
+        }, function (ret) {
+            console.log(val);
+            console.log(ret.msg);
+        });
+    }
+
+    //设置任务参数(数据回放)
+    function setPlayBackTaskParam() {
+        var fileId = encodeURI('');
+        getJsonData2('../service/rtm/GetRtmDataParam', {
+            fileId: fileId,
+            rmsip: ''
+        }, function (ret) {
+            if (ret.flag == "0") return popTips(ret.msg, 'error');
+            setDeviceParam(ret.data);
+        });
+    }
+
+    //设置任务参数（ 数据共享和恢复使用）
+    function setTaskParam() {
+        getJsonData2('../service/rtm/getDeviceParam?' + new Date(), {
+            nTaskID: '',
+            rmsip: ''
+        }, function (ret) {
+            if (ret.flag == "0") return popTips(ret.msg, 'error');
+            setDeviceParam(ret.data);
+        });
+    }
+
+    function setDeviceParam(data) {
+        if (!data) return;
+        var groups = [];//参数组
+        if (Object.prototype.toString.call(data.parameter.group) == '[object Array]') {
+            groups = data.parameter.group;
+        } else {
+            groups.push(data.parameter.group);
+        }
+        $('.param-group').slice(1).remove();
+        $.each(groups, function (index, group) {
+            if (index > 0) {
+                addParamGroup(true);
+            }
+            var $paramGroup = $('.param-group', $('#sglfreq')).last();
+            $.each(group.item, function (i, item) {
+                var name = item.$.name;
+                var val = item.$.value;
+                var $input = $('.param-item', $paramGroup).find('[name="' + name + '"]');
+                if ($input.hasClass('enum')) {
+                    var text = $input.nextAll('.droplist-custom').find('li[data-value="' + val + '"]').attr('data-text');
+                    $input.val(text).attr('data-value', val);
+                } else {
+                    if (name == "frequency" || name == "startfreq" || name == "stopfreq" || $input.hasClass('double')) {
+                        val = parseFloat(val);
+                        val = isNaN(val) ? 0 : val;
+                    } else if ($input.hasClass('int')) {
+                        val = parseInt(val);
+                        val = isNaN(val) ? 0 : val;
+                    }
+                    $input.val(val);
+                }
+            });
+        });
+        fillFreqList(0);
+        $('.droplist-custom>li').unbind('click');
+        initParamEvent();
+    }
+</script>
+    </div>
+    <div id="mainContainer" class="layout-dock-bottom" style="top:68px; border: 0px; padding: 5px 5px 0 5px;">
+        <div class="layout-fill">
+            <div id="irContainer" style="width: 100%; position: relative; border: 1px solid rgb(0, 177, 179); height: 20.17px;">
+                <div class="table-head">
+                    <table class="table table-custom " style="border:none;">
+                        <colgroup>
+                            <col style="width: 20%;">
+                            <col style="width: 20%;">
+                            <col style="width: 20%;">
+                            <col style="width: 20%;">
+                            <col style="">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>测量项</th>
+                            <th>实时值</th>
+                            <th>平均值</th>
+                            <th>最大值</th>
+                            <th>最小值</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="table-body" style="height: 0px; overflow: hidden; outline: none;" tabindex="5003">
+                    <table id="irTable" class="table table-custom not-sort" style="">
+                        <colgroup>
+                            <col style="width: 20%;">
+                            <col style="width: 20%;">
+                            <col style="width: 20%;">
+                            <col style="width: 20%;">
+                            <col style="">
+                        </colgroup>
+                        <tbody>
+                        <tr id="ir0">
+                            <td class="ITUName">&nbsp;</td>
+                            <td class="value"></td>
+                            <td class="avgValue"></td>
+                            <td class="maxValue"></td>
+                            <td class="minValue"></td>
+                        </tr>
+                        <tr id="ir1">
+                            <td class="ITUName">&nbsp;</td>
+                            <td class="value"></td>
+                            <td class="avgValue"></td>
+                            <td class="maxValue"></td>
+                            <td class="minValue"></td>
+                        </tr>
+                        <tr id="ir2">
+                            <td class="ITUName">&nbsp;</td>
+                            <td class="value"></td>
+                            <td class="avgValue"></td>
+                            <td class="maxValue"></td>
+                            <td class="minValue"></td>
+                        </tr>
+                        <tr id="ir3">
+                            <td class="ITUName">&nbsp;</td>
+                            <td class="value"></td>
+                            <td class="avgValue"></td>
+                            <td class="maxValue"></td>
+                            <td class="minValue"></td>
+                        </tr>
+                        <tr id="ir4">
+                            <td class="ITUName">&nbsp;</td>
+                            <td class="value"></td>
+                            <td class="avgValue"></td>
+                            <td class="maxValue"></td>
+                            <td class="minValue"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="container" data-toggle="context" data-target="#context-menu" style="margin-bottom: 0px; height: 19.75px;">
+                <div class="layout-fill">
+                    <div class="layout-dock-top" style="top: 6px; color:#2dfbfe;">
+                        <div style="margin-left: 35px; float: left;">
+                            <div style="display: inline-block; width: 150px;">
+                                实时值（<span id="txtUnit">dbμv</span>）：<span id="txtLevel">0</span>
+                            </div>
+                        </div>
+                        <div style="float: right; margin-right: 20px;">
+                            频率：
+                            <span id="txtFreq">0</span>MHz
+                        </div>
+                    </div>
+                    <div class="layout-dock-bottom" style="top: 25px;">
+                        <div id="chartContainer" style=" width: 100%;position:relative;">
+
+                        <canvas id="967ffa90-46d8-11e8-8907-03e672f81095" width="1752" height="-5" style="position: absolute; left: 0px; top: 0px; z-index: 1;"></canvas><canvas id="967ffa91-46d8-11e8-8907-03e672f81095" width="1752" height="-6" style="position: absolute; left: 0px; top: 0px; z-index: 2;"></canvas><canvas id="967ffa92-46d8-11e8-8907-03e672f81095" width="1752" height="-6" style="position: absolute; left: 0px; top: 0px; z-index: 3;"></canvas><canvas id="967ffa93-46d8-11e8-8907-03e672f81095" width="1752" height="-6" style="position: absolute; left: 0px; top: 0px; z-index: 4;"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div id="occContainer" data-toggle="context" data-target="#occ-context-menu" style="position: relative; margin-bottom: 0px; height: 18.54px;">
+                <div id="lblSetThr" style="position: absolute; top: 5px; right: 50px; color: #2dfbfe;">未设置门限值</div>
+            <canvas id="9680e4f0-46d8-11e8-8907-03e672f81095" width="1752" height="18" style="position: absolute; left: 0px; top: 0px; z-index: 1;"></canvas><div style="position: absolute; z-index: 100; top: 35px; left: 0px; width: 1726px; height: 0px; overflow: hidden; outline: none;" tabindex="5000"><div class="layout-fill" style="height: 336px;"><canvas id="968307d0-46d8-11e8-8907-03e672f81095" width="1726" height="336" style="position: absolute; left: 0px; top: 0px; z-index: 2;"></canvas><canvas id="968307d1-46d8-11e8-8907-03e672f81095" width="1726" height="336" style="position: absolute; left: 0px; top: 0px; z-index: 3;"></canvas><canvas id="968307d2-46d8-11e8-8907-03e672f81095" width="1726" height="336" style="position: absolute; left: 0px; top: 0px; z-index: 4;"></canvas></div></div></div>
+            <div id="maxContainer" style="position: relative; margin-bottom: 0px; height: 17.54px;">
+            <canvas id="96841940-46d8-11e8-8907-03e672f81095" width="1752" height="17" style="position: absolute; left: 0px; top: 0px; z-index: 1;"></canvas><div style="position: absolute; z-index: 100; top: 35px; left: 0px; width: 1726px; height: 0px; overflow: hidden; outline: none;" tabindex="5001"><div class="layout-fill" style="height: 336px;"><canvas id="9684dc90-46d8-11e8-8907-03e672f81095" width="1726" height="336" style="position: absolute; left: 0px; top: 0px; z-index: 2;"></canvas><canvas id="968503a0-46d8-11e8-8907-03e672f81095" width="1726" height="336" style="position: absolute; left: 0px; top: 0px; z-index: 3;"></canvas><canvas id="968503a1-46d8-11e8-8907-03e672f81095" width="1726" height="336" style="position: absolute; left: 0px; top: 0px; z-index: 4;"></canvas></div></div></div>
+        </div>
+    </div>
+</div>
+<div id="context-menu">
+    <ul class="dropdown-menu dropdown-menu-custom" role="menu">
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm/func?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&amp;monstationno=33090002&amp;devno=00101&amp;devmodelname=Atom_TCI735HV&amp;monstationname=%E8%88%9F%E5%B1%B1%E5%B8%82%E6%9E%B8%E6%9D%9E%E5%B2%9B%E5%9B%BA%E5%AE%9A%E7%AB%99&amp;devname=TCI-TCI735HV&amp;funcno=10&amp;type=sglfreq#" id="btnChangeChartType"><i>&nbsp;</i>切换柱状图</a></li>
+    </ul>
+</div>
+<div id="occ-context-menu">
+    <ul class="dropdown-menu dropdown-menu-custom" role="menu">
+        <li><a tabindex="-1" href="http://mdfs-rx.pd.cp.hxdi.cn/rtm/func?token=d3b15f90-46d7-11e8-85f0-5b99027fd485&amp;monstationno=33090002&amp;devno=00101&amp;devmodelname=Atom_TCI735HV&amp;monstationname=%E8%88%9F%E5%B1%B1%E5%B8%82%E6%9E%B8%E6%9D%9E%E5%B2%9B%E5%9B%BA%E5%AE%9A%E7%AB%99&amp;devname=TCI-TCI735HV&amp;funcno=10&amp;type=sglfreq#" id="btnThrValue"><i>&nbsp;</i>设置门限值</a></li>
+    </ul>
+</div>
+<div id="modalSetThr" class="modal modal-custom" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="gridSystemModalLabel">设置异常信号门限</h4></div>
+            <div class="modal-body">
+                <div class="form-group form-inline">
+                    <label class="control-label">门限值[-40～100]：</label>
+                    <div class="input-group">
+                        <input id="txtThrValue" type="text" class="form-control input-custom double minus" max="100" min="-40" value="0.0" maxlength="6" style="width: 140px;">
+                        <span class="input-custom-addon">dbμv</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">
+                    <i class="">&nbsp;</i>取消
+                </button>
+                <button type="button" class="btn btn-primary btn-sm btnSetThrValue">
+                    <i class="fa fa-save">&nbsp;</i>确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var $page = $('#sglfreq');
+    var $tablereport = $('#STReport');
+    var chart;
+    var occChart;
+    var maxChart;
+    $(function () {
+        var size = getChartSize();
+        $('#container').height(size.chartSize.height);
+        chart = $("#chartContainer").rxchart({
+            title: "  ",
+            width: size.chartSize.width,
+            height: size.chartSize.height - 25,
+            type: 'line',
+            hiddenXAxis: true,
+            xAxis: [],
+            yAxis: {
+                min: -20,
+                max: 80,
+                step: 6,
+                hidden: false
+            },
+            event: {
+                onclick: function (event) {
+                }
+            },
+            data: []
+        });
+        $('#irContainer').height(size.irChartSize.height);
+        $('#irContainer').find('.table-body').height(size.irChartSize.height - 26);
+
+        $('#occContainer').height(size.occChartSize.height);
+        // $('#occChartContainer').width(size.occChartSize.width-100);
+        occChart = $("#occContainer").rxgridchart({
+            title: "时间占用度[每分钟]",
+            type: "minutes",
+            width: size.occChartSize.width,
+            height: size.occChartSize.height,
+            colorlegend: {
+                min: 0,
+                max: 100,
+                step: 10,
+                colors: ['#00ffff', '#00fff5', '#72ff00', '#fff500', '#ff0000', '#e500ff', '#000aff']
+            },
+            data: []
+        });
+        $('#maxContainer').height(size.maxChartSize.height);
+        maxChart = $("#maxContainer").rxgridchart({
+            title: "最大电平统计[每分钟]",
+            width: size.maxChartSize.width,
+            height: size.maxChartSize.height,
+            colorlegend: {
+                min: -20,
+                max: 100,
+                step: 10,
+                colors: ['#00cf00', '#40ff00', '#00ff00', '#00ff00', '#00ff00', '#008000', '#004000']
+            },
+            data: []
+        });
+
+        initButtons();//初始化功能按钮
+        initParamData();
+        ////窗口大小发生改变时控件自适应
+        $(window).resize(function () {
+            var size = getChartSize();
+            $('#container').height(size.chartSize.height);
+            chart.resize(size.chartSize.width, size.chartSize.height - 25);
+            $('#irContainer').height(size.irChartSize.height);
+            $('#irContainer').find('.table-body').height(size.irChartSize.height - 26);
+            $('#occContainer').height(size.occChartSize.height);
+            occChart.resize(size.occChartSize.width, size.occChartSize.height);
+            $('#maxContainer').height(size.maxChartSize.height);
+            maxChart.resize(size.maxChartSize.width, size.maxChartSize.height);
+        });
+    });
+    function initParamData() {
+        emitParamData({arrSize: chart.grid.width});
+    }
+    //初始化按钮
+    function initButtons() {
+        //切换波形图/柱状图
+        $('#btnChangeChartType').click(function (event) {
+            event.preventDefault();
+            var btnText = $(this).text();
+            if (btnText.indexOf("波形") != -1) {
+                $(this).html('<i class="fa fa-check">&nbsp;</i>切换柱状图');
+                chart.getOption().type = "line";
+            } else {
+                $(this).html('<i class="fa fa-check">&nbsp;</i>切换波形图');
+                chart.getOption().type = "bar";
+            }
+        });
+        //设置门限值
+        $('#btnThrValue').click(function (event) {
+            event.preventDefault();
+            $('#modalSetThr').modal('show');
+        });
+        //设置门限值 确定按钮
+        $('#modalSetThr').find('.btnSetThrValue').click(function (event) {
+            event.preventDefault();
+            var thrValue = $('#txtThrValue').val();
+            emitParamData({thrValue: thrValue});
+
+            $('#lblSetThr').text('当前门限值：' + thrValue + 'dbμv');
+            $('#modalSetThr').modal('hide');
+        });
+    }
+    //填充测量项表格数据
+    function fillIrTable(items) {
+        var $irTable = $('#irTable').find('tbody');
+        for (var i = 0; i < items.length; i++) {
+            var ITUName = decodeURIComponent(items[i].ITUName + '(' + items[i].unit + ')');
+            var $tr = $irTable.find('#ir' + i);
+            if ($tr.length == 0) {
+                $tr = $('<tr id="ir' + i + '">' +
+                        '<td class="ITUName">' + ITUName + '</td> ' +
+                        '<td class="value">' + items[i].value + '</td> ' +
+                        '<td class="avgValue">' + ConvertFloat(items[i].avgValue, 4) + '</td> ' +
+                        '<td class="maxValue">' + items[i].maxValue + '</td> ' +
+                        '<td class="minValue">' + items[i].minValue + '</td> ' +
+                        '<tr>');
+                $irTable.append($tr);
+            } else {
+                $tr.find('.ITUName').html(ITUName);
+                $tr.find('.value').html(items[i].value);
+                $tr.find('.avgValue').html(ConvertFloat(items[i].avgValue, 4));
+                $tr.find('.maxValue').html(items[i].maxValue);
+                $tr.find('.minValue').html(items[i].minValue);
+            }
+            if (!$tr.hasClass('dblclick')) {
+                $tr.dblclick(function () {
+                    var ITUName = $(this).find('.ITUName').html();
+                    $(this).parent().find('.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                    $('#txtName').text(ITUName);
+                    var itemIndex = $(this).index();
+                    var paramData = $.extend($('#sglfreq').data('paramData') || {}, {itemIndex: itemIndex});
+                    $('#sglfreq').data('paramData', paramData);
+                    $('#sglfreq').data('socket').emit('paramData', paramData);
+
+                    var option = chart.getOption();
+                    var minValue = $(this).find('.minValue').html();
+                    var maxValue = $(this).find('.maxValue').html();
+                    option.title = ITUName;
+                    $.extend(option.yAxis, {
+                        max: Math.ceil(ConvertFloat(maxValue, 4) / 10) * 10 + 20,
+                        min: Math.floor(ConvertFloat(minValue, 4) / 10) * 10 - 20
+                    });
+                    chart.setOption(option, true, true);
+                });
+                $tr.addClass('dblclick');
+            }
+            if (!$irTable.hasClass('first')) {
+                $irTable.addClass('first');
+                var ITUName = $irTable.find('tr:first').find('.ITUName').html();
+                var option = chart.getOption();
+                option.title = ITUName;
+                chart.setOption(option, true, true);
+            }
+        }
+    }
+
+    function getChartSize() {
+        var chartWidth = parent.$('.fun-content').width() - 10;
+        var cantainerHeight = parent.$('.fun-content').height() - 71;
+
+        var chartSize = {
+            width: chartWidth,
+            height: cantainerHeight * 0.25
+        }
+        var irChartSize = {
+            width: chartWidth,
+            height: cantainerHeight * 0.23
+        }
+        var occChartSize = {
+            width: chartWidth,
+            height: (cantainerHeight - chartSize.height - irChartSize.height) / 2 - 2
+        }
+        var maxChartSize = {
+            width: chartWidth,
+            height: cantainerHeight - chartSize.height - irChartSize.height - occChartSize.height - 5
+        }
+        return {chartSize: chartSize, irChartSize: irChartSize, occChartSize: occChartSize, maxChartSize: maxChartSize}
+    }
+
+    function setRealFreqLevel(item) {
+        $('#txtLevel').text(item.value);
+        $('#txtFreq').text(item.name);
+        $('#txtUnit').text(decodeURIComponent(item.unit));
+    }
+    //socket 监听事件
+    function initSocketListenerAfter(socket) {
+        socket.on('items', function (items) {
+            //console.log(items)
+            fillIrTable(items);
+        });
+        socket.on('maxLevel', function (maxLevel) {
+            maxLevel.unit = 'dbμv';
+            var option = maxChart.getOption();
+            option.data = [maxLevel];
+            maxChart.setOption(option);
+        });
+        socket.on('occValue', function (occValue) {
+            occValue.unit = '%';
+            var option = occChart.getOption();
+            option.data = [occValue];
+            occChart.setOption(option);
+        });
+        socket.on('serverError', function (err) {
+            popTips(err);
+        })
+        //实时数据
+        socket.on('data', function (data) {
+            var option = chart.getOption();
+            option.data = data;
+            chart.setOption(option);
+            //设置实际工作频率和电平值
+            if (data.length > 0)
+                setRealFreqLevel(data[data.length - 1]);
+        });
+    }
+    //启动任务完成后执行
+    function startTaskComplate() {
+        chart.options.data = [];
+        chart.context2D.clearRect(0, 0, chart.canvasElm.width, chart.canvasElm.height);//清除
+    }
+    //停止任务完成后执行
+    function stopTaskComplate() {
+        chart.options.data = [];
+    }
+
+</script>
+
+
+<script src="./sortTable.js"></script><div id="ascrail2000" class="nicescroll-rails" style="width: 14px; z-index: 100; cursor: default; position: absolute; top: 147.906px; left: 1717px; height: 0px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 12px; height: 32px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 14px; z-index: 100; top: 133.906px; left: 5px; position: absolute; cursor: default; display: none; width: 1712px; opacity: 0;"><div style="position: relative; top: 0px; height: 12px; width: 1726px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2001" class="nicescroll-rails" style="width: 14px; z-index: 100; cursor: default; position: absolute; top: 166.438px; left: 1717px; height: 0px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 12px; height: 32px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2001-hr" class="nicescroll-rails" style="height: 14px; z-index: 100; top: 152.438px; left: 5px; position: absolute; cursor: default; display: none; width: 1712px; opacity: 0;"><div style="position: relative; top: 0px; height: 12px; width: 1726px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2002" class="nicescroll-rails" style="width: 14px; z-index: 1050; cursor: default; position: absolute; top: 0px; left: -14px; height: 150px; display: none;"><div style="position: relative; top: 0px; float: right; width: 12px; height: 0px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2002-hr" class="nicescroll-rails" style="height: 14px; z-index: 1050; top: 136px; left: 0px; position: absolute; cursor: default; display: none;"><div style="position: relative; top: 0px; height: 12px; width: 0px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2003" class="nicescroll-rails" style="width: 14px; z-index: auto; cursor: default; position: absolute; top: 98px; left: 1742px; height: 0px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 12px; height: 32px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="ascrail2003-hr" class="nicescroll-rails" style="height: 14px; z-index: auto; top: 84px; left: 6px; position: absolute; cursor: default; display: none; width: 1736px; opacity: 0;"><div style="position: relative; top: 0px; height: 12px; width: 1750px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div><div id="NiuniuCaptureEvent" style="display: none;"></div></body></html>
