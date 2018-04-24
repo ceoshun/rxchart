@@ -1,22 +1,30 @@
 (function ($) {
-	function getEventPosition(t){
-		var i,e;
-		if(!t.layerX){
-			if(0==t.layerX){
-				i=t.layerX;
-				e=t.layerY;
-
-			}else{
-				if(t.offsetX||0==t.offsetX){
-					i=t.offsetX;
-					e=t.offsetY;
-				}
+	function getEventPosition(event){
+		var x,y;//t eveete
+		if(!event.layerX){
+			if(event.layerX == 0){
+				x=event.layerX;
+				y=event.layerY;
+			}else if(event.offsetX || event.offsetX == 0){
+				x=event.offsetX;
+				y=event.offsetY;
 			}
 		}
 		return  {
-			x:i,
-			y:e
+			x:x,
+			y:y
 		}
+	}
+
+	function ConvertFloat(value,digit){
+		var e = parseFloat(value);
+		if(isNaN(e)){
+			e = 0;
+		}
+		if(digit){
+			e=Math.round(e*Math.pow(10,digit))/Math.pow(10,digit);
+		}
+		return e;
 	}
 
 	function Chart(Elm, opt) {
@@ -45,63 +53,65 @@
 			height: this.Colorlegend.height,
 			width: this.options.width - this.Colorlegend.width,
 			ContainsXY: function (l, t) {
-				return l >= this.left && l <= this.left + this.width && t >= this.top && t <= this.top + this.height
+				return l >= this.left && l <= this.left + this.width && t >= this.top && t <= this.top + this.height;
 			}
 		},
-		this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min),
-		this.canvasElmBuffer = this._createCanvas(),
-		this.context2DBuffer = this._getContext2D(this.canvasElmBuffer),
-		this.canvasElm = this._createCanvas(this.grid),
-		this.context2D = this._getContext2D(this.canvasElm),
-		this.canvasElmInfo = this._createCanvas(this.grid),
-		this.context2DInfo = this._getContext2D(this.canvasElmInfo),
-		this.canvasElmASThr = this._createCanvas(this.grid),
-		this.context2DASThr = this._getContext2D(this.canvasElmASThr),
-		this.itemWidth = 1,
-		this.draw(true),
-		this.bindMouseEvent()
+		this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min);
+		this.canvasElmBuffer = this._createCanvas();
+		this.context2DBuffer = this._getContext2D(this.canvasElmBuffer);
+		this.canvasElm = this._createCanvas(this.grid);
+		this.context2D = this._getContext2D(this.canvasElm);
+		this.canvasElmInfo = this._createCanvas(this.grid);
+		this.context2DInfo = this._getContext2D(this.canvasElmInfo);
+		this.canvasElmASThr = this._createCanvas(this.grid);
+		this.context2DASThr = this._getContext2D(this.canvasElmASThr);
+		this.itemWidth = 1;
+		this.draw(false);
+		this.bindMouseEvent();
 	}
-	function _mousemove(t) {
-		t.preventDefault();
-		var i = $(this).data("chart");
-		t = getEventPosition(t)
-		if (i.grid.ContainsXY(t.x, t.y)) {
-			if (i.dragging){
-				_gridDragging(i, t);
-			} else if (i.draggingAThr) {
-				var e = i.getValueByY(t.y);
-				i.options.asThrValue = e;
-				i._drawASThreshold(false);
+
+	function _mousemove(event) {
+		event.preventDefault();
+		var chart = $(this).data("chart");
+		event = getEventPosition(event);
+		if (chart.grid.ContainsXY(event.x, event.y)) {
+			if (chart.dragging){
+				_gridDragging(chart, event);
+			} else if (chart.draggingAThr) {
+				var valueY = chart.getValueByY(event.y);
+				chart.options.asThrValue = valueY;
+				chart._drawASThreshold(false);
 			} else {
-				var e = i.getValueByY(t.y);
-				if (i.options.showASThreshold && Math.abs(i.options.asThrValue - e) < 3 / i.heightRatio){
-					i._drawASThreshold(false);
-					i.container.css({
+				var valueY = chart.getValueByY(event.y);
+				if (chart.options.showASThreshold && Math.abs(chart.options.asThrValue - valueY) < 3 / chart.heightRatio){
+					chart._drawASThreshold(false);
+					chart.container.css({
 						cursor: "pointer"
 					});
-					i.context2DInfo.clearRect(i.grid.left, i.grid.top, i.grid.width, i.grid.height);
+					chart.context2DInfo.clearRect(chart.grid.left, chart.grid.top, chart.grid.width, chart.grid.height);
 				} else {
-					i.container.css({
+					chart.container.css({
 						cursor: ""
 					});
-					i.context2DASThr.clearRect(i.grid.left + 11, i.grid.top, i.grid.width, i.grid.height);
-					_gridShowInfo(i, t);
+					chart.context2DASThr.clearRect(chart.grid.left + 11, chart.grid.top, chart.grid.width, chart.grid.height);
+					_gridShowInfo(chart, event);
 				}
 			}
-			if("function" == typeof i.options.event.onmousemove){
-				i.options.event.onmousemove(t);
+			if("function" == typeof chart.options.event.onmousemove){
+				chart.options.event.onmousemove(event);
 			}
 		} else {
-			_clear(i, t)
+			_clear(chart, event)
 		}
 	}
+
 	function _mousedown(event) {
 		if( !$.rx.paramGetFocus ){
 			event.preventDefault()
 		}
-		if (1 == event.which) {
+		if (event.which == 1) {
 			var _chart = $(this).data("chart");
-			event = getEventPosition(event)
+			event = getEventPosition(event);
 			if (_chart.grid.ContainsXY(event.x, event.y)) {
 				var yvalue = _chart.getValueByY(event.y);
 				if(_chart.options.showASThreshold && Math.abs(_chart.options.asThrValue - yvalue) < 3 / _chart.heightRatio){
@@ -119,213 +129,293 @@
 			}
 		}
 	}
-	function _mouseup(e) {
-		e.preventDefault();
-		var i = $(this).data("chart");
-		e= getEventPosition(e);
-		if(i.grid.ContainsXY(e.x, e.y)){
-			if(i.dragging){
-				_girdDragEnd(i, e);
+	function _mouseup(event) {
+		event.preventDefault();
+		var chart = $(this).data("chart");
+		event= getEventPosition(event);
+		if(chart.grid.ContainsXY(event.x, event.y)){
+			if(chart.dragging){
+				_girdDragEnd(chart, event);
 			}
-			if(i.draggingAThr){
-				i.draggingAThr = false;
-				if("function" == typeof i.options.event.ondrawasthrchanged){
-					i.options.event.ondrawasthrchanged(i.options.asThrValue);
+			if(chart.draggingAThr){
+				chart.draggingAThr = false;
+				if("function" == typeof chart.options.event.ondrawasthrchanged){
+					chart.options.event.ondrawasthrchanged(chart.options.asThrValue);
 				} 
 			} 
 				
-			if("function" == typeof i.options.event.onmouseup){
-				i.options.event.onmouseup(e);
+			if("function" == typeof chart.options.event.onmouseup){
+				chart.options.event.onmouseup(event);
 			}
 		}
 	}
-	function _dblclick(t) {
-		if ("CANVAS" != t.target.tagName) return false;
-		t.stopPropagation();
-		t.preventDefault();
-		var i = $(this).data("chart");
-		t = getEventPosition(t)
-		if (i.grid.ContainsXY(t.x, t.y)) {
-			var e = i.getValueByY(t.y);
-			if (i.options.showASThreshold && Math.abs(i.options.asThrValue - e) < 3 / i.heightRatio) {
-				var a = $(document).find("#modalSetAsThr" + i.canvasElm.id);
-				if(0 == a.length){
-					a = $('<div class="modal modal-custom" role="dialog" aria-labelledby="gridSystemModalLabel"> <div class="modal-dialog modal-sm" role="document"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> <h4 class="modal-title" id="gridSystemModalLabel">设置异常信号门限</h4> </div> <div class="modal-body"> <div class="form-group form-inline"> <label class="control-label">异常信号门限：</label> <div class="input-group"><input type="text" class="form-control input-custom double minus asThrValue" max="120" min="-40" maxlength="6" ><span class="input-custom-addon">dbμv</span> </div> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><i class="">&nbsp;</i>取消</button> <button type="button" class="btn btn-primary btn-sm btnSetAsThrValue" ><i class="fa fa-save">&nbsp;</i>确定</button> </div> </div> </div> </div>'),
-					a.attr("id", "modalSetAsThr" + i.canvasElm.id),
-					a.find(".btnSetAsThrValue").click(function () {
-						i.options.asThrValue = ConvertFloat(a.find(".asThrValue").val(), 2);
-						if(i.options.asThrValue > i.options.yAxis.max){
-							i.options.asThrValue = i.options.yAxis.max;
+	function _dblclick(event) {
+		if ("CANVAS" != event.target.tagName) return false;
+		event.stopPropagation();
+		event.preventDefault();
+		var chart = $(this).data("chart");
+		event = getEventPosition(event);
+		if (chart.grid.ContainsXY(event.x, event.y)) {
+			var valueY = chart.getValueByY(event.y);
+			if (chart.options.showASThreshold && Math.abs(chart.options.asThrValue - valueY) < 3 / chart.heightRatio) {
+				var model = $(document).find("#modalSetAsThr" + chart.canvasElm.id);
+				if(model.length ==0){
+					model = $(
+					'<div class="modal modal-custom" role="dialog" aria-labelledby="gridSystemModalLabel">'+
+						'<div class="modal-dialog modal-sm" role="document">'+
+							'<div class="modal-content">'+
+								'<div class="modal-header"> '+
+									'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+									'<span aria-hidden="true">&times;</span></button> '+
+									'<h4 class="modal-title" id="gridSystemModalLabel">设置异常信号门限</h4> '+
+								'</div>'+
+								'<div class="modal-body">'+
+									'<div class="form-group form-inline">'+
+										'<label class="control-label">异常信号门限：</label>'+
+										'<div class="input-group">'+
+										'<input type="text" class="form-control input-custom double minus asThrValue" max="120" min="-40" maxlength="6" >'+
+										'<span class="input-custom-addon">dbμv</span>'+
+										'</div>'+
+									'</div>'+
+								'</div>'+
+								'<div class="modal-footer">'+
+									'<button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">'+
+									'<i class="">&nbsp;</i>取消</button>'+
+									'<button type="button" class="btn btn-primary btn-sm btnSetAsThrValue" ><i class="fa fa-save">&nbsp;</i>确定</button>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'
+					);
+					model.attr("id", "modalSetAsThr" + chart.canvasElm.id);
+					model.find(".btnSetAsThrValue").click(function () {
+						chart.options.asThrValue = ConvertFloat(model.find(".asThrValue").val(), 2);
+						if(chart.options.asThrValue > chart.options.yAxis.max){
+							chart.options.asThrValue = chart.options.yAxis.max;
 						}
-						if(i.options.asThrValue < i.options.yAxis.min){
-							i.options.asThrValue = i.options.yAxis.min;
+						if(chart.options.asThrValue < chart.options.yAxis.min){
+							chart.options.asThrValue = chart.options.yAxis.min;
 						}					
-						i._drawASThreshold(false);
-						if("function" == typeof i.options.event.ondrawasthrchanged){
-							i.options.event.ondrawasthrchanged(i.options.asThrValue);
+						chart._drawASThreshold(false);
+						if("function" == typeof chart.options.event.ondrawasthrchanged){
+							chart.options.event.ondrawasthrchanged(chart.options.asThrValue);
 						}
-						a.modal("hide");
+						model.modal("hide");
 					});
-					$("body").append(a);
+					$("body").append(model);
 					if("function" == typeof initParamEvent){
 						initParamEvent();
 					}
 				} 
-				a.find(".asThrValue").val(ConvertFloat(i.options.asThrValue, 2));
-				a.modal("show");
+				model.find(".asThrValue").val(ConvertFloat(chart.options.asThrValue, 2));
+				model.modal("show");
 			}
-			i.dragging = false;
-			if (!i.gridZoomDisable) {
-				var n = i.getOption();
-				n.xAxis = i.originOptions.xAxis.map(function (t) {
-					return 2 == i.options.xAxisType ? t : $.extend({}, t);
+			chart.dragging = false;
+			if (!chart.gridZoomDisable) {
+				var n = chart.getOption();
+				n.xAxis = chart.originOptions.xAxis.map(function (xAxis) {
+					return 2 == chart.options.xAxisType ? xAxis : $.extend({}, xAxis);
 				});
-				var n = i.getOption();
 				n.dataItemRange = [];
-				i.draw(false);
-				_gridZoomComplate(i);
+				chart.draw(false);
+				_gridZoomComplate(chart);
 			}
-			if("function" == typeof i.options.event.ondblclick){
-				i.options.event.ondblclick(t);
+			if("function" == typeof chart.options.event.ondblclick){
+				chart.options.event.ondblclick(event);
 			}
-		} else if (i.Colorlegend.ContainsXY(t.x, t.y)) {
-			var r = $(document).find("#modal" + i.canvasElm.id);
-			if(0 == r.length){
-				r = $('<div  class="modal modal-custom" role="dialog" aria-labelledby="gridSystemModalLabel"> <div class="modal-dialog modal-sm" role="document"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> <h4 class="modal-title" id="gridSystemModalLabel">设置坐标上下限</h4> </div> <div class="modal-body"> <div class="form-group form-inline"> <label class="control-label">坐标上限值：</label> <div class="input-group"> <input type="text" class="form-control input-custom int minus yAxisUp" maxlength="3" max="120" ><span class="input-custom-addon">dbμv</span></div> </div> <div class="form-group form-inline"> <label class="control-label">坐标下限值：</label> <div class="input-group"> <input type="text" class="form-control input-custom int minus yAxisDown" maxlength="3" min="-40"  ><span class="input-custom-addon">dbμv</span> </div> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><i class="">&nbsp;</i>取消</button> <button type="button" class="btn btn-primary btn-sm btnSetYAxisUpdown" ><i class="fa fa-save">&nbsp;</i>确定</button> </div> </div></div></div>');
-				r.attr("id", "modal" + i.canvasElm.id);
-				r.find(".btnSetYAxisUpdown").click(function () {
-					i.options.yAxis.max = ConvertFloat(r.find(".yAxisUp").val(), 2);
-					i.options.yAxis.min = ConvertFloat(r.find(".yAxisDown").val(), 2);
-					if(i.options.yAxis.min > i.options.yAxis.max){
-						alert("坐标下限值必须小于上限值")
-					} else {
-						i.draw(false);
-						r.modal("hide");
-						if("function" == typeof i.options.event.onyaxischanged){
-							i.options.event.onyaxischanged(i.options);
-						}
+		} else if (chart.Colorlegend.ContainsXY(event.x, event.y)) {
+			var model = $(document).find("#modal" + chart.canvasElm.id);
+			if(model.length == 0){
+				model = $(
+					'<div  class="modal modal-custom" role="dialog" aria-labelledby="gridSystemModalLabel">'+
+					'	<div class="modal-dialog modal-sm" role="document">'+
+					'		<div class="modal-content">'+
+					'			<div class="modal-header">'+
+					'				<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+					'				<span aria-hidden="true">&times;</span>'+
+					'				</button>'+
+					'				<h4 class="modal-title" id="gridSystemModalLabel">设置坐标上下限</h4>'+
+					'			</div>'+
+					'			<div class="modal-body">'+
+					'				<div class="form-group form-inline">'+
+					'					<label class="control-label">坐标上限值：</label>'+
+					'					<div class="input-group">'+
+					'						<input type="text" class="form-control input-custom int minus yAxisUp" maxlength="3" max="120" >'+
+					'						<span class="input-custom-addon">dbμv</span>'+
+					'					</div>'+
+					'				</div>'+
+					'				<div class="form-group form-inline">'+
+					'					<label class="control-label">坐标下限值：</label>'+
+					'					<div class="input-group">'+
+					'						<input type="text" class="form-control input-custom int minus yAxisDown" maxlength="3" min="-40"  >'+
+					'						<span class="input-custom-addon">dbμv</span>'+
+					'					</div>'+
+					'				</div>'+
+					'			</div>'+
+					'			<div class="modal-footer">'+
+					'				<button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">'+
+					'					<i class="">&nbsp;</i>取消'+
+					'				</button>'+
+					'				<button type="button" class="btn btn-primary btn-sm btnSetYAxisUpdown" >'+
+					'					<i class="fa fa-save">&nbsp;</i>确定'+
+					'				</button>'+
+					'			</div>'+
+					'		</div>'+
+					'	</div>'+
+					'</div>'
+				);
+			}
+			model.attr("id", "modal" + chart.canvasElm.id);
+			model.find(".btnSetYAxisUpdown").click(function () {
+				chart.options.yAxis.max = ConvertFloat(model.find(".yAxisUp").val(), 2);
+				chart.options.yAxis.min = ConvertFloat(model.find(".yAxisDown").val(), 2);
+				if(chart.options.yAxis.min > chart.options.yAxis.max){
+					alert("坐标下限值必须小于上限值")
+				} else {
+					chart.draw(false);
+					model.modal("hide");
+					if("function" == typeof chart.options.event.onyaxischanged){
+						chart.options.event.onyaxischanged(chart.options);
 					}
-				});
-				r.find(".yAxisUp").val(i.options.yAxis.max);
-				r.find(".yAxisDown").val(i.options.yAxis.min);
-				$("body").append(r);
-				if("function" == typeof initParamEvent){
-					 initParamEvent();
 				}
+			});
+			model.find(".yAxisUp").val(chart.options.yAxis.max);
+			model.find(".yAxisDown").val(chart.options.yAxis.min);
+			$("body").append(model);
+			if("function" == typeof initParamEvent){
+					initParamEvent();
 			}
-			r.modal("show")
+		}
+		model.modal("show");
+	}
+
+	function _click(event) {
+		var chart = $(this).data("chart");
+		event = getEventPosition(event);
+		if(chart.grid.ContainsXY(event.x, event.y) && "function" == typeof chart.options.event.onclick){
+			chart.options.event.onclick(event);
 		}
 	}
-	function _click(t) {
-		var i = $(this).data("chart");
-		t = getEventPosition(t);
-		if(i.grid.ContainsXY(t.x, t.y) && "function" == typeof i.options.event.onclick){
-			i.options.event.onclick(t);
+
+	function _mouseout(event) {
+		var chart = $(this).data("chart");
+		_clear(chart);
+		if("function" == typeof chart.options.event.onmouseout){
+			chart.options.event.onmouseout(event);
 		}
 	}
-	function _mouseout(t) {
-		var i = $(this).data("chart");
-		_clear(i);
-		if("function" == typeof i.options.event.onmouseout){
-			i.options.event.onmouseout(t);
-		}
-	}
-	function _clear(t, i) {
-		t.dragging = false,
-		t.grid.event = {},
-		t.context2DInfo.clearRect(0, 0, t.canvasElmInfo.width, t.canvasElmInfo.height),
-		t.draggingAThr = !1,
-		t.container.css({
+	function _clear(chart, i) {
+		chart.dragging = false;
+		chart.grid.event = {};
+		chart.context2DInfo.clearRect(0, 0, chart.canvasElmInfo.width, chart.canvasElmInfo.height);
+		chart.draggingAThr = false;
+		chart.container.css({
 			cursor: ""
-		}),
-		t.context2DASThr.clearRect(t.grid.left + 11, 0, t.canvasElmInfo.width, t.canvasElmInfo.height)
+		});
+		chart.context2DASThr.clearRect(chart.grid.left + 11, 0, chart.canvasElmInfo.width, chart.canvasElmInfo.height);
 	}
-	function _girdDragEnd(t, i) {
-		if (t.dragging = !1,
-			t.context2DInfo.clearRect(0, 0, t.canvasElmInfo.width, t.canvasElmInfo.height),
-			$.extend(t.grid.event, {
-				endX: i.x,
-				endY: i.y
-			}),
-			!(Math.abs(t.grid.event.endX - t.grid.event.startX) < 20)) {
-			var e = t.getDataItemByX(t.grid.event.startX, false)
-				, a = t.getDataItemByX(t.grid.event.endX, false);
-			if (e && a) {
-				if (e.index > a.index) {
-					var n = $.extend({}, e);
-					e = $.extend({}, a),
-						a = n
+	function _girdDragEnd(chart, event) {
+		chart.dragging = false;
+		chart.context2DInfo.clearRect(0, 0, chart.canvasElmInfo.width, chart.canvasElmInfo.height);
+		$.extend(chart.grid.event, {
+			endX: event.x,
+			endY: event.y
+		});
+		if (Math.abs(chart.grid.event.endX - chart.grid.event.startX) >= 20) {
+			var startX = chart.getDataItemByX(chart.grid.event.startX, false); // e
+			var endX = chart.getDataItemByX(chart.grid.event.endX, false); //a
+			if (startX && startX) {
+				if (startX.index > startX.index) {
+					var n = $.extend({}, startX);
+					startX = $.extend({}, endX);
+					endX = n;
 				}
-				var r = e.index
-					, o = a.index;
-				if (r && o) {
-					var s = t.getOption();
-					if (!(s.data.slice(r, o).length < 3)) {
-						if (s.dataItemRange = [r, o],
-							t.itemWidth = t.grid.width / s.data.slice(r, o).length,
-							2 != t.options.xAxisType) {
-							for (var h = [], l = 0; l < s.xAxis.length; l++)
-								s.xAxis[l].endindex >= e.index && s.xAxis[l].startindex <= a.index && h.push($.extend({}, s.xAxis[l]));
-							h.length > 0 && (h[0].startfreq = e.name,
-								h[0].startindex = e.index,
-								h[0].points = parseInt((h[0].endfreq - h[0].startfreq) / h[0].step + 1),
-								h[h.length - 1].endfreq = a.name,
-								h[h.length - 1].endindex = a.index,
-								h[h.length - 1].points = parseInt((h[h.length - 1].endfreq - h[h.length - 1].startfreq) / h[h.length - 1].step + 1)),
-								s.xAxis = h
+				var startXindex = startX.index; //r
+				var endXindex = endX.index;         //0
+				if (startXindex && endXindex) {
+					var _option = chart.getOption();
+					if (_option.data.slice(startXindex, endXindex).length >=3) {
+						_option.dataItemRange = [startXindex, endXindex];
+						chart.itemWidth = chart.grid.width / chart.data.slice(startXindex, endXindex).length;
+						if (chart.options.xAxisType != 2) {
+							var h = [];
+							for (var l = 0; l < _option.xAxis.length; l++){
+								if(_option.xAxis[l].endindex >= startX.index && _option.xAxis[l].startindex <= endX.index){
+									h.push($.extend({}, _option.xAxis[l]));
+								}
+							}
+							if(h.length > 0){
+								h[0].startfreq = startX.name;
+								h[0].startindex = startX.index;
+								h[0].points = parseInt((h[0].endfreq - h[0].startfreq) / h[0].step + 1);
+								h[h.length - 1].endfreq = endX.name;
+								h[h.length - 1].endindex = endX.index;
+								h[h.length - 1].points = parseInt((h[h.length - 1].endfreq - h[h.length - 1].startfreq) / h[h.length - 1].step + 1);
+							}
+							_option.xAxis = h;
 						}
-						t.draw(false),
-							_gridZoomComplate(t)
+						chart.draw(false);
+						_gridZoomComplate(chart);
 					}
 				}
 			}
 		}
 	}
 	function _gridDragging(chart, event) {
-		if ($.extend(chart.grid.event, {
+		$.extend(chart.grid.event, {
 			endX: event.x,
 			endY: event.y
-		}),
-			!(Math.abs(chart.grid.event.endX - chart.grid.event.startX) < 5))
-			with (chart.context2DInfo)
-			save(),
-				clearRect(0, 0, chart.canvasElmInfo.width, chart.canvasElmInfo.height),
-				beginPath(),
-				translate(.5, .5),
-				lineWidth = 1,
-				rect(chart.grid.event.startX, chart.grid.event.startY, chart.grid.event.endX - chart.grid.event.startX, chart.grid.event.endY - chart.grid.event.startY),
-				stroke(),
-				restore()
+		})
+		if (Math.abs(chart.grid.event.endX - chart.grid.event.startX) >=5 ){
+			with (chart.context2DInfo){
+				save();
+				clearRect(0, 0, chart.canvasElmInfo.width, chart.canvasElmInfo.height);
+				beginPath();
+				translate(0.5, 0.5);
+				lineWidth = 1;
+				rect(chart.grid.event.startX, chart.grid.event.startY, chart.grid.event.endX - chart.grid.event.startX, chart.grid.event.endY - chart.grid.event.startY);
+				stroke();
+				restore();
+			}
+		}
 	}
 	function _gridShowInfo(chart, event) {
 		if ("undefined" == typeof chart.showInfo || chart.showInfo) {
 			var dataItem = chart.getDataItemByX(event.x);
 			with (chart.context2DInfo) {
-				clearRect(chart.grid.left, chart.grid.top, chart.grid.width, chart.grid.height),
-					strokeStyle = chart.options.style.lineColor || "#00fbfe",
-					fillStyle = chart.options.style.textColor || "#2dfbfe",
-					save(),
-					beginPath(),
-					translate(.5, .5),
-					lineWidth = 1,
-					moveTo(event.x, chart.grid.top),
-					lineTo(event.x, chart.grid.top + chart.grid.height),
-					moveTo(chart.grid.left, event.y),
-					lineTo(chart.grid.left + chart.grid.width, event.y),
-					textAlign = "left";
+				clearRect(chart.grid.left, chart.grid.top, chart.grid.width, chart.grid.height);
+				strokeStyle = chart.options.style.lineColor || "#00fbfe";
+				fillStyle = chart.options.style.textColor || "#2dfbfe";
+				save();
+				beginPath();
+				translate(0.5, 0.5);
+				lineWidth = 1;
+				moveTo(event.x, chart.grid.top);
+				lineTo(event.x, chart.grid.top + chart.grid.height);
+				moveTo(chart.grid.left, event.y);
+				lineTo(chart.grid.left + chart.grid.width, event.y);
+				textAlign = "left";
 				var textX = event.x + 5;
-				event.x - chart.grid.left > 4 * chart.grid.width / 5 && (textAlign = "right",
-					textX = event.x - 5),
-					dataItem && (fillText(dataItem.name + "MHz", textX, chart.grid.top + 10),
-						fillText(ConvertFloat(dataItem.value, 3) + (decodeURIComponent(dataItem.unit || "") || "dbμv"), textX, chart.grid.top + 25),
-						chart.options.showOccupancy && fillText((dataItem.occValue || 0) + "%", textX, chart.grid.top + 40)),
-					stroke(),
-					restore()
+				if( event.x - chart.grid.left > 4 * chart.grid.width / 5){
+					textAlign = "right";
+					textX = event.x - 5;
+				} 
+				if(dataItem){
+					fillText(dataItem.name + "MHz", textX, chart.grid.top + 10);
+					fillText(ConvertFloat(dataItem.value, 3) + (decodeURIComponent(dataItem.unit || "") || "dbμv"), textX, chart.grid.top + 25);
+					if(chart.options.showOccupancy){
+						fillText((dataItem.occValue || 0) + "%", textX, chart.grid.top + 40);
+					}
+				}
+				stroke();
+				restore();
 			}
 		}
 	}
 	function _gridZoomComplate(t) {
-		"function" == typeof t.options.event.onZoomChanged && t.options.event.onZoomChanged(t.options)
+		if("function" == typeof t.options.event.onZoomChanged){
+			t.options.event.onZoomChanged(t.options);
+		}
 	}
 	Chart.prototype = {
 		draw: function (bDraw) {
@@ -337,7 +427,7 @@
 					return;
 				}
 					
-				if(2 == this.options.xAxisType){
+				if(this.options.xAxisType == 2){
 					this._drawXAxis2()
 				}else{
 					this._drawXAxis()
@@ -358,53 +448,57 @@
 		},
 		getOption: function () {
 			var t = this.container.data("option");
-			return "undefined" == typeof t && (t = {}),
-				t
+			if(typeof t == "undefined"){
+				t = {}
+			}
+			return t;
 		},
-		setOption: function (t, i, e) {
+		setOption: function (_options, bDraw, bSave) {
 			var a = this.getOption();
-			this.options = $.extend({}, a, t),
-				this.container.data("option", this.options),
-				e && (this.originOptions = $.extend(false, {}, this.options)),
-				this.draw(i)
+			this.options = $.extend({}, a, _options);
+			this.container.data("option", this.options);
+			if(bSave){
+				this.originOptions = $.extend(false, {}, this.options);
+			}
+			this.draw(bDraw)
 		},
-		setHeight: function (t) {
-			this.options.height = t,
-				this.container.height(t + "px"),
-				this.Colorlegend.height = t - this.xAxisLabelHeight,
-				this.grid.height = this.Colorlegend.height,
-				this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min),
-				this.canvasElmBuffer.height = t,
-				this.canvasElm.height = this.grid.height,
-				this.canvasElmInfo.height = this.grid.height,
-				this.canvasElmASThr.height = this.grid.height,
-				this.setOption({
-					height: t
-				}, false, false)
+		setHeight: function (height) {
+			this.options.height = height;
+			this.container.height(height + "px");
+			this.Colorlegend.height = height - this.xAxisLabelHeight;
+			this.grid.height = this.Colorlegend.height;
+			this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min);
+			this.canvasElmBuffer.height = height;
+			this.canvasElm.height = this.grid.height;
+			this.canvasElmInfo.height = this.grid.height;
+			this.canvasElmASThr.height = this.grid.height;
+			this.setOption({
+				height: height
+			}, false, false);
 		},
-		resize: function (t, i) {
-			this.options.width = t,
-				this.options.height = i,
-				this.container.width(t + "px"),
-				this.container.height(i + "px"),
-				this.Colorlegend.height = i - this.xAxisLabelHeight,
-				this.grid.width = this.options.width - this.Colorlegend.width,
-				this.grid.height = this.Colorlegend.height,
-				this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min),
-				this.canvasElmBuffer.width = t,
-				this.canvasElmBuffer.height = i,
-				this.canvasElm.width = t,
-				this.canvasElm.height = this.grid.height,
-				this.canvasElmInfo.width = t,
-				this.canvasElmInfo.height = this.grid.height,
-				this.canvasElmASThr.width = t,
-				this.canvasElmASThr.height = this.grid.height,
-				this.setOption({
-					width: t,
-					height: i
-				}, false, false),
-				this.options.showOccupancy && this.showOccupancy(),
-				this._redrawfalls()
+		resize: function (width, height) {
+			this.options.width = width;
+			this.options.height = height;
+			this.container.width(width + "px");
+			this.container.height(height + "px");
+			this.Colorlegend.height = height - this.xAxisLabelHeight;
+			this.grid.width = this.options.width - this.Colorlegend.width;
+			this.grid.height = this.Colorlegend.height;
+			this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min);
+			this.canvasElmBuffer.width = width;
+			this.canvasElmBuffer.height = height;
+			this.canvasElm.width = width;
+			this.canvasElm.height = this.grid.height;
+			this.canvasElmInfo.width = width;
+			this.canvasElmInfo.height = this.grid.height;
+			this.canvasElmASThr.width = width;
+			this.canvasElmASThr.height = this.grid.height;
+			this.setOption({
+				width: width,
+				height: height
+			}, false, false);
+			this.options.showOccupancy && this.showOccupancy();
+			this._redrawfalls();
 		},
 		destroy: function () {
 			this.container.remove("canvas");
@@ -422,7 +516,7 @@
 			}
 		},
 		showOccupancy: function () {
-			this.options.showOccupancy = false;
+			this.options.showOccupancy = true;
 			this.OccColorlegend = {
 				left: 0,
 				top: 0,
@@ -444,14 +538,14 @@
 			this.canvasElmOcc && (this.canvasElmOcc.height = this.OccGrid.height);
 		},
 		hideOccupancy: function () {
-			this.options.showOccupancy = !1,
-				this.Colorlegend.top = 0,
-				this.Colorlegend.height = this.options.height - this.xAxisLabelHeight,
-				this.grid.top = this.Colorlegend.top,
-				this.grid.height = this.Colorlegend.height,
-				this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min),
-				this.draw(false),
-				this.canvasElmOcc.height = 0
+			this.options.showOccupancy = false;
+			this.Colorlegend.top = 0;
+			this.Colorlegend.height = this.options.height - this.xAxisLabelHeight;
+			this.grid.top = this.Colorlegend.top;
+			this.grid.height = this.Colorlegend.height;
+			this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min);
+			this.draw(false);
+			this.canvasElmOcc.height = 0;
 		},
 		_drawOccupancy: function () {
 			if(!this.context2DOcc){
@@ -526,20 +620,11 @@
 			}
 			return canvasele.getContext("2d")
 		},
-		_getColor: function (t) {
+		_getColor: function (value) {
 			if (!this.options.showColorlegend){
 				return this.options.yAxis.colors[0] || "#ff0";
 			}
-				
-			for (var i = 0, e = this.gradientColors.length - 1, a = Math.floor((e + i) / 2); a > 0 && !(this.gradientColors[a - 1].value <= t && this.gradientColors[a].value >= t) && e > i;){
-				if(this.gradientColors[a].value > t){
-					e = a - 1;
-				} else if(this.gradientColors[a].value < t){
-					i = a + 1;
-				}
-				a = Math.floor((e + i) / 2);
-			}
-			return this.gradientColors[a].color
+			return this.binarySearch(this.gradientColors,"value","color",value)
 		},
 		getDataItemByX: function (t, i) {
 			var e = -1;
@@ -611,27 +696,27 @@
 			return ConvertFloat((this.grid.height + this.grid.top - y) / this.heightRatio + this.options.yAxis.min, 3)
 		},
 		// 二分法查找
-		binarySearch:function(data,name){
+		binarySearch:function(data,keyProp,valueProp,value){
 			var low = 0;
 			var high = data.length -1;
 			var mid = -1;
 			while (low<high) {
 				var mid = Math.floor((low+high)/2);
-				if(name == data[mid].name){
+				if(value == data[mid][keyProp]){
 					return mid;
-				} else if(item > data[mid].name){
+				} else if(item > data[mid][keyProp]){
 					low = mid + 1;
-				} else if(item < data[mid].name){
+				} else if(item < data[mid][keyProp]){
 					high = mid -1;
 				} else {
 					return -1;
 				}
 			}
-			return data[mid].value;
+			return data[mid][valueProp];
 		},
 		getValueByName: function (name) {
 			var data = this.getSampleData(this.options.data);
-			return binarySearch(data);
+			return binarySearch(data,"name","value",name);
 		},
 		_drawXAxis: function () {
 			this.stepXArr = [];
@@ -697,41 +782,35 @@
 						}
 					}
 				} else {
-					var _allpoints = 0;
-					chart.options.xAxis.forEach(function (t) {
-						_allpoints += t.points
+					var _allpoints=0;
+					chart.options.xAxis.forEach(function(t){
+						_allpoints+=t.points
 					});
-					var _startX = this.grid.left, _endX = 0;
-					for (i = 0; len > i; i++){
-						_startX = _endX,
-                        _endX = _startX + xAxisData[i].points / _allpoints * chart.grid.width,
-                        _endX = Math.ceil(_endX / this.itemWidth) * this.itemWidth,
-                        fillStyle = "#2dfbfe",
-                        0 == i ? (a) : (b),
-                        i == len - 1 && (c),
-                        moveTo(this.grid.left + _endX, this.grid.top + this.grid.height),
-						lineTo(this.grid.left + _endX, this.grid.top + this.grid.height + 6)
-						
-						_startX = _endX,
-						_endX = _startX + xAxisData[i].points / _allpoints * chart.grid.width;
-						_endX = Math.ceil(_endX / this.itemWidth) * this.itemWidth;
-						fillStyle = "#2dfbfe";
-						if(0 == i){
-							moveTo(this.grid.left + _startX, this.grid.top + this.grid.height),
-							lineTo(this.grid.left + _startX, this.grid.top + this.grid.height + 6),
-							textValue = ConvertFloat(xAxisData[i].startfreq, 3) + "MHz",
-							fillText(textValue, this.grid.left + _startX, this.grid.top + this.grid.height + 18);
-						}  else {
-							this.stepXArr.push(this.grid.left + _startX);
-							textValue = ConvertFloat(xAxisData[i - 1].endfreq, 3) + "/" + ConvertFloat(xAxisData[i].startfreq, 3) + "MHz",
-							fillText(textValue, this.grid.left + _startX - 5 * textValue.length / 2, this.grid.top + this.grid.height + 18);
-						} 
-						if(i == len - 1){
-							textValue = ConvertFloat(xAxisData[i].endfreq, 3) + "MHz";
-							fillText(textValue, this.grid.left + _endX - 6 * (textValue.length - 3) - 30, this.grid.top + this.grid.height + 18);
+					var _startX=this.grid.left;
+					var _endX=0;
+					for(var i=0;len>i;i++){
+						_startX=_endX;
+						_endX=_startX + xAxisData[i].points / _allpoints * chart.grid.width;
+						_endX=Math.ceil(_endX/this.itemWidth)*this.itemWidth;
+						fillStyle="#2dfbfe";
+						if(i==0){
+							moveTo(this.grid.left+_startX,this.grid.top+this.grid.height);
+							lineTo(this.grid.left+_startX,this.grid.top+this.grid.height+6);
+							textValue=ConvertFloat(xAxisData[i].startfreq,3)+"MHz";
+							fillText(textValue,this.grid.left+_startX,this.grid.top+this.grid.height+18);
+						}else{
+							this.stepXArr.push(this.grid.left+_startX);
+							textValue=ConvertFloat(xAxisData[i-1].endfreq,3)+"/"+ConvertFloat(xAxisData[i].startfreq,3)+"MHz";
+							fillText(textValue,this.grid.left+_startX-5*textValue.length/2,this.grid.top+this.grid.height+18);
 						}
-						moveTo(this.grid.left + _endX, this.grid.top + this.grid.height);
-						lineTo(this.grid.left + _endX, this.grid.top + this.grid.height + 6);
+	
+						// 最后一个坐标
+						if(i==len-1){
+							textValue=ConvertFloat(xAxisData[i].endfreq,3)+"MHz";
+							fillText(textValue,this.grid.left+_endX-6*(textValue.length-3)-30,this.grid.top+this.grid.height+18);
+						}
+						moveTo(this.grid.left+_endX,this.grid.top+this.grid.height),
+						lineTo(this.grid.left+_endX,this.grid.top+this.grid.height+6)
 					}
 				}
 				stroke(),

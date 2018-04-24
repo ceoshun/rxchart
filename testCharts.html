@@ -116,8 +116,23 @@
         });
 
         var option = chart.getOption();
-        option.data = [{name:1,value:10},{name:2,value:20},{name:3,value:30},{name:4,value:40}];
-        chart.setOption(option);
+        option.data = [];
+        for(var i =0;i<1000;i++){
+            option.data.push({
+                name:i,
+                value:20 + Math.random() * 20
+            })
+        }
+        //option.data = [{name:1,value:10},{name:2,value:20},{name:3,value:30},{name:4,value:40}];
+        option.xAxis = [];
+        for(var i =0;i<6;i++){
+            option.xAxis.push({
+                points:1,
+                startfreq:100*i,
+                endfreq:(i+1)*100 -1
+            })
+        }
+        chart.setOption(option, true, true);
     })
 </script>
 </body></html>
