@@ -1,4 +1,24 @@
 (function ($) {
+	function getEventPosition(t){
+		var i,e;
+		if(!t.layerX){
+			if(0==t.layerX){
+				i=t.layerX;
+				e=t.layerY;
+
+			}else{
+				if(t.offsetX||0==t.offsetX){
+					i=t.offsetX;
+					e=t.offsetY;
+				}
+			}
+		}
+		return  {
+			x:i,
+			y:e
+		}
+	}
+
 	function Chart(Elm, opt) {
 		$this = this,
 		this.target = Elm,
@@ -38,62 +58,86 @@
 		this.canvasElmASThr = this._createCanvas(this.grid),
 		this.context2DASThr = this._getContext2D(this.canvasElmASThr),
 		this.itemWidth = 1,
-		this.draw(false),
+		this.draw(true),
 		this.bindMouseEvent()
 	}
 	function _mousemove(t) {
 		t.preventDefault();
 		var i = $(this).data("chart");
-		if (t = getEventPosition(t),
-			i.grid.ContainsXY(t.x, t.y)) {
-			if (i.dragging)
+		t = getEventPosition(t)
+		if (i.grid.ContainsXY(t.x, t.y)) {
+			if (i.dragging){
 				_gridDragging(i, t);
-			else if (i.draggingAThr) {
+			} else if (i.draggingAThr) {
 				var e = i.getValueByY(t.y);
-				i.options.asThrValue = e,
-					i._drawASThreshold(false)
+				i.options.asThrValue = e;
+				i._drawASThreshold(false);
 			} else {
 				var e = i.getValueByY(t.y);
-				if (i.options.showASThreshold && Math.abs(i.options.asThrValue - e) < 3 / i.heightRatio)
-					return i._drawASThreshold(false),
-						i.container.css({
-							cursor: "pointer"
-						}),
-						void i.context2DInfo.clearRect(i.grid.left, i.grid.top, i.grid.width, i.grid.height);
-				i.container.css({
-					cursor: ""
-				}),
-					i.context2DASThr.clearRect(i.grid.left + 11, i.grid.top, i.grid.width, i.grid.height),
-					_gridShowInfo(i, t)
+				if (i.options.showASThreshold && Math.abs(i.options.asThrValue - e) < 3 / i.heightRatio){
+					i._drawASThreshold(false);
+					i.container.css({
+						cursor: "pointer"
+					});
+					i.context2DInfo.clearRect(i.grid.left, i.grid.top, i.grid.width, i.grid.height);
+				} else {
+					i.container.css({
+						cursor: ""
+					});
+					i.context2DASThr.clearRect(i.grid.left + 11, i.grid.top, i.grid.width, i.grid.height);
+					_gridShowInfo(i, t);
+				}
 			}
-			"function" == typeof i.options.event.onmousemove && i.options.event.onmousemove(t)
-		} else
+			if("function" == typeof i.options.event.onmousemove){
+				i.options.event.onmousemove(t);
+			}
+		} else {
 			_clear(i, t)
+		}
 	}
-	function _mousedown(t) {
-		if ($.rx.paramGetFocus || t.preventDefault(),
-			1 == t.which) {
-			var i = $(this).data("chart");
-			if (t = getEventPosition(t),
-				i.grid.ContainsXY(t.x, t.y)) {
-				var e = i.getValueByY(t.y);
-				i.options.showASThreshold && Math.abs(i.options.asThrValue - e) < 3 / i.heightRatio ? i.draggingAThr = false : (i.dragging = false,
-					i.grid.event = $.extend(i.grid.event || {}, {
-						startX: t.x,
-						startY: t.y
-					})),
-					"function" == typeof i.options.event.onmousedown && i.options.event.onmousedown(t)
+	function _mousedown(event) {
+		if( !$.rx.paramGetFocus ){
+			event.preventDefault()
+		}
+		if (1 == event.which) {
+			var _chart = $(this).data("chart");
+			event = getEventPosition(event)
+			if (_chart.grid.ContainsXY(event.x, event.y)) {
+				var yvalue = _chart.getValueByY(event.y);
+				if(_chart.options.showASThreshold && Math.abs(_chart.options.asThrValue - yvalue) < 3 / _chart.heightRatio){
+					_chart.draggingAThr = false;
+				 } else {
+					_chart.dragging = false,
+					_chart.grid.event = $.extend(_chart.grid.event || {}, {
+						startX: event.x,
+						startY: event.y
+					})
+				 }
+				if("function" == typeof _chart.options.event.onmousedown){
+					_chart.options.event.onmousedown(event);
+				}
 			}
 		}
 	}
-	function _mouseup(t) {
-		t.preventDefault();
+	function _mouseup(e) {
+		e.preventDefault();
 		var i = $(this).data("chart");
-		t = getEventPosition(t),
-			i.grid.ContainsXY(t.x, t.y) && (i.dragging && _girdDragEnd(i, t),
-				i.draggingAThr && (i.draggingAThr = !1,
-					"function" == typeof i.options.event.ondrawasthrchanged && i.options.event.ondrawasthrchanged(i.options.asThrValue)),
-				"function" == typeof i.options.event.onmouseup && i.options.event.onmouseup(t))
+		e= getEventPosition(e);
+		if(i.grid.ContainsXY(e.x, e.y)){
+			if(i.dragging){
+				_girdDragEnd(i, e);
+			}
+			if(i.draggingAThr){
+				i.draggingAThr = false;
+				if("function" == typeof i.options.event.ondrawasthrchanged){
+					i.options.event.ondrawasthrchanged(i.options.asThrValue);
+				} 
+			} 
+				
+			if("function" == typeof i.options.event.onmouseup){
+				i.options.event.onmouseup(e);
+			}
+		}
 	}
 	function _dblclick(t) {
 		if ("CANVAS" != t.target.tagName) return false;
@@ -363,37 +407,41 @@
 				this._redrawfalls()
 		},
 		destroy: function () {
-			this.container.remove("canvas"),
-				this.container.removeData("option"),
-				delete this
+			this.container.remove("canvas");
+			this.container.removeData("option");
+			delete this;
 		},
 		clear: function () {
-			_clear(this)
+			_clear(this);
 		},
 		bindMouseEvent: function (t) {
-			"falls" == this.options.type ? this.container.dblclick(_dblclick) : "disabled" != this.options.mouseEvent && this.container.mousedown(_mousedown).mousemove(_mousemove).mouseup(_mouseup).dblclick(_dblclick).mouseout(_mouseout).click(_click)
+			if("falls" == this.options.type){
+				this.container.dblclick(_dblclick);
+			} if("disabled" != this.options.mouseEvent) {
+				this.container.mousedown(_mousedown).mousemove(_mousemove).mouseup(_mouseup).dblclick(_dblclick).mouseout(_mouseout).click(_click);
+			}
 		},
 		showOccupancy: function () {
-			this.options.showOccupancy = false,
-				this.OccColorlegend = {
-					left: 0,
-					top: 0,
-					height: 59,
-					width: this.options.yAxis.hidden ? 0 : 35
-				},
-				this.OccGrid = {
-					left: this.OccColorlegend.width,
-					top: 1,
-					height: 59,
-					width: this.options.width - this.OccColorlegend.width
-				},
-				this.Colorlegend.top = this.OccColorlegend.height + 1,
-				this.Colorlegend.height = this.options.height - this.xAxisLabelHeight - this.OccGrid.height - 1,
-				this.grid.top = this.Colorlegend.top,
-				this.grid.height = this.Colorlegend.height,
-				this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min),
-				this.draw(false),
-				this.canvasElmOcc && (this.canvasElmOcc.height = this.OccGrid.height)
+			this.options.showOccupancy = false;
+			this.OccColorlegend = {
+				left: 0,
+				top: 0,
+				height: 59,
+				width: this.options.yAxis.hidden ? 0 : 35
+			};
+			this.OccGrid = {
+				left: this.OccColorlegend.width,
+				top: 1,
+				height: 59,
+				width: this.options.width - this.OccColorlegend.width
+			};
+			this.Colorlegend.top = this.OccColorlegend.height + 1;
+			this.Colorlegend.height = this.options.height - this.xAxisLabelHeight - this.OccGrid.height - 1;
+			this.grid.top = this.Colorlegend.top;
+			this.grid.height = this.Colorlegend.height;
+			this.heightRatio = this.grid.height / (this.options.yAxis.max - this.options.yAxis.min);
+			this.draw(false);
+			this.canvasElmOcc && (this.canvasElmOcc.height = this.OccGrid.height);
 		},
 		hideOccupancy: function () {
 			this.options.showOccupancy = !1,
@@ -406,138 +454,199 @@
 				this.canvasElmOcc.height = 0
 		},
 		_drawOccupancy: function () {
-			with (this.context2DOcc || (this.canvasElmOcc = this._createCanvas(this.OccGrid),
-				this.canvasElmOcc.height = this.OccGrid.height + 1,
-				this.context2DOcc = this._getContext2D(this.canvasElmOcc)),
-			this.context2DBuffer) {
-				save(),
-					font = "normal normal 12px 微软雅黑",
-					fillStyle = "#2dfbfe",
-					beginPath(),
-					translate(.5, .5);
+			if(!this.context2DOcc){
+				this.canvasElmOcc = this._createCanvas(this.OccGrid);
+				this.canvasElmOcc.height = this.OccGrid.height + 1;
+				this.context2DOcc = this._getContext2D(this.canvasElmOcc);
+			}
+			with (this.context2DBuffer) {
+				save();
+				font = "normal normal 12px 微软雅黑";
+				fillStyle = "#2dfbfe";
+				beginPath();
+				translate(0.5, 0.5);
 				var textValue = "占用度";
-				for (i = 0; i < textValue.length; i++)
+				for (i = 0; i < textValue.length; i++){
 					fillText(textValue[i], this.OccColorlegend.width / 2 - 2, this.OccColorlegend.height / 2 + 14 * (i - 1));
-				rect(this.OccGrid.left, this.OccGrid.top - 1, this.OccGrid.width - 1, this.OccGrid.height + 1),
-					stroke(),
-					restore()
+				}
+				rect(this.OccGrid.left, this.OccGrid.top - 1, this.OccGrid.width - 1, this.OccGrid.height + 1);
+				stroke();
+				restore();
 			}
 		},
 		_drawASThreshold: function (drawLine) {
-			var asThrValue = this.options.asThrValue = this.options.asThrValue || 40
-				, y = this.getYByValue(asThrValue);
-			with (this.context2DASThr)
-			clearRect(this.grid.left, this.grid.top, this.canvasElmASThr.width, this.canvasElmASThr.height),
-				save(),
-				strokeStyle = "#f00",
-				fillStyle = "#f00",
-				beginPath(),
-				moveTo(this.grid.left + 1, y - 8),
-				lineTo(this.grid.left + 11, y),
-				lineTo(this.grid.left + 1, y + 8),
-				closePath(),
-				fill(),
-				drawLine && (beginPath(),
-					translate(.5, .5),
-					moveTo(this.grid.left + 11, y),
-					lineTo(this.grid.left + this.grid.width, y),
-					fillStyle = "#fff",
-					font = "normal normal 14px 微软雅黑",
-					fillText(ConvertFloat(asThrValue, 2), this.grid.left + 12, y + 5),
-					stroke()),
-				restore()
+			var asThrValue = this.options.asThrValue = this.options.asThrValue || 40;
+			var y = this.getYByValue(asThrValue);
+			with (this.context2DASThr){
+				clearRect(this.grid.left, this.grid.top, this.canvasElmASThr.width, this.canvasElmASThr.height);
+				save();
+				strokeStyle = "#f00";
+				fillStyle = "#f00";
+				beginPath();
+				moveTo(this.grid.left + 1, y - 8);
+				lineTo(this.grid.left + 11, y);
+				lineTo(this.grid.left + 1, y + 8);
+				closePath();
+				fill();
+				if(drawLine){
+					beginPath();
+					translate(0.5, 0.5);
+					moveTo(this.grid.left + 11, y);
+					lineTo(this.grid.left + this.grid.width, y);
+					fillStyle = "#fff";
+					font = "normal normal 14px 微软雅黑";
+					fillText(ConvertFloat(asThrValue, 2), this.grid.left + 12, y + 5);
+					stroke();
+				};
+				restore();
+			}
+			
 		},
 		_createCanvas: function (t) {
 			this.zIndex = this.zIndex || 0;
-			var i = document.createElement("canvas");
-			$(i).appendTo(this.container).css({
+			var canvas = document.createElement("canvas");
+			$(canvas).appendTo(this.container).css({
 				position: "absolute",
 				left: "0px",
 				top: (t && t.top || 0) + "px",
 				"z-index": ++this.zIndex
 			});
-			i.id = uuid.v1();
-			i.width = this.options.width;
-			i.height = t && t.height || this.options.height;
-			return  i;
+			canvas.id = Math.random();//uuid.v1();
+			canvas.width = this.options.width;
+			canvas.height = t && t.height || this.options.height;
+			return  canvas;
 		},
 		_getContext2D: function (canvasele) {
-			canvasele = canvasele || this.canvasElm,
-			canvasele.getContext || G_vmlCanvasManager.initElement(canvasele);
+			if(!canvasele){
+				canvasele = this.canvasElm;
+			}
+			if(!canvasele.getContext){
+				// IE 不支持getContext
+				G_vmlCanvasManager.initElement(canvasele);
+			}
 			return canvasele.getContext("2d")
 		},
 		_getColor: function (t) {
-			if (!this.options.showColorlegend)
+			if (!this.options.showColorlegend){
 				return this.options.yAxis.colors[0] || "#ff0";
-			for (var i = 0, e = this.gradientColors.length - 1, a = Math.floor((e + i) / 2); a > 0 && !(this.gradientColors[a - 1].value <= t && this.gradientColors[a].value >= t) && e > i;)
-				this.gradientColors[a].value > t ? e = a - 1 : this.gradientColors[a].value < t && (i = a + 1),
-					a = Math.floor((e + i) / 2);
+			}
+				
+			for (var i = 0, e = this.gradientColors.length - 1, a = Math.floor((e + i) / 2); a > 0 && !(this.gradientColors[a - 1].value <= t && this.gradientColors[a].value >= t) && e > i;){
+				if(this.gradientColors[a].value > t){
+					e = a - 1;
+				} else if(this.gradientColors[a].value < t){
+					i = a + 1;
+				}
+				a = Math.floor((e + i) / 2);
+			}
 			return this.gradientColors[a].color
 		},
 		getDataItemByX: function (t, i) {
-			var e = -1
-				, a = t - this.grid.left;
-			0 > a && (e = -1);
+			var e = -1;
+			var a = t - this.grid.left;
+			if( 0 > a ) {
+				e = -1;
+			}
 			var n = this.getSampleData(this.options.data);
 			if (n.length > 0) {
-				var r = Math.ceil(a / this.itemWidth);
-				(r - 1) * this.itemWidth;
-				e = r - 1
+				//(r - 1) * this.itemWidth;
+				e = Math.ceil(a / this.itemWidth) - 1
 			}
 			return n[e]
 		},
 		getSampleData: function (t, i) {
-			if ("undefined" == typeof t)
-				return [];
-			!i && this.options.dataItemRange && 2 == this.options.dataItemRange.length && (t = t.slice(this.options.dataItemRange[0], this.options.dataItemRange[1]));
+			if ("undefined" == typeof t) return [];
+			if(this.options.dataItemRange && 2 == this.options.dataItemRange.length){
+				t = t.slice(this.options.dataItemRange[0], this.options.dataItemRange[1])
+			}
 			var e = [];
-			if (len = this.grid.width || 1e3,
-				t.length <= len)
-				return t;
+			var len = this.grid.width || 1e3;
+			if (t.length <= len) return t;
+
 			for (var a = t.length / len, n = 0, r = {}, o = 0, s = 0; s < len; s++) {
 				n = parseInt(a * s),
-					o = parseInt(a * (s + 1)),
-					r = $.extend({}, t[n]);
-				for (var h = n + 1; o > h; h++)
-					r.value = t[h].value > r.value ? t[h].value : r.value,
-						r.maxValue = t[h].maxValue > r.maxValue ? t[h].maxValue : r.maxValue,
-						r.minValue = t[h].minValue < r.minValue ? t[h].minValue : r.minValue,
-						r.avgValue += t[h].avgValue;
-				r.index = s,
-					r.avgValue = r.avgValue / (o - n),
-					e.push(r)
+				o = parseInt(a * (s + 1)),
+				r = $.extend({}, t[n]);
+				for (var h = n + 1; o > h; h++){
+					if(t[h].value > r.value){
+						r.value =  t[h].value;
+					}else{
+						r.value =  r.value;
+					}
+					if(t[h].minValue > r.minValue){
+						r.minValue =  t[h].minValue;
+					}else{
+						r.minValue =  r.minValue;
+					}
+					if(t[h].maxValue > r.maxValue){
+						r.maxValue =  t[h].maxValue;
+					}else{
+						r.maxValue =  r.maxValue;
+					}
+
+					r.avgValue += t[h].avgValue;
+				}
+				r.index = s;
+				r.avgValue = r.avgValue / (o - n);
+				e.push(r);
 			}
 			return e
 		},
 		getDataByRange: function (t, i, e) {
 			var a = [];
-			return t.forEach(function (t) {
-				t.name >= i && t.name <= e && a.push(t)
-			}),
-				a
+			t.forEach(function (t) {
+				if(t.name >= i && t.name <= e){
+					a.push(t)
+				}
+			})
+			return a;
 		},
-		getXByIndex: function (t) {
-			return this.grid.left + this.itemWidth * t
+		getXByIndex: function (index) {
+			return this.grid.left + this.itemWidth * index;
 		},
-		getYByValue: function (t) {
-			return this.grid.top + this.grid.height - t * this.heightRatio + this.options.yAxis.min * this.heightRatio
+		getYByValue: function (value) {
+			return this.grid.top + this.grid.height - value * this.heightRatio + this.options.yAxis.min * this.heightRatio
 		},
-		getValueByY: function (t) {
-			return ConvertFloat((this.grid.height + this.grid.top - t) / this.heightRatio + this.options.yAxis.min, 3)
+		getValueByY: function (y) {
+			return ConvertFloat((this.grid.height + this.grid.top - y) / this.heightRatio + this.options.yAxis.min, 3)
 		},
-		getValueByName: function (t) {
-			for (var i = this.getSampleData(this.options.data), e = 0, a = i.length - 1, n = Math.floor((a + e) / 2); n > 0 && i[n].name != t && a > e;)
-				i[n - 1].name > t ? a = n - 1 : i[n - 1].name < t && (e = n + 1),
-					n = Math.floor((a + e) / 2);
-			return i[n + 1].value
+		// 二分法查找
+		binarySearch:function(data,name){
+			var low = 0;
+			var high = data.length -1;
+			var mid = -1;
+			while (low<high) {
+				var mid = Math.floor((low+high)/2);
+				if(name == data[mid].name){
+					return mid;
+				} else if(item > data[mid].name){
+					low = mid + 1;
+				} else if(item < data[mid].name){
+					high = mid -1;
+				} else {
+					return -1;
+				}
+			}
+			return data[mid].value;
+		},
+		getValueByName: function (name) {
+			var data = this.getSampleData(this.options.data);
+			return binarySearch(data);
 		},
 		_drawXAxis: function () {
 			this.stepXArr = [];
 			var textValue, chart = this, xAxisData = chart.options.xAxis, len = xAxisData.length;
 			if (this.options.xAxis.length > 0) {
 				var fianlData = this.getSampleData(this.options.data);
-				fianlData.length > 0 && fianlData.length / this.grid.width < .01 && (fianlData[0].name == this.options.xAxis[0].startfreq && (this.options.xAxis[0].startfreq -= this.options.xAxis[0].step),
-					fianlData[fianlData.length - 1].name == this.options.xAxis[this.options.xAxis.length - 1].endfreq && (this.options.xAxis[this.options.xAxis.length - 1].endfreq += this.options.xAxis[this.options.xAxis.length - 1].step))
+				if(fianlData.length > 0 && fianlData.length / this.grid.width < 0.01) {
+					if(fianlData[0].name == this.options.xAxis[0].startfreq){
+						this.options.xAxis[0].startfreq -= this.options.xAxis[0].step
+					}
+
+					if(fianlData[fianlData.length - 1].name == this.options.xAxis[this.options.xAxis.length - 1].endfreq){
+						this.options.xAxis[this.options.xAxis.length - 1].endfreq += this.options.xAxis[this.options.xAxis.length - 1].step
+					}
+				}
 			}
 			with (this.context2DBuffer) {
 				font = "normal normal normal 10px 微软雅黑",
@@ -557,7 +666,7 @@
 					var pointData = chart.getSampleData(chart.options.data || []);
 					if (0 == pointData.length || pointData.length > 10) {
 						var newlen = 5, newxAxisData = [];
-						var avgValue = (xAxisData[0].endfreq - xAxisData[0].startfreq) / (newlen - 1),;
+						var avgValue = (xAxisData[0].endfreq - xAxisData[0].startfreq) / (newlen - 1);
 						for (var i = 0; newlen > i; i++) {
 							newxAxisData.push(ConvertFloat(xAxisData[0].startfreq + avgValue * i, 3));
 						}
@@ -595,6 +704,15 @@
 					var _startX = this.grid.left, _endX = 0;
 					for (i = 0; len > i; i++){
 						_startX = _endX,
+                        _endX = _startX + xAxisData[i].points / _allpoints * chart.grid.width,
+                        _endX = Math.ceil(_endX / this.itemWidth) * this.itemWidth,
+                        fillStyle = "#2dfbfe",
+                        0 == i ? (a) : (b),
+                        i == len - 1 && (c),
+                        moveTo(this.grid.left + _endX, this.grid.top + this.grid.height),
+						lineTo(this.grid.left + _endX, this.grid.top + this.grid.height + 6)
+						
+						_startX = _endX,
 						_endX = _startX + xAxisData[i].points / _allpoints * chart.grid.width;
 						_endX = Math.ceil(_endX / this.itemWidth) * this.itemWidth;
 						fillStyle = "#2dfbfe";
@@ -603,17 +721,17 @@
 							lineTo(this.grid.left + _startX, this.grid.top + this.grid.height + 6),
 							textValue = ConvertFloat(xAxisData[i].startfreq, 3) + "MHz",
 							fillText(textValue, this.grid.left + _startX, this.grid.top + this.grid.height + 18);
-						} else {
+						}  else {
 							this.stepXArr.push(this.grid.left + _startX);
 							textValue = ConvertFloat(xAxisData[i - 1].endfreq, 3) + "/" + ConvertFloat(xAxisData[i].startfreq, 3) + "MHz",
 							fillText(textValue, this.grid.left + _startX - 5 * textValue.length / 2, this.grid.top + this.grid.height + 18);
-						}
+						} 
 						if(i == len - 1){
 							textValue = ConvertFloat(xAxisData[i].endfreq, 3) + "MHz";
 							fillText(textValue, this.grid.left + _endX - 6 * (textValue.length - 3) - 30, this.grid.top + this.grid.height + 18);
-							moveTo(this.grid.left + _endX, this.grid.top + this.grid.height);
-							lineTo(this.grid.left + _endX, this.grid.top + this.grid.height + 6);
-						} 
+						}
+						moveTo(this.grid.left + _endX, this.grid.top + this.grid.height);
+						lineTo(this.grid.left + _endX, this.grid.top + this.grid.height + 6);
 					}
 				}
 				stroke(),
@@ -696,12 +814,12 @@
 					fillStyle = "#000";
 					if (i % 2 == 0) {
 						var textoffset = 4;
+						var textXoffset = -3;
+						var textAlign = "right";
 						if(i==0){
 							textoffset = -2;
 						}else if(i == step){
 							textoffset = 9;
-							textAlign = "right";
-							textXoffset = -3;
 							if("colorlegend" == this.options.type){
 								textAlign = "left";
 								textXoffset = -30
@@ -713,35 +831,48 @@
 					this.stepYArr.push(this.grid.top + this.grid.height - tickWidth * i)
 				}
 				stroke(),
-				restore()
+				restore();
 			}
 		},
 		_drawGrid: function () {
 			with (this.context2DBuffer) {
-				save(),
-					strokeStyle = "rgba(0,77,77)",
-					globalAlpha = "0.8",
-					fillStyle = "#fff",
-					lineWidth = .5,
-					translate(.25, .25);
-				for (var j = 0, stepX = parseInt(this.grid.width / 10), stepY = this.grid.height / 10, i = 1, len = this.stepYArr.length - 1; len > i; i++) {
-					for (beginPath(),
-						j = 1; stepX > j; j++)
-						moveTo(this.grid.left + 10 * j, this.stepYArr[i]),
-							lineTo(this.grid.left + 10 * j + 4, this.stepYArr[i]);
-					stroke()
+				save();
+				strokeStyle = "rgba(0,77,77)";
+				globalAlpha = "0.8";
+				fillStyle = "#fff";
+				lineWidth = 0.5;
+				translate(.25, .25);
+				var j = 0;
+				var stepX = parseInt(this.grid.width / 10);
+				var stepY = this.grid.height / 10;
+				var len = this.stepYArr.length - 1;
+
+				for (var i = 1; len > i; i++) {
+					beginPath();
+					for (var j = 1; stepX > j; j++){
+						moveTo(this.grid.left + 10 * j, this.stepYArr[i]);
+						lineTo(this.grid.left + 10 * j + 4, this.stepYArr[i]);
+					}
+					stroke();
 				}
-				if (this.options.xStep)
-					for (var xStep = this.options.xStep || 5, xStepWidth = this.grid.width / (xStep - 1), i = 0; xStep > i; i++)
+
+				if (this.options.xStep){
+					var xStep = this.options.xStep || 5;
+					var xStepWidth = this.grid.width / (xStep - 1);
+					for (var i = 0; xStep > i; i++){
 						this.stepXArr.push(this.grid.left + (i + 1) * xStepWidth);
-				for (var i = 0, len = this.stepXArr.length; len > i; i++) {
-					for (beginPath(),
-						j = 1; stepY > j; j++)
-						moveTo(this.stepXArr[i], this.grid.top + 10 * j),
-							lineTo(this.stepXArr[i], this.grid.top + 10 * j + 4);
-					stroke()
+					}
 				}
-				restore()
+					
+				for (var i = 0, len = this.stepXArr.length; len > i; i++) {
+					beginPath();
+					for (var j = 1; stepY > j; j++){
+						moveTo(this.stepXArr[i], this.grid.top + 10 * j);
+						lineTo(this.stepXArr[i], this.grid.top + 10 * j + 4);
+					}
+					stroke();
+				}
+				restore();
 			}
 		},
 		_drawColorlegend: function () {
@@ -776,113 +907,161 @@
 			this.context2DBuffer.restore();
 		},
 		_drawData: function () {
-			var chart = this
-				, data = chart.options.data || []
-				, barData = chart.getSampleData(data);
+			var chart = this;
+			var data = chart.options.data || []
+			var barData = chart.getSampleData(data);
 			chart.itemWidth = 1;
-			var barHeight = 0
-				, len = barData.length;
-			if (0 != len)
-				with (len >= chart.grid.width ? len = chart.grid.width : chart.itemWidth = chart.grid.width / len,
-				chart.context2D) {
-					save(),
-						clearRect(0, 0, this.canvasElm.width, this.canvasElm.height),
-						chart.options.showOccupancy && (chart.context2DOcc.fillStyle = "#000",
-							chart.context2DOcc.fillRect(this.OccGrid.left + 1, 1, this.OccGrid.width - 2, this.OccGrid.height));
-					for (var i = 0; len > i; i++)
-						if ("undefined" != typeof barData[i] && "undefined" != typeof barData[i].value) {
-							beginPath(),
-								barHeight = barData[i].value * chart.heightRatio - chart.options.yAxis.min * chart.heightRatio;
-							var y = chart.getYByValue(barData[i].value);
-							if (y < chart.grid.top && (y = chart.grid.top,
-								barHeight = chart.grid.height),
-								"bar" == chart.options.type)
-								fillStyle = chart._getColor(barData[i].value),
-									2 == chart.options.xAxisType ? fillRect(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, y, 1, barHeight) : fillRect(chart.grid.left + i * chart.itemWidth + (chart.itemWidth - 1) / 6, y, (chart.itemWidth - 1) / 6 * 4 + 1, barHeight);
-							else if ("line" == chart.options.type) {
-								if (beginPath(),
-									strokeStyle = chart._getColor(barData[i].value),
-									i + 1 >= len)
-									return;
-								moveTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].value)),
-									lineTo(chart.grid.left + (i + 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i + 1].value)),
-									stroke()
-							}
-							chart.options.showMax && (beginPath(),
-								strokeStyle = "#f00",
-								i - 1 >= 0 && (moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].maxValue)),
-									lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].maxValue)),
-									stroke())),
-								chart.options.showMin && (beginPath(),
-									strokeStyle = "#0065fc",
-									i - 1 >= 0 && (moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].minValue)),
-										lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].minValue)),
-										stroke())),
-								chart.options.showAvg && (beginPath(),
-									strokeStyle = "#ffa500",
-									i - 1 >= 0 && (moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].avgValue)),
-										lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].avgValue)),
-										stroke())),
-								chart.options.showOccupancy && (chart.context2DOcc.fillStyle = "#52caf3",
-									y = this.OccGrid.top + this.OccGrid.height - barData[i].occValue * (chart.OccGrid.height / 100),
-									chart.context2DOcc.fillRect(chart.OccGrid.left + i * chart.itemWidth + (chart.itemWidth - 1) / 6, y, (chart.itemWidth - 1) / 6 * 4 + 1, barData[i].occValue * (chart.OccGrid.height / 100))),
-								chart.options.showThreshold && (beginPath(),
-									strokeStyle = "#f00",
-									i - 1 >= 0 && (moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].thrValue)),
-										lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].thrValue)),
-										stroke())),
-								"function" == typeof chart.options.event.ondatadrawing && chart.options.event.ondatadrawing(i, barData[i])
-						}
-					restore()
+			var barHeight = 0;
+			var len = barData.length;
+			if (len < 1) return;
+			if(len >= chart.grid.width){
+				len = chart.grid.width
+			}else{
+				chart.itemWidth = chart.grid.width / len
+			}
+			with (chart.context2D) {
+				save();
+				clearRect(0, 0, this.canvasElm.width, this.canvasElm.height);
+				if(chart.options.showOccupancy){
+					chart.context2DOcc.fillStyle = "#000"
+					chart.context2DOcc.fillRect(this.OccGrid.left + 1, 1, this.OccGrid.width - 2, this.OccGrid.height)
 				}
+				for (var i = 0; len > i; i++){
+					if ("undefined" != typeof barData[i] && "undefined" != typeof barData[i].value) {
+						beginPath();
+						barHeight = barData[i].value * chart.heightRatio - chart.options.yAxis.min * chart.heightRatio;
+						var y = chart.getYByValue(barData[i].value);
+						if (y < chart.grid.top) {
+							y = chart.grid.top;
+							barHeight = chart.grid.height
+						}
+						if ("bar" == chart.options.type){
+							fillStyle = chart._getColor(barData[i].value);
+							if(2 == chart.options.xAxisType){
+								fillRect(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, y, 1, barHeight)
+							}else{
+								fillRect(chart.grid.left + i * chart.itemWidth + (chart.itemWidth - 1) / 6, y, (chart.itemWidth - 1) / 6 * 4 + 1, barHeight)
+							}
+						} else if ("line" == chart.options.type) {
+							beginPath();
+							strokeStyle = chart._getColor(barData[i].value);
+							if (i >= len -1) return;
+							moveTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].value));
+							lineTo(chart.grid.left + (i + 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i + 1].value));
+							stroke();
+						}
+						if(chart.options.showMax){
+							beginPath();
+							strokeStyle = "#f00";
+							if(i>=1){
+								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].maxValue));
+								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].maxValue));
+								stroke();
+							}
+						}
+						if(chart.options.showMin){
+							beginPath();
+							strokeStyle = "#0065fc";
+							if(i>=1){
+								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].minValue));
+								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].minValue));
+								stroke()
+							}
+						}
+						if(chart.options.showAvg){
+							beginPath();
+							strokeStyle = "#ffa500";
+							if(i>=1){
+								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].avgValue));
+								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].avgValue));
+								stroke()
+							}
+						}
+						if(chart.options.showOccupancy){
+							chart.context2DOcc.fillStyle = "#52caf3";
+							y = this.OccGrid.top + this.OccGrid.height - barData[i].occValue * (chart.OccGrid.height / 100);
+							chart.context2DOcc.fillRect(chart.OccGrid.left + i * chart.itemWidth + (chart.itemWidth - 1) / 6, y, (chart.itemWidth - 1) / 6 * 4 + 1, barData[i].occValue * (chart.OccGrid.height / 100))
+						}
+						if(chart.options.showThreshold){
+							beginPath();
+							strokeStyle = "#f00";
+							if(i>=1){
+								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].thrValue));
+								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].thrValue));
+								stroke()
+							}
+							if("function" == typeof chart.options.event.ondatadrawing){
+								chart.options.event.ondatadrawing(i, barData[i])
+							}
+						}
+					}
+				}
+				restore()
+			}
 		},
 		_redrawfalls: function () {
 			var t = this;
-			t.options.cacheFallsData = t.options.cacheFallsData || [],
-				t.fallsY = 0,
-				t.options.cacheFallsData.forEach(function (i) {
-					t._drawfalls(i, false)
-				})
+			t.options.cacheFallsData = t.options.cacheFallsData || [];
+			t.fallsY = 0;
+			t.options.cacheFallsData.forEach(function (i) {
+				t._drawfalls(i, false)
+			})
 		},
 		_drawfalls: function (data, noCache) {
-			var fallsHeight = 5
-				, chart = this;
-			data = data || chart.options.data || [],
-				noCache || (chart.options.cacheFallsData = chart.options.cacheFallsData || [],
-					chart.options.cacheFallsData.length > Math.ceil(this.options.height / fallsHeight) && chart.options.cacheFallsData.splice(0, 1),
-					chart.options.cacheFallsData.push(data));
+			var fallsHeight = 5,chart = this;
+			data = data || chart.options.data || [];
+			if(!noCache){
+				chart.options.cacheFallsData = chart.options.cacheFallsData || [];
+				if(chart.options.cacheFallsData.length > Math.ceil(this.options.height / fallsHeight)){
+					chart.options.cacheFallsData.splice(0, 1);
+				}
+				chart.options.cacheFallsData.push(data);
+			};
 			var fallsData = chart.getSampleData(data);
 			chart.itemWidth = 1;
 			var len = fallsData.length;
-			if (0 != len)
-				with (len >= chart.grid.width ? len = chart.grid.width : chart.itemWidth = chart.grid.width / len,
-				chart.context2D) {
-					if (chart.fallsY >= chart.grid.height) {
-						chart.fallsY = chart.grid.height;
-						var imgData = getImageData(chart.grid.left, fallsHeight, chart.grid.width, chart.grid.height - fallsHeight);
-						clearRect(0, 0, chart.canvasElm.width, chart.canvasElm.height),
-							putImageData(imgData, chart.grid.left, 1)
-					} else
-						chart.fallsY = (chart.fallsY || 0) + fallsHeight;
-					for (var i = 0; len > i; i++)
-						"undefined" != typeof fallsData[i] && "undefined" != typeof fallsData[i].value && (beginPath(),
-							fillStyle = chart._getColor(fallsData[i].value),
-							fillRect(chart.grid.left + i * chart.itemWidth - .5, chart.fallsY - fallsHeight, chart.itemWidth + 1, fallsHeight))
+			if (len < 1) return;
+			if(len >= chart.grid.width){
+				len = chart.grid.width
+			}else{
+				chart.itemWidth = chart.grid.width / len
+			}
+			with (chart.context2D) {
+				if (chart.fallsY >= chart.grid.height) {
+					chart.fallsY = chart.grid.height;
+					var imgData = getImageData(chart.grid.left, fallsHeight, chart.grid.width, chart.grid.height - fallsHeight);
+					clearRect(0, 0, chart.canvasElm.width, chart.canvasElm.height);
+					putImageData(imgData, chart.grid.left, 1);
+				} else {
+					chart.fallsY = (chart.fallsY || 0) + fallsHeight;
 				}
+					
+				for (var i = 0; len > i; i++){
+					if("undefined" != typeof fallsData[i] && "undefined" != typeof fallsData[i].value){
+						beginPath();
+						fillStyle = chart._getColor(fallsData[i].value);
+						fillRect(chart.grid.left + i * chart.itemWidth - .5, chart.fallsY - fallsHeight, chart.itemWidth + 1, fallsHeight);
+					}
+				}
+			}
 		},
 		_drawMark: function (index, dataItem) {
-			with (chart.context2DMark || (this.canvasElmMark = this._createCanvas(this.grid),
-				this.context2DMark = this._getContext2D(this.canvasElmMark)),
-			chart.context2DMark)
-			save(),
-				clearRect(0, 0, this.canvasElmMark.width, this.canvasElmMark.height),
-				beginPath(),
-				fillStyle = "#2dfbfe",
-				moveTo(chart.grid.left + index * this.itemWidth + chart.itemWidth / 2 - 6, this.getYByValue(dataItem.value) - 12),
-				lineTo(chart.grid.left + index * this.itemWidth + chart.itemWidth / 2 + 6, this.getYByValue(dataItem.value) - 12),
-				lineTo(chart.grid.left + index * this.itemWidth + chart.itemWidth / 2, this.getYByValue(dataItem.value)),
-				fill(),
-				restore()
+			if(!chart.context2DMark){
+				this.canvasElmMark = this._createCanvas(this.grid);
+				this.context2DMark = this._getContext2D(this.canvasElmMark);
+			}
+			with (chart.context2DMark){
+				save();
+				clearRect(0, 0, this.canvasElmMark.width, this.canvasElmMark.height);
+				beginPath();
+				fillStyle = "#2dfbfe";
+				moveTo(chart.grid.left + index * this.itemWidth + chart.itemWidth / 2 - 6, this.getYByValue(dataItem.value) - 12);
+				lineTo(chart.grid.left + index * this.itemWidth + chart.itemWidth / 2 + 6, this.getYByValue(dataItem.value) - 12);
+				lineTo(chart.grid.left + index * this.itemWidth + chart.itemWidth / 2, this.getYByValue(dataItem.value));
+				fill();
+				restore();
+			}
+			
 		}
 	},
 	$.fn.rxchart = function (options) {

@@ -2148,11 +2148,11 @@
         var freqItem = chart.getOption().xAxis[0];
         var freq = freqItem.freq;
         var bandData = $('#ifanalysis').data('bandData') || {
-                    level1: 45,
-                    level2: 19,
-                    freq1: freq - freqItem.span / 10,
-                    freq2: freq + freqItem.span / 10
-                };
+            level1: 45,
+            level2: 19,
+            freq1: freq - freqItem.span / 10,
+            freq2: freq + freqItem.span / 10
+        };
         bandData = $.extend(bandData, data);
         $('#ifanalysis').data('bandData', bandData);
         setBandValue();//设置带宽值

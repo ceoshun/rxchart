@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="./scripts/jquery-1.10.2.min.js"></script>
+    <script src="./scripts/rxchart.js"></script>
+</head>
+<body style="height: 600px">
+    <div id="mainContainer">
+        <div id="container"></div>
+        <div id="maxContainer"></div>
+        <div id="fallsContainer"></div>
+    </div>
+<script type="text/javascript">
+    var chart;
+    var fallsChart;
+    var maxChart;
+    $(function () {
+        function getChartSize() {
+            var chartWidth = $('body').width() - 10;
+            var cantainerHeight = $('body').height() - 103;
+
+            var chartSize = {
+                width: chartWidth,
+                height: cantainerHeight / 11 * 5
+            }
+            var difChartSize = {
+                width: chartWidth,
+                height: (cantainerHeight - chartSize.height) / 5 * 3
+            }
+            var fallsChartSize = {
+                width: chartWidth,
+                height: cantainerHeight - chartSize.height - difChartSize.height
+            }
+            return {chartSize: chartSize, difChartSize: difChartSize, fallsChartSize: fallsChartSize}
+        }
+
+        var size = getChartSize();
+        $('#container').height(size.chartSize.height);
+        chart = $("#container").rxchart({
+            title: "实时数据图（dbμv）",
+            width: size.chartSize.width,
+            height: size.chartSize.height,
+            type: 'line',
+            xAxis: [],
+            yAxis: {
+                min: -20,
+                max: 80,
+                step: 10,
+                //showColorlegend:false,
+                hidden: false,
+                colors:[]
+            },
+            event: {
+                onZoomChanged: function (option) {
+                    var fallsoption = fallsChart.getOption();
+                    fallsoption.dataItemRange = option.dataItemRange;
+                    fallsChart._redrawfalls();
+                    if (option.dataItemRange.length == 0) {
+                        initXAxis(chart.originOptions.xAxis);
+                        $('.realMark', chart.container).show();
+                    } else {
+                        $('.realMark', chart.container).hide();
+                    }
+                    $('.myMark', chart.container).each(function () {
+                        chart.context2DMark.clearRect(0, 0, chart.canvasElmMark.width, chart.canvasElmMark.height);
+                        var mark = $(this).data('mark');
+                        mark.isShow = false;
+                    });
+                    //绘制模板
+                    if ($('#btnShowTemplate').children('i').hasClass('fa fa-check')) {
+                        drawTemplate();
+                    }
+                },
+                onyaxischanged: function (option) {
+                    if (!option.dataItemRange || option.dataItemRange.length == 0) {
+                        initXAxis(chart.originOptions.xAxis);
+                        $('.realMark', chart.container).show();
+                    } else {
+                        $('.realMark', chart.container).hide();
+                    }
+                },
+                onclick: function (event) {
+                    //是否添加mark点
+                    if (chart.setMarking) {
+                        chart.setMarking = false;
+                        setMark(chart, {x: event.x, y: event.y});
+                    }
+                },
+                ondatadrawing: function (index, dataItem) {
+                    $('.myMark', chart.container).each(function () {
+                        var mark = $(this).data('mark');
+                        if (dataItem.name == mark.name) {
+                            mark.y = chart.getYByValue(dataItem.value);
+                            mark.x = chart.grid.left + index * chart.itemWidth + chart.itemWidth / 2;
+                            mark.isShow = true;
+                            mark.value = dataItem.value;
+                            $(this).data('mark', mark);
+                            $(this).find('.freq').html(dataItem.name + 'MHz,' + (dataItem.value || 0) + 'dbμv');
+                            //重绘点
+                            chart.context2DMark.clearRect(0, 0, chart.canvasElmMark.width, chart.canvasElmMark.height);
+                            $('.myMark', chart.container).each(function () {
+                                drawMark(chart, $(this).data('mark'));
+                            });
+                            //更新Mark点的带宽信息
+                            updateMarkBandInfo();
+                        }
+                    });
+                }, onmousemove: function (event) {
+                    $('#ifanalysis').data('mousemove', event);
+                    //更新Mark点的带宽信息
+                    updateMarkBandInfo(event);
+                }
+            },
+            data: []
+        });
+
+        var option = chart.getOption();
+        option.data = [{name:1,value:10},{name:2,value:20},{name:3,value:30},{name:4,value:40}];
+        chart.setOption(option);
+    })
+</script>
+</body></html>
