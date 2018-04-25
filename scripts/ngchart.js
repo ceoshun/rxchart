@@ -791,7 +791,6 @@
 		},
 		//更新Mark点的带宽信息
 		updateMarkBandInfo:function(event) {
-			event = event || $('#ifdf').data('mousemove');
 			$('.myMark', chart.container).each(function () {
 				var $markbandInfo = $(this).find('.mark-bandInfo');
 				if ($markbandInfo.length == 0) {
@@ -852,6 +851,7 @@
 				}
 				chart.setOption(option);
 			});
+			//显示均值
 			$('#btnShowAvg').click(function (event) {
 				event.preventDefault();
 				var option = chart.getOption();
@@ -865,6 +865,7 @@
 				}
 				chart.setOption(option);
 			});
+			//显示占用度
 			$('#btnOcc').click(function (event) {
 				event.preventDefault();
 				var $this = $(this);
@@ -879,6 +880,7 @@
 					$(this).css({'top': (chart.grid.top + 18 * (index + 1) - 9) + 'px'});
 				});
 			});
+			//显示门限
 			$('#btnShowThr').click(function (event) {
 				event.preventDefault();
 				var $this = $(this);
@@ -892,95 +894,11 @@
 				}
 				chart.setOption(option);
 			});
-	
-			/*
-			 * 差分
-			 * */
-			//切换波形图/柱状图
-			$('#btnDifChangeChartType').click(function (event) {
-				event.preventDefault();
-				var btnText = $(this).text();
-				if (btnText.indexOf("波形") != -1) {
-					$(this).html('<i class="fa fa-check">&nbsp;</i>切换柱状图');
-					difChart.getOption().type = "line";
-				} else {
-					$(this).html('<i class="fa fa-check">&nbsp;</i>切换波形图');
-					difChart.getOption().type = "bar";
-				}
-			});
-			//显示最大值曲线
-			$('#btnDifShowMax').click(function (event) {
-				event.preventDefault();
-				var option = difChart.getOption();
-				var $this = $(this);
-				if (!$this.children('i').hasClass('fa fa-check')) {
-					$this.children('i').addClass('fa fa-check');
-					option.showMax = true;
-				} else {
-					$this.children('i').removeClass('fa fa-check');
-					option.showMax = false;
-				}
-				difChart.setOption(option);
-			});
-			//显示最小值曲线
-			$('#btnDifShowMin').click(function (event) {
-				event.preventDefault();
-				var option = difChart.getOption();
-				var $this = $(this);
-				if (!$this.children('i').hasClass('fa fa-check')) {
-					$this.children('i').addClass('fa fa-check');
-					option.showMin = true;
-				} else {
-					$this.children('i').removeClass('fa fa-check');
-					option.showMin = false;
-				}
-				difChart.setOption(option);
-			});
-			$('#btnDifShowAvg').click(function (event) {
-				event.preventDefault();
-				var option = difChart.getOption();
-				var $this = $(this);
-				if (!$this.children('i').hasClass('fa fa-check')) {
-					$this.children('i').addClass('fa fa-check');
-					option.showAvg = true;
-				} else {
-					$this.children('i').removeClass('fa fa-check');
-					option.showAvg = false;
-				}
-				difChart.setOption(option);
-			});
+
 			//设置Mark点
 			$('#btnSetMark').click(function (event) {
 				event.preventDefault();
 				chart.setMarking = true;
-			});
-			//报表导出
-			$('#btnReportExport').click(function (event) {
-				event.preventDefault();
-				var rows = [];
-				var cells = [];
-				$('#divSTReport').find('.table-head>table>thead th').each(function () {
-					cells.push($(this).text());
-				});
-				rows.push(cells.join(','));
-	
-				$('#divSTReport').find('.table-body>table>tbody>tr').each(function () {
-					cells = [];
-					$(this).find('td').each(function () {
-						cells.push($(this).text());
-					});
-					if (cells.length > 0)
-						rows.push(cells.join(','));
-				});
-				var content = rows.join('\r\n')
-				$.post('../file/writeFile?' + new Date(), {
-					filename: 'data.csv',
-					content: content,
-					encoding: 'GBK'
-				}, function (ret) {
-					if (ret.flag == "0") return popTips(ret.msg, 'error');
-					downfile('../file/download?filename=data.csv&filepath=' + ret.filename);//下载
-				});
 			});
 		},
 		// 设置Markd点

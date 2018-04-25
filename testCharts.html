@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
+<html lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>charts</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="./css/jquery.Jcrop.min.css" rel="stylesheet">
+    <link href="./css/font-awesome.css" rel="stylesheet">
+   
     <script src="./scripts/jquery-1.10.2.min.js"></script>
-    <script src="./scripts/rxchart.js"></script>
+    <script src="./scripts/bootstrap.js"></script>
+    <script src="./scripts/bootstrap-contextmenu.js"></script>
+    
+    <script src="./scripts/Common.js"></script>
+    <script src="./scripts/gradientColor.js"></script>
+    <script src="./scripts/ngchart.js"></script>
 </head>
-<body style="height: 600px">
+<body style="height: 800px">
+    <ul >
+        <li><a tabindex="-1" href="" id="btnChangeChartType"><i>&nbsp;</i>切换波形图</a></li>
+        <li role="separator" class="divider"></li>
+        <li class="dropdown-submenu"><a href=""><i>&nbsp;</i>频段曲线选择</a></li>
+        <li><a tabindex="-1" href="javascript:void(0);" id="btnShowMax"><i>&nbsp;</i>最大值曲线</a></li>
+        <li><a tabindex="-1" href="javascript:void(0);" id="btnShowMin"><i>&nbsp;</i>最小值曲线</a></li>
+        <li><a tabindex="-1" href="javascript:void(0);" id="btnShowAvg"><i>&nbsp;</i>平均值曲线</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a tabindex="-1" href="javascript:void(0);" id="btnOcc"><i>&nbsp;</i>显示占用度</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a tabindex="-1" href="javascript:void(0);" id="btnShowThr"><i>&nbsp;</i>显示背噪</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a tabindex="-1" href="javascript:void(0);" id="btnSetMark"><i>&nbsp;</i>设置mark点</a></li>
+        <li role="separator" class="divider"></li>
+    </ul>
     <div id="mainContainer">
-        <div id="container"></div>
-        <div id="maxContainer"></div>
-        <div id="fallsContainer"></div>
+        <div id="container" style="width: 100%; position: relative; margin-bottom: 0px;"></div>
+        <div id="fallsContainer"style="width: 100%; position: relative; margin-bottom: 0px;"></div>
     </div>
 <script type="text/javascript">
     var chart;
@@ -18,63 +43,50 @@
     $(function () {
         function getChartSize() {
             var chartWidth = $('body').width() - 10;
-            var cantainerHeight = $('body').height() - 103;
+            var cantainerHeight = $('body').height() - 109;
 
             var chartSize = {
                 width: chartWidth,
                 height: cantainerHeight / 11 * 5
             }
-            var difChartSize = {
-                width: chartWidth,
-                height: (cantainerHeight - chartSize.height) / 5 * 3
-            }
+
             var fallsChartSize = {
                 width: chartWidth,
-                height: cantainerHeight - chartSize.height - difChartSize.height
+                height: cantainerHeight - chartSize.height
             }
-            return {chartSize: chartSize, difChartSize: difChartSize, fallsChartSize: fallsChartSize}
+            return {chartSize: chartSize, fallsChartSize: fallsChartSize}
         }
 
         var size = getChartSize();
         $('#container').height(size.chartSize.height);
-        chart = $("#container").rxchart({
+        chart = $("#container").ngchart({
             title: "实时数据图（dbμv）",
             width: size.chartSize.width,
             height: size.chartSize.height,
-            type: 'line',
+            type: 'line',//falls
             xAxis: [],
+            showASThreshold:true,
+            showColorlegend:true,
+            //showThreshold:true,
             yAxis: {
                 min: -20,
                 max: 80,
                 step: 10,
                 //showColorlegend:false,
                 hidden: false,
-                colors:[]
+                colors: ['#ff0000', '#fff500', '#00ff00', '#00fff5', '#000aff']
             },
             event: {
                 onZoomChanged: function (option) {
-                    var fallsoption = fallsChart.getOption();
-                    fallsoption.dataItemRange = option.dataItemRange;
-                    fallsChart._redrawfalls();
-                    if (option.dataItemRange.length == 0) {
-                        initXAxis(chart.originOptions.xAxis);
-                        $('.realMark', chart.container).show();
-                    } else {
-                        $('.realMark', chart.container).hide();
-                    }
                     $('.myMark', chart.container).each(function () {
                         chart.context2DMark.clearRect(0, 0, chart.canvasElmMark.width, chart.canvasElmMark.height);
                         var mark = $(this).data('mark');
                         mark.isShow = false;
                     });
-                    //绘制模板
-                    if ($('#btnShowTemplate').children('i').hasClass('fa fa-check')) {
-                        drawTemplate();
-                    }
                 },
                 onyaxischanged: function (option) {
                     if (!option.dataItemRange || option.dataItemRange.length == 0) {
-                        initXAxis(chart.originOptions.xAxis);
+                        //initXAxis(chart.originOptions.xAxis);
                         $('.realMark', chart.container).show();
                     } else {
                         $('.realMark', chart.container).hide();
@@ -84,7 +96,7 @@
                     //是否添加mark点
                     if (chart.setMarking) {
                         chart.setMarking = false;
-                        setMark(chart, {x: event.x, y: event.y});
+                        chart.setMark(chart, {x: event.x, y: event.y});
                     }
                 },
                 ondatadrawing: function (index, dataItem) {
@@ -100,39 +112,103 @@
                             //重绘点
                             chart.context2DMark.clearRect(0, 0, chart.canvasElmMark.width, chart.canvasElmMark.height);
                             $('.myMark', chart.container).each(function () {
-                                drawMark(chart, $(this).data('mark'));
+                               chart.drawMark(chart, $(this).data('mark'));
                             });
                             //更新Mark点的带宽信息
-                            updateMarkBandInfo();
+                            var event = $('#container').data('mousemove');
+                            chart.updateMarkBandInfo(event);
                         }
                     });
                 }, onmousemove: function (event) {
-                    $('#ifanalysis').data('mousemove', event);
-                    //更新Mark点的带宽信息
-                    updateMarkBandInfo(event);
+                    $('#container').data('mousemove', event);
+                    chart.updateMarkBandInfo(event);
                 }
             },
             data: []
         });
+        
 
-        var option = chart.getOption();
-        option.data = [];
-        for(var i =0;i<1000;i++){
-            option.data.push({
+        $('#fallsContainer').height(size.fallsChartSize.height);
+        fallsChart = $("#fallsContainer").ngchart({
+            title: "瀑布图（dbμv）",
+            width: size.fallsChartSize.width,
+            height: size.fallsChartSize.height,
+            type: 'falls',
+            hiddenXAxis: false,
+            showColorlegend:true,
+            xAxis: [],
+            yAxis: {
+                min: -20,
+                max: 80,
+                step: 10,
+                colors: ['#ff0000', '#fff500', '#00ff00', '#00fff5', '#000aff']
+            },
+            data: []
+        });
+
+        $(window).resize(function () {
+            var size = getChartSize();
+            $('#container').height(size.chartSize.height);
+            chart.resize(size.chartSize.width, size.chartSize.height);
+            $('#fallsContainer').height(size.fallsChartSize.height);
+            fallsChart.resize(size.fallsChartSize.width, size.fallsChartSize.height);
+        });
+
+        
+        var _data = [];
+        for(var i =0;i<500;i++){
+            _data.push({
                 name:i,
-                value:20 + Math.random() * 20
+                value:Math.random() * 50,
+                occValue:Math.random() * 50,
+                maxValue:Math.random() * 50,
+                minValue:Math.random() * 50,
+                thrValue:Math.random() * 50
             })
         }
-        //option.data = [{name:1,value:10},{name:2,value:20},{name:3,value:30},{name:4,value:40}];
-        option.xAxis = [];
+        var _xAxis = [];
         for(var i =0;i<6;i++){
-            option.xAxis.push({
+            _xAxis.push({
                 points:1,
                 startfreq:100*i,
-                endfreq:(i+1)*100 -1
+                endfreq:(i+1)*100 -1,
+                freq:100*i,
+                span:0.02
             })
         }
+
+        var fallsoption = fallsChart.getOption();
+        fallsoption.data = _data;
+        fallsoption.xAxis = _xAxis;
+        fallsChart.setOption(fallsoption, true, true);
+
+        var option = chart.getOption();
+        option.data = _data;
+        option.xAxis = _xAxis;
+        chart.initButtons();
         chart.setOption(option, true, true);
+
+        setInterval(function(){
+            var _data = [];
+            for(var i =0;i<500;i++){
+                _data.push({
+                    name:i,
+                    value:Math.random() * 50,
+                    occValue:Math.random() * 50,
+                    maxValue:Math.random() * 50,
+                    minValue:Math.random() * 50,
+                    thrValue:Math.random() * 50
+                })
+            }
+            var fallsoption = fallsChart.getOption();
+            fallsoption.data = _data;
+            fallsChart.setOption(fallsoption, false, true);
+
+            var option = chart.getOption();
+            option.data = _data;
+            chart.setOption(option, false, true);
+        },500)
     })
 </script>
-</body></html>
+</body>
+</html>

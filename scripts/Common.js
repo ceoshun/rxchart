@@ -1,7 +1,3 @@
-$.rx={};
-/**
- * Created by dyhui52 on 2016/4/18.
- */
 window.console = window.console || (function () {
         var c = {};
         c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile = c.clear = c.exception = c.trace = c.assert = function () {
@@ -72,14 +68,6 @@ function initParamEvent(paramValueChangeEvent) {
         if ($(this).closest('.param-group').hasClass('hover')) {
             $(this).closest('.param-group').addClass('open');
         }
-    });
-    //更改监测设备参数信息
-    $('input.input-custom', '.param-group').focus(function () {
-        $.rx.paramGetFocus=true;
-    }).blur(function () {
-        if(!$.rx.paramGetFocus) return;
-        $.rx.paramGetFocus=false;
-        if (typeof paramValueChangeEvent === 'function') paramValueChangeEvent();
     });
 
     //验证
