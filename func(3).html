@@ -85,7 +85,7 @@
         
         <div class="form-inline param-group" style="padding: 0px; width: auto;">
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="frequency">频率</label>
                 <div class="input-group">
                     <input class="form-control input-custom double" min="20" max="3000" living="true" unit="MHz" id="frequency" name="frequency" data-default="20" value="20" maxlength="12" type="text" style="width:120px">
@@ -93,7 +93,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="antenna">天线</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="antenna" name="antenna" data-default="" data-value="" value="" type="text" style="width:120px">
@@ -104,7 +104,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="bfo">差拍频率振荡</label>
                 <div class="input-group">
                     <input class="form-control input-custom double" min="-8000" max="8000" living="true" unit="" id="bfo" name="bfo" data-default="-8000" value="-8000" maxlength="12" type="text" style="width:120px">
@@ -112,7 +112,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="demodmode">解调模式</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="demodmode" name="demodmode" data-default="FM" data-value="FM" value="FM" type="text" style="width:120px">
@@ -133,7 +133,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="gainctrl">增益控制</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="gainctrl" name="gainctrl" data-default="fast" data-value="fast" value="fast" type="text" style="width:120px">
@@ -150,7 +150,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="ifbw">中频带宽</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="ifbw" name="ifbw" data-default="1kHz" data-value="1kHz" value="1kHz" type="text" style="width:120px">
@@ -187,7 +187,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="datasaveflag">数据保存</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="datasaveflag" name="datasaveflag" data-default="0" data-value="0" value="不保存" type="text" style="width:120px">
@@ -227,10 +227,10 @@
                     <div class="panel-body" style="position:relative;  padding: 0; background-color: #000;">
                         <div class="form-group" style="margin-bottom: 4px;">
                             <div class="table-head">
-                                <table class="table table-custom " style="">
+                                <table class="table table-custom ">
                                     <colgroup>
                                         <col style="width: 250px;">
-                                        <col style="">
+                                        <col>
                                     </colgroup>
                                     <thead>
                                     <tr>
@@ -241,10 +241,10 @@
                                 </table>
                             </div>
                             <div class="table-body" style="overflow: hidden; height: 150px; outline: none;" tabindex="5000">
-                                <table id="DevConflictTable" class="table table-custom " style="">
+                                <table id="DevConflictTable" class="table table-custom ">
                                     <colgroup>
                                         <col style="width: 250px;">
-                                        <col style="">
+                                        <col>
                                     </colgroup>
                                     <tbody>
 
@@ -1454,9 +1454,9 @@
     <div id="mainContainer" class="layout-dock-bottom" style="top:68px; border: 0px; padding: 5px 5px 0 5px;">
         <div class="layout-fill">
             <div id="btnGroups" class="layout-dock-top" style="height: 30px;">
-                <button id="btnShowRTChart" onclick="$('#divSTReport').hide();$('#divRTChart').show();" style="">实时图
+                <button id="btnShowRTChart" onclick="$('#divSTReport').hide();$('#divRTChart').show();">实时图
                 </button>
-                <button id="btnShowSTReport" onclick="$('#divRTChart').hide();$('#divSTReport').show();" style="">统计报表
+                <button id="btnShowSTReport" onclick="$('#divRTChart').hide();$('#divSTReport').show();">统计报表
                 </button>
             </div>
             <div class="layout-dock-bottom" style="top: 30px;">
@@ -1466,7 +1466,7 @@
                 </div>
                 <div id="divSTReport" class="layout-fill" data-toggle="context" data-target="#table-context-menu" style="display: none; position: relative ">
                     <div class="table-head">
-                        <table class="table table-custom " style="">
+                        <table class="table table-custom ">
                             <colgroup>
                                 <col style="width: 80px;">
                                 <col style="width: 140px;">
@@ -1476,7 +1476,7 @@
                                 <col style="width: 140px;">
                                 <col style="width: 140px;">
                                 <col style="width: 140px;">
-                                <col style="">
+                                <col>
                             </colgroup>
                             <thead>
                             <tr>
@@ -1494,7 +1494,7 @@
                         </table>
                     </div>
                     <div class="table-body" style="position: absolute; top: 24px; bottom: 0px; height: auto; overflow: hidden; outline: none;" tabindex="5001">
-                        <table id="STReport" class="table table-custom " style="">
+                        <table id="STReport" class="table table-custom ">
                             <colgroup>
                                 <col style="width: 80px;">
                                 <col style="width: 140px;">

@@ -68,7 +68,7 @@
         
         <div class="form-inline param-group" style="padding: 0px; width: auto;">
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="frequency">频率</label>
                 <div class="input-group">
                     <input class="form-control input-custom double" min="20" max="3000" living="true" unit="MHz" id="frequency" name="frequency" data-default="20" value="20" maxlength="12" type="text" style="width:120px">
@@ -76,7 +76,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="step">扫描步长</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="step" name="step" data-default="5kHz" data-value="5kHz" value="5kHz" type="text" style="width:120px">
@@ -117,7 +117,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="antenna">天线</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="antenna" name="antenna" data-default="" data-value="" value="" type="text" style="width:120px">
@@ -128,7 +128,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="workmode">工作方式</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="workmode" name="workmode" data-default="broad" data-value="broad" value="broad" type="text" style="width:120px">
@@ -143,7 +143,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="span">跨距</label>
                 <div class="input-group">
                     <input class="form-control input-custom double" min="2" max="3000000" living="true" unit="kHz" id="span" name="span" data-default="2" value="2" maxlength="12" type="text" style="width:120px">
@@ -151,7 +151,7 @@
                 </div>
             </div>
             
-            <div class="input-group param-item" style="">
+            <div class="input-group param-item">
                 <label style="margin-right: 5px;" for="datasaveflag">数据保存</label>
                 <div class="input-group">
                     <input class="form-control input-custom enum" living="true" readonly="readonly" id="datasaveflag" name="datasaveflag" data-default="0" data-value="0" value="不保存" type="text" style="width:120px">
@@ -191,10 +191,10 @@
                     <div class="panel-body" style="position:relative;  padding: 0; background-color: #000;">
                         <div class="form-group" style="margin-bottom: 4px;">
                             <div class="table-head">
-                                <table class="table table-custom " style="">
+                                <table class="table table-custom ">
                                     <colgroup>
                                         <col style="width: 250px;">
-                                        <col style="">
+                                        <col>
                                     </colgroup>
                                     <thead>
                                     <tr>
@@ -205,10 +205,10 @@
                                 </table>
                             </div>
                             <div class="table-body" style="overflow: hidden; height: 150px; outline: none;" tabindex="5000">
-                                <table id="DevConflictTable" class="table table-custom " style="">
+                                <table id="DevConflictTable" class="table table-custom ">
                                     <colgroup>
                                         <col style="width: 250px;">
-                                        <col style="">
+                                        <col>
                                     </colgroup>
                                     <tbody>
 
@@ -1418,9 +1418,9 @@
     <div id="mainContainer" class="layout-dock-bottom" style="top:68px; border: 0px; padding: 5px 5px 0 5px;">
         <div class="layout-fill">
             <div id="btnGroups" class="layout-dock-top" style="height: 30px;">
-                <button id="btnShowRTChart" onclick="$('#divSTReport').hide();$('#divRTChart').show();" style="">实时图
+                <button id="btnShowRTChart" onclick="$('#divSTReport').hide();$('#divRTChart').show();">实时图
                 </button>
-                <button id="btnShowSTReport" onclick="$('#divRTChart').hide();$('#divSTReport').show();" style="">统计报表
+                <button id="btnShowSTReport" onclick="$('#divRTChart').hide();$('#divSTReport').show();">统计报表
                 </button>
             </div>
             <div class="layout-dock-bottom" style="top: 30px;">
@@ -1429,7 +1429,7 @@
                 </div>
                 <div id="divSTReport" class="layout-fill" data-toggle="context" data-target="#table-context-menu" style="display: none; position: relative ">
                     <div class="table-head">
-                        <table class="table table-custom " style="">
+                        <table class="table table-custom ">
                             <colgroup>
                                 <col style="width: 60px;">
                                 <col style="width: 120px;">
@@ -1440,7 +1440,7 @@
                                 <col style="width: 120px;">
                                 <col style="width: 120px;">
                                 <col style="width: 120px;">
-                                <col style="">
+                                <col>
                             </colgroup>
                             <thead>
                             <tr>
@@ -1459,7 +1459,7 @@
                         </table>
                     </div>
                     <div class="table-body" style="position: absolute; top: 24px; bottom: 0px; height: auto; overflow: hidden; outline: none;" tabindex="5001">
-                        <table id="STReport" class="table table-custom " style="">
+                        <table id="STReport" class="table table-custom ">
                             <colgroup>
                                 <col style="width: 60px;">
                                 <col style="width: 120px;">
@@ -1684,7 +1684,7 @@
                             </div>
                             <div class="form-group" style="margin-bottom: 4px;">
                                 <div class="table-head">
-                                    <table class="table table-custom " style="">
+                                    <table class="table table-custom ">
                                         <colgroup>
                                             <col style="width: 0;">
                                             <col style="width: 150px;">
@@ -1695,7 +1695,7 @@
                                             <col style="width: 60px;">
                                             <col style="width: 60px;">
                                             <col style="width: 60px;">
-                                            <col style="">
+                                            <col>
                                         </colgroup>
                                         <thead>
                                         <tr>
@@ -1714,7 +1714,7 @@
                                     </table>
                                 </div>
                                 <div class="table-body" style="overflow: hidden; height: 180px; width: 100%; outline: none;" tabindex="5002">
-                                    <table id="SampleTable" class="table table-custom " style="">
+                                    <table id="SampleTable" class="table table-custom ">
                                         <colgroup>
                                             <col style="width: 0px;">
                                             <col style="width: 150px;">
@@ -1725,7 +1725,7 @@
                                             <col style="width: 60px;">
                                             <col style="width: 60px;">
                                             <col style="width: 60px;">
-                                            <col style="">
+                                            <col>
                                         </colgroup>
                                         <tbody>
 
@@ -1793,7 +1793,7 @@
                     <div class="panel-body" style="position:relative;  padding: 0; background-color: #000;">
                         <div class="form-group" style="margin-bottom: 4px;">
                             <div class="table-head">
-                                <table class="table table-custom " style="">
+                                <table class="table table-custom ">
                                     <thead>
                                     <tr>
                                         <th>开始频率(MHz)</th>
@@ -1804,7 +1804,7 @@
                                 </table>
                             </div>
                             <div class="table-body" style="overflow: hidden; height: 150px; outline: none;" tabindex="5003">
-                                <table id="StatFreqTable" class="table table-custom " style="">
+                                <table id="StatFreqTable" class="table table-custom ">
                                     <tbody>
 
                                     </tbody>
@@ -1876,7 +1876,7 @@
                 <div class="panel-body" style="position:relative;  padding: 0;">
                     <div class="form-group" style="margin-bottom: 4px;">
                         <div class="table-head">
-                            <table class="table table-custom " style="">
+                            <table class="table table-custom ">
                                 <thead>
                                 <tr>
                                     <th>开始频率(MHz)</th>
@@ -1888,7 +1888,7 @@
                             </table>
                         </div>
                         <div class="table-body" style="overflow: hidden; height: 150px; outline: none;" tabindex="5004">
-                            <table id="StatFreqOffsetTable" class="table table-custom " style="">
+                            <table id="StatFreqOffsetTable" class="table table-custom ">
                                 <tbody>
 
                                 </tbody>

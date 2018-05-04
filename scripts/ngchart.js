@@ -104,6 +104,12 @@
 				height: height
 			}, false, false);
 		},
+		/**
+		 * 重新调整画布大小
+		 * 
+		 * @param {any} width 
+		 * @param {any} height 
+		 */
 		resize: function (width, height) {
 			this.options.width = width;
 			this.options.height = height;
@@ -128,6 +134,10 @@
 			this.options.showOccupancy && this.showOccupancy();
 			this._redrawfalls();
 		},
+		/**
+		 * 销毁画布
+		 * 
+		 */
 		destroy: function () {
 			this.container.remove("canvas");
 			this.container.removeData("option");
@@ -139,10 +149,13 @@
 		bindMouseEvent: function (t) {
 			if("falls" == this.options.type){
 				this.container.dblclick(_dblclick);
-			} if("disabled" != this.options.mouseEvent) {
+			}else if("disabled" != this.options.mouseEvent) {
 				this.container.mousedown(_mousedown).mousemove(_mousemove).mouseup(_mouseup).dblclick(_dblclick).mouseout(_mouseout).click(_click);
 			}
 		},
+		/**
+		 * 显示占用度
+		 */
 		showOccupancy: function () {
 			this.options.showOccupancy = true;
 			this.OccColorlegend = {
@@ -167,6 +180,10 @@
 				this.canvasElmOcc.height = this.OccGrid.height;
 			}
 		},
+		/**
+		 * 隐藏占用度
+		 * 
+		 */
 		hideOccupancy: function () {
 			this.options.showOccupancy = false;
 			this.Colorlegend.top = 0;
@@ -177,6 +194,10 @@
 			this.draw(true);
 			this.canvasElmOcc.height = 0;
 		},
+		/**
+		 * 绘制占用度数据
+		 * 
+		 */
 		_drawOccupancy: function () {
 			if(!this.context2DOcc){
 				this.canvasElmOcc = this._createCanvas(this.OccGrid);
@@ -198,6 +219,11 @@
 				restore();
 			}
 		},
+		/**
+		 * 绘制背景噪声
+		 * 
+		 * @param {any} drawLine 
+		 */
 		_drawASThreshold: function (drawLine) {
 			var asThrValue = this.options.asThrValue = this.options.asThrValue || 40;
 			var y = this.getYByValue(asThrValue);
@@ -253,79 +279,159 @@
 			if (!this.options.showColorlegend){
 				return this.options.yAxis.colors[0] || "#ff0";
 			}
-			return this.binarySearch(this.gradientColors,"value","color",value)
+			return this.binarySearchObj(this.gradientColors,"value","color",value)
 		},
-		getDataItemByX: function (t, i) {
+		/**
+		 * 通过X轴获取数据
+		 * 
+		 * @param {any} x  X轴位置
+		 * @returns X 轴位置对应的数据
+		 */
+		getDataItemByX: function (x) {
 			var e = -1;
-			var a = t - this.grid.left;
-			if( 0 > a ) {
+			var a = x - this.grid.left;
+			if( a < 0 ) {
 				e = -1;
 			}
 			var n = this.getSampleData(this.options.data);
 			if (n.length > 0) {
-				//(r - 1) * this.itemWidth;
 				e = Math.ceil(a / this.itemWidth) - 1
 			}
 			return n[e]
 		},
-		getSampleData: function (t, i) {
-			if ("undefined" == typeof t) return [];
+		/**
+		 * 获取绘图数据, 经过比例缩放
+		 * 
+		 * @param {any} data 
+		 * @returns data
+		 */
+		getSampleData: function (data) {
+			if ("undefined" == typeof data) return [];
 			if(this.options.dataItemRange && 2 == this.options.dataItemRange.length){
-				t = t.slice(this.options.dataItemRange[0], this.options.dataItemRange[1])
+				data = data.slice(this.options.dataItemRange[0], this.options.dataItemRange[1])
 			}
-			var e = [];
-			var len = this.grid.width || 1e3;
-			if (t.length <= len) return t;
+			var rtnData = [];
+			var len = this.grid.width || 1000;
+			if (data.length <= len) return data;
 
-			for (var a = t.length / len, n = 0, r = {}, o = 0, s = 0; s < len; s++) {
-				n = parseInt(a * s),
-				o = parseInt(a * (s + 1)),
-				r = $.extend({}, t[n]);
-				for (var h = n + 1; o > h; h++){
-					if(t[h].value > r.value){
-						r.value =  t[h].value;
+			// 缩放比例
+			var dataScale = data.length / len;
+			var dataIndex = 0;
+			var item = {};
+			var dataIndexNext = 0;
+			for (var i = 0; i < len; i++) {
+				// 根据缩放比例获取缩放频段的值
+				dataIndex = parseInt(dataScale * i),
+				dataIndexNext = parseInt(dataScale * (i + 1)), //0
+				item = $.extend({}, data[dataIndex]);
+				for (var j = dataIndex + 1; dataIndexNext > j; j++){
+					if(t[j].value > item.value){
+						item.value =  data[j].value;
 					}else{
-						r.value =  r.value;
+						item.value =  item.value;
 					}
-					if(t[h].minValue > r.minValue){
-						r.minValue =  t[h].minValue;
+					if(data[j].minValue > item.minValue){
+						item.minValue =  data[j].minValue;
 					}else{
-						r.minValue =  r.minValue;
+						item.minValue =  item.minValue;
 					}
-					if(t[h].maxValue > r.maxValue){
-						r.maxValue =  t[h].maxValue;
+					if(data[j].maxValue > item.maxValue){
+						item.maxValue =  data[j].maxValue;
 					}else{
-						r.maxValue =  r.maxValue;
+						item.maxValue =  item.maxValue;
 					}
 
-					r.avgValue += t[h].avgValue;
+					item.avgValue += item[j].avgValue;
 				}
-				r.index = s;
-				r.avgValue = r.avgValue / (o - n);
-				e.push(r);
+				item.index = i;
+				item.avgValue = item.avgValue / (dataIndexNext - dataIndex);
+				rtnData.push(item);
 			}
-			return e
+			return rtnData;
 		},
-		getDataByRange: function (t, i, e) {
-			var a = [];
-			t.forEach(function (t) {
-				if(t.name >= i && t.name <= e){
-					a.push(t)
+		/**
+		 * 获取指定区间数据
+		 * 
+		 * @param {any} data  数据源
+		 * @param {any} start 起始位置
+		 * @param {any} end   结束位置
+		 * @returns 
+		 */
+		getDataByRange: function (data, start, end) {
+			var rttData = [];
+			data.forEach(function (item) {
+				if(item.name >= start && item.name <= end){
+					rttData.push(item)
 				}
 			})
-			return a;
+			return rttData;
 		},
+		/**
+		 * 获取指定索引的X轴坐标
+		 * 
+		 * @param {any} index 
+		 * @returns 
+		 */
 		getXByIndex: function (index) {
 			return this.grid.left + this.itemWidth * index;
 		},
+		/**
+		 * 获取指定数值的Y轴坐标
+		 * 
+		 * @param {any} value 
+		 * @returns 
+		 */
 		getYByValue: function (value) {
 			return this.grid.top + this.grid.height - value * this.heightRatio + this.options.yAxis.min * this.heightRatio
 		},
+		/**
+		 * 通过Y轴的数值获取对应的实际值
+		 * 
+		 * @param {any} y 
+		 * @returns 
+		 */
 		getValueByY: function (y) {
 			return ConvertFloat((this.grid.height + this.grid.top - y) / this.heightRatio + this.options.yAxis.min, 3)
 		},
-		// 二分法查找
-		binarySearch:function(data,keyProp,valueProp,value){
+		/**
+		 * 二分法查找 算法 针对数组
+		 * 
+		 * @param {any} data 
+		 * @param {any} value 
+		 * @returns 
+		 */
+		binarySearch:function(data,value){
+			var low = 0;
+			var high = data.length -1;
+			var mid = -1;
+			while (low<high) {
+				var mid = Math.floor((low+high)/2);
+				if(value == data[mid]){
+					return mid;
+				} else if(value > data[mid]){
+					low = mid + 1;
+				} else if(value < data[mid]){
+					high = mid -1;
+				} else {
+					return -1;
+				}
+			}
+			return data[mid];
+		},
+		/**
+		 * 二分法查找对象数组
+		 * [{
+		 *   value:"0",
+		 *   color:"#F00"
+		 * }]
+		 * 
+		 * @param {any} data      数据源
+		 * @param {any} keyProp   查找的索引对应的键值
+		 * @param {any} valueProp 查找的数据对应的键值
+		 * @param {any} value     查找的数据
+		 * @returns 
+		 */
+		binarySearchObj:function(data,keyProp,valueProp,value){
 			var low = 0;
 			var high = data.length -1;
 			var mid = -1;
@@ -343,14 +449,27 @@
 			}
 			return data[mid][valueProp];
 		},
+		/**
+		 * 通过数据name快速得到数据
+		 * @param {any} name 
+		 * @returns 
+		 */
 		getValueByName: function (name) {
 			var data = this.getSampleData(this.options.data);
-			return binarySearch(data,"name","value",name);
+			return binarySearchObj(data,"name","value",name);
 		},
+		/**
+		 * 绘制X轴
+		 * 
+		 */
 		_drawXAxis: function () {
 			this.stepXArr = [];
-			var textValue, chart = this, xAxisData = chart.options.xAxis, len = xAxisData.length;
+			var textValue; // 数据标签
+			var chart = this;//图标索引
+			var xAxisData = chart.options.xAxis;// x轴数据
+			var len = xAxisData.length;// x轴总数
 			if (this.options.xAxis.length > 0) {
+				// 获得将要绘制的数据
 				var fianlData = this.getSampleData(this.options.data);
 				if(fianlData.length > 0 && fianlData.length / this.grid.width < 0.01) {
 					if(fianlData[0].name == this.options.xAxis[0].startfreq){
@@ -491,6 +610,10 @@
 				restore()
 			}
 		},
+		/**
+		 * 绘制Y轴坐标
+		 * 
+		 */
 		_drawYAxis: function () {
 			this.stepYArr = [];
 			var yMax = this.options.yAxis.max
@@ -533,6 +656,7 @@
 								textXoffset = -30
 							}
 						}
+						
 						var textValue = Math.round((yMax - yMin) / step * i + yMin);
 						fillText(textValue, this.grid.left + textXoffset, this.grid.top + this.grid.height - tickWidth * i + textoffset)
 					}
@@ -542,6 +666,10 @@
 				restore();
 			}
 		},
+		/**
+		 * 绘制背景表格
+		 * 
+		 */
 		_drawGrid: function () {
 			with (this.context2DBuffer) {
 				save();
@@ -583,21 +711,32 @@
 				restore();
 			}
 		},
+
+		/**
+		 * 获取图例 此图例是由多个区间的渐变值组成
+		 * 
+		 * @param {any} colors 渐变色数组
+		 * @param {any} height 图例的高度
+		 * @returns 
+		 */
 		gradientColorArr:function(colors,height) {
-			//t color
-			//i height
-			var e = [];
+			var rtnData = [];
 			if ("[object Array]" !== Object.prototype.toString.call(colors))
-				return e;
+				return rtnData;
 			for (var i = 1; i < colors.length; i++){
-				e = e.concat(new gradientColor(colors[i - 1], colors[i], parseInt(height / (colors.length - 1))));
+				rtnData = rtnData.concat(new gradientColor(colors[i - 1], colors[i], parseInt(height / (colors.length - 1))));
 			}
 			for (var i = 1; i < height % (colors.length - 1);i++) {
 				var n = parseInt(height / (colors.length - 1));
-				e.splice(n, 0, e[n])
+				rtnData.splice(n, 0, rtnData[n])
 			}
-			return e
+			return rtnData;
 		},
+		/**
+		 * 绘制配色图例
+		 * 
+		 * @returns 
+		 */
 		_drawColorlegend: function () {
 			if (this.options.yAxis.colors.length < 2) {
 				return;
@@ -621,7 +760,7 @@
 				this.context2DBuffer.fill();
 			}
 				
-			this.context2DBuffer.font = "normal normal 12px 幼园",
+			this.context2DBuffer.font = "normal normal 12px",
 			this.context2DBuffer.fillStyle = "#000";
 			var title = this.options.title || "dbμv";
 			this.context2DBuffer.translate(this.Colorlegend.left + 8, (this.Colorlegend.top + this.Colorlegend.height + (this.options.showOccupancy ? 60 : 0)) / 2 + 4 * title.length),
@@ -646,9 +785,6 @@
 				save();
 				clearRect(0, 0, this.canvasElm.width, this.canvasElm.height);
 				if(chart.options.showOccupancy && chart.context2DOcc){
-					// if(!chart.context2DOcc){
-					// 	chart._drawOccupancy();
-					// }
 					chart.context2DOcc.fillStyle = "#000"
 					chart.context2DOcc.fillRect(this.OccGrid.left + 1, 1, this.OccGrid.width - 2, this.OccGrid.height)
 				}
@@ -661,6 +797,7 @@
 							y = chart.grid.top;
 							barHeight = chart.grid.height
 						}
+
 						if ("bar" == chart.options.type){
 							fillStyle = chart._getColor(barData[i].value);
 							if(2 == chart.options.xAxisType){
@@ -676,47 +813,58 @@
 							lineTo(chart.grid.left + (i + 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i + 1].value));
 							stroke();
 						}
+
+						// 最大值曲线
 						if(chart.options.showMax){
 							beginPath();
-							strokeStyle = "#f00";
+							strokeStyle = chart.options.maxColor;
 							if(i>=1){
 								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].maxValue));
 								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].maxValue));
 								stroke();
 							}
 						}
+
+						// 最小值曲线
 						if(chart.options.showMin){
 							beginPath();
-							strokeStyle = "#0065fc";
+							strokeStyle = chart.options.minColor;
 							if(i>=1){
 								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].minValue));
 								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].minValue));
 								stroke()
 							}
 						}
+
+						// 均值曲线
 						if(chart.options.showAvg){
 							beginPath();
-							strokeStyle = "#ffa500";
+							strokeStyle = chart.options.avgColor;
 							if(i>=1){
 								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].avgValue));
 								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].avgValue));
 								stroke()
 							}
 						}
+
+						// 占用度曲线
 						if(chart.options.showOccupancy){
-							chart.context2DOcc.fillStyle = "#52caf3";
+							chart.context2DOcc.fillStyle = chart.option.occupancyColor;
 							y = this.OccGrid.top + this.OccGrid.height - barData[i].occValue * (chart.OccGrid.height / 100);
 							chart.context2DOcc.fillRect(chart.OccGrid.left + i * chart.itemWidth + (chart.itemWidth - 1) / 6, y, (chart.itemWidth - 1) / 6 * 4 + 1, barData[i].occValue * (chart.OccGrid.height / 100))
 						}
+
+						// 底噪曲线
 						if(chart.options.showThreshold){
 							beginPath();
-							strokeStyle = "#f00";
+							strokeStyle = chart.option.thresholdColor;
 							if(i>=1){
 								moveTo(chart.grid.left + (i - 1) * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i - 1].thrValue));
 								lineTo(chart.grid.left + i * chart.itemWidth + chart.itemWidth / 2, chart.getYByValue(barData[i].thrValue));
 								stroke()
 							}
 						}
+
 						if("function" == typeof chart.options.event.ondatadrawing){
 							chart.options.event.ondatadrawing(i, barData[i])
 						}
@@ -966,16 +1114,21 @@
 	},
 	$.fn.ngchart = function (options) {
 		var chart = new Chart(this, options);
-		return $(this).data("chart", chart),chart
-	}
-	,
+		$(this).data("chart", chart);
+		return chart;
+	};
 	$.fn.ngchart.defaults = {
 		width: 850,
 		height: 450,
 		type: "bar",
 		showColorlegend: false,
 		mouseEvent: "enabled",
-		hiddenXAxis: !1,
+		hiddenXAxis: false,
+		maxColor:"#f00",
+		minColor:"#0065fc",
+		avgColor: "#ffa500",
+		occupancyColor:"#52caf3",
+		thresholdColor:"#f00",
 		style: {
 			textColor: "#000",
 			lineColor: "rgba(0,177,179,1)"
@@ -1010,7 +1163,7 @@
 
 
 	function getEventPosition(event){
-		var x,y;//t eveete
+		var x,y;
 		if(!event.layerX){
 			if(event.layerX == 0){
 				x=event.layerX;
@@ -1248,7 +1401,7 @@
 			model.find(".yAxisDown").val(chart.options.yAxis.min);
 			$("body").append(model);
 			if("function" == typeof initParamEvent){
-					initParamEvent();
+				initParamEvent();
 			}
 			model.modal("show");
 		}
@@ -1269,7 +1422,7 @@
 			chart.options.event.onmouseout(event);
 		}
 	}
-	function _clear(chart, i) {
+	function _clear(chart) {
 		chart.dragging = false;
 		chart.grid.event = {};
 		chart.context2DInfo.clearRect(0, 0, chart.canvasElmInfo.width, chart.canvasElmInfo.height);
